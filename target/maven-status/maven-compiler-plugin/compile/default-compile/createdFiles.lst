@@ -1,0 +1,7 @@
+fr\romdhani\scaridae\core\database\EntityManagerCreator$InstanceHolder.class
+fr\romdhani\scaridae\core\orm\Address.class
+fr\romdhani\scaridae\ScaridaeView.class
+fr\romdhani\scaridae\core\orm\Company.class
+fr\romdhani\scaridae\core\orm\CompanyStatus.class
+fr\romdhani\scaridae\core\database\EntityManagerCreator.class
+fr\romdhani\scaridae\core\database\HibernateUtil.class
