@@ -12,7 +12,6 @@ import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
 
 
-
 public class HibernateUtil {
     private static SessionFactory sessionFactory;
 
@@ -22,7 +21,7 @@ public class HibernateUtil {
                 Configuration configuration = new Configuration();
                 Properties settings = new Properties();
                 settings.put(Environment.DRIVER, "org.postgresql.Driver");
-                settings.put(Environment.URL, "jdbc:postgresql://127.0.0.1:5432/test1");
+                settings.put(Environment.URL, "jdbc:postgresql://127.0.0.1:5432/scaridae");
                 settings.put(Environment.USER, "postgres");
                 settings.put(Environment.PASS, "postgres");
                 settings.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");

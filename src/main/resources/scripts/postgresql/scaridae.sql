@@ -13,7 +13,7 @@ CREATE TABLE public.company (
 				creation_time TIMESTAMP,
 				serialized_properties TEXT,
 				company_status_id BIGINT,
-				adress_id BIGINT,
+				address_id BIGINT,
                 CONSTRAINT company_pk PRIMARY KEY (id)
 );
 ALTER SEQUENCE public.company_id_seq OWNED BY public.company.id;
@@ -44,17 +44,17 @@ CREATE TABLE public.service (
 );
 ALTER SEQUENCE public.service_id_seq OWNED BY public.service.id;
 
-/* adress*/
-CREATE SEQUENCE public.adress_id_seq;
-CREATE TABLE public.adress (
-                id BIGINT NOT NULL DEFAULT nextval('public.adress_id_seq'),
+/* address*/
+CREATE SEQUENCE public.address_id_seq;
+CREATE TABLE public.address (
+                id BIGINT NOT NULL DEFAULT nextval('public.address_id_seq'),
                 city VARCHAR(50),
                 code VARCHAR(50),
                 country VARCHAR(50),
 				street VARCHAR(50),
-	            CONSTRAINT adress_pk PRIMARY KEY (id)
+	            CONSTRAINT address_pk PRIMARY KEY (id)
 );
-ALTER SEQUENCE public.adress_id_seq OWNED BY public.adress.id;
+ALTER SEQUENCE public.address_id_seq OWNED BY public.address.id;
 
 /* group */
 CREATE SEQUENCE public.group_id_seq;
@@ -121,7 +121,7 @@ CREATE TABLE public.user (
 				function_id BIGINT,
 				user_role_id BIGINT,
 				user_type_id BIGINT,
-				adress_id BIGINT,
+				address_id BIGINT,
                 CONSTRAINT user_pk PRIMARY KEY (id)
 );
 ALTER SEQUENCE public.user_id_seq OWNED BY public.user.id;
@@ -156,7 +156,7 @@ CREATE TABLE public.contract (
 				serialized_properties TEXT,
 				part_one_id BIGINT,
 				part_two_id BIGINT,
-				adress_id BIGINT,
+				address_id BIGINT,
 				CONSTRAINT contract_pk PRIMARY KEY (id)
 );
 ALTER SEQUENCE public.contract_id_seq OWNED BY public.contract.id;
@@ -654,9 +654,9 @@ ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.company ADD CONSTRAINT adress_id_fk
-FOREIGN KEY (adress_id)
-REFERENCES public.adress (id)
+ALTER TABLE public.company ADD CONSTRAINT address_id_fk
+FOREIGN KEY (address_id)
+REFERENCES public.address (id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
@@ -716,9 +716,9 @@ ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.user ADD CONSTRAINT adress_id_fk
-FOREIGN KEY (adress_id)
-REFERENCES public.adress (id)
+ALTER TABLE public.user ADD CONSTRAINT address_id_fk
+FOREIGN KEY (address_id)
+REFERENCES public.address (id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
@@ -755,9 +755,9 @@ ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.contract ADD CONSTRAINT adress_id_fk
-FOREIGN KEY (adress_id)
-REFERENCES public.adress (id)
+ALTER TABLE public.contract ADD CONSTRAINT address_id_fk
+FOREIGN KEY (address_id)
+REFERENCES public.address (id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
