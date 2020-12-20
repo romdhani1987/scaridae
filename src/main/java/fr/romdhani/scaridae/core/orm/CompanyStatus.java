@@ -21,11 +21,16 @@ public class CompanyStatus implements Serializable {
     @Column(name = "serialized_properties")
     private String serializedProperties;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL,
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL,
             mappedBy = "companyStatus")
     private Company company;
 
-    protected CompanyStatus() {
+    public CompanyStatus() {
+    }
+
+    public CompanyStatus(String name, String description) {
+        this.name = name;
+        this.description = description;
     }
 
     public long getId() {

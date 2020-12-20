@@ -3,7 +3,9 @@ package fr.romdhani.scaridae.core.database;
 
 import org.hibernate.SessionFactory;
 
+
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +21,6 @@ public class DBEntityManager {
     private SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 
     private DBEntityManager() {
-
     }
 
     private static class InstanceHolder {
@@ -54,11 +55,16 @@ public class DBEntityManager {
      */
     public void doInTransaction(Consumer<EntityManager> consumer) throws Exception {
         EntityManager entityManager = sessionFactory.createEntityManager();
+        EntityTransaction tx = null;
         try {
-            entityManager.getTransaction().begin();
+            tx = entityManager.getTransaction();
+            tx.begin();
             consumer.accept(entityManager);
-            entityManager.getTransaction().commit();
+            entityManager.flush();
+            tx.commit();
+
         } catch (Exception e) {
+            if (tx != null) tx.rollback();
             e.printStackTrace();
         } finally {
             if (entityManager != null) entityManager.close();

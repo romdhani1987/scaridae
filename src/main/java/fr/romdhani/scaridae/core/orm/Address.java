@@ -10,6 +10,7 @@ public class Address implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private long id;
 
     @Column(name = "street")
@@ -28,7 +29,7 @@ public class Address implements Serializable {
             mappedBy = "address")
     private Company company;
 
-    protected Address(){}
+    public Address(){}
 
     public Address(String street, String city, String country, String code) {
         this.street = street;
@@ -85,4 +86,13 @@ public class Address implements Serializable {
         this.company = company;
     }
 
+    @Override
+    public String toString() {
+        return "Address{" +
+                "street='" + street + '\'' +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                ", code='" + code + '\'' +
+                '}';
+    }
 }
