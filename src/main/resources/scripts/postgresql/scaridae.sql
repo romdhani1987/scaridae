@@ -665,7 +665,7 @@ NOT DEFERRABLE;
 
 ALTER TABLE public.service ADD CONSTRAINT service_company_id_fk
 FOREIGN KEY (company_id)
-REFERENCES public.company (id)
+REFERENCES public.company(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
@@ -683,42 +683,42 @@ NOT DEFERRABLE;
 
 ALTER TABLE public.user ADD CONSTRAINT service_id_fk
 FOREIGN KEY (service_id)
-REFERENCES public.service (id)
+REFERENCES public.service(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 ALTER TABLE public.user ADD CONSTRAINT group_id_fk
 FOREIGN KEY (group_id)
-REFERENCES public.group (id)
+REFERENCES public.group(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 ALTER TABLE public.user ADD CONSTRAINT function_id_fk
 FOREIGN KEY (function_id)
-REFERENCES public.function (id)
+REFERENCES public.function(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 ALTER TABLE public.user ADD CONSTRAINT user_role_id_fk
 FOREIGN KEY (user_role_id)
-REFERENCES public.user_role (id)
+REFERENCES public.user_role(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 ALTER TABLE public.user ADD CONSTRAINT user_type_id_fk
 FOREIGN KEY (user_type_id)
-REFERENCES public.user_type (id)
+REFERENCES public.user_type(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 ALTER TABLE public.user ADD CONSTRAINT address_id_fk
 FOREIGN KEY (address_id)
-REFERENCES public.address (id)
+REFERENCES public.address(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
@@ -727,14 +727,14 @@ NOT DEFERRABLE;
 
 ALTER TABLE public.project ADD CONSTRAINT contract_id_fk
 FOREIGN KEY (contract_id)
-REFERENCES public.contract (id)
+REFERENCES public.contract(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 ALTER TABLE public.project ADD CONSTRAINT object_data_id_fk
 FOREIGN KEY (object_data_id)
-REFERENCES public.object_data (id)
+REFERENCES public.object_data(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
@@ -743,21 +743,21 @@ NOT DEFERRABLE;
 
 ALTER TABLE public.contract ADD CONSTRAINT part_one_id_fk
 FOREIGN KEY (part_one_id)
-REFERENCES public.user (id)
+REFERENCES public.user(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 ALTER TABLE public.contract ADD CONSTRAINT part_two_id_fk
 FOREIGN KEY (part_two_id)
-REFERENCES public.user (id)
+REFERENCES public.user(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 ALTER TABLE public.contract ADD CONSTRAINT address_id_fk
 FOREIGN KEY (address_id)
-REFERENCES public.address (id)
+REFERENCES public.address(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
@@ -766,14 +766,14 @@ NOT DEFERRABLE;
 
 ALTER TABLE public.object_data ADD CONSTRAINT project_id_fk
 FOREIGN KEY (project_id)
-REFERENCES public.project (id)
+REFERENCES public.project(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 ALTER TABLE public.object_data ADD CONSTRAINT contract_id_fk
 FOREIGN KEY (contract_id)
-REFERENCES public.contract (id)
+REFERENCES public.contract(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
