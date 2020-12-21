@@ -2,7 +2,9 @@ package fr.romdhani.scaridae.core.orm;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.sql.Timestamp;
+import java.util.Set;
 
 
 @Entity
@@ -37,7 +39,7 @@ public class Company implements Serializable {
     private Long capital;
 
     @Column(name = "creation_time")
-    private Timestamp creationTime;
+    private Timestamp creationTime= new Timestamp(new Date().getTime());
 
     @Column(name = "serialized_properties")
     private String serializedProperties;
@@ -49,6 +51,9 @@ public class Company implements Serializable {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", nullable = true)
     private Address address;
+
+    @OneToMany(mappedBy = "company")
+    private Set<Service> serviceSet;
 
     public Company() {
     }
@@ -143,6 +148,14 @@ public class Company implements Serializable {
 
     public Address getAddress() {
         return address;
+    }
+
+    public Set<Service> getServiceSet() {
+        return serviceSet;
+    }
+
+    public void setServiceSet(Set<Service> serviceSet) {
+        this.serviceSet = serviceSet;
     }
 
     public void setAddress(Address address) {

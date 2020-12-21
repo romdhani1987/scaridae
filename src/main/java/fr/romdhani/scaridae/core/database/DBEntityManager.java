@@ -6,6 +6,7 @@ import org.hibernate.SessionFactory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.FlushModeType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +58,7 @@ public class DBEntityManager {
         EntityManager entityManager = sessionFactory.createEntityManager();
         EntityTransaction tx = null;
         try {
+            entityManager.setFlushMode(FlushModeType.COMMIT);
             tx = entityManager.getTransaction();
             tx.begin();
             consumer.accept(entityManager);
