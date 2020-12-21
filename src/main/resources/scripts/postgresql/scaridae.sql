@@ -56,31 +56,32 @@ CREATE TABLE public.address (
 );
 ALTER SEQUENCE public.address_id_seq OWNED BY public.address.id;
 
-/* group */
-CREATE SEQUENCE public.group_id_seq;
-CREATE TABLE public.group (
-                id BIGINT NOT NULL DEFAULT nextval('public.group_id_seq'),
+/* user_group */
+CREATE SEQUENCE public.user_group_id_seq;
+CREATE TABLE public.user_group (
+                id BIGINT NOT NULL DEFAULT nextval('public.user_group_id_seq'),
                 name VARCHAR(50),
 				creation_time TIMESTAMP,
 				activity VARCHAR(50),
 				description VARCHAR(50),
                 serialized_properties TEXT,
 				service_id BIGINT,
-                CONSTRAINT group_pk PRIMARY KEY (id)
+                CONSTRAINT user_group_pk PRIMARY KEY (id)
 );
-ALTER SEQUENCE public.group_id_seq OWNED BY public.group.id;
+ALTER SEQUENCE public.user_group_id_seq OWNED BY public.user_group.id;
 
-/* function */
-CREATE SEQUENCE public.function_id_seq;
-CREATE TABLE public.function (
-                id BIGINT NOT NULL DEFAULT nextval('public.function_id_seq'),
+/* user_function */
+CREATE SEQUENCE public.user_function_id_seq;
+CREATE TABLE public.user_function (
+                id BIGINT NOT NULL DEFAULT nextval('public.user_function_id_seq'),
                 name VARCHAR(50),
 				start_time TIMESTAMP,
 				description VARCHAR(50),
                 serialized_properties TEXT,
-                CONSTRAINT function_pk PRIMARY KEY (id)
+				user_id BIGINT,
+                CONSTRAINT user_function_pk PRIMARY KEY (id)
 );
-ALTER SEQUENCE public.function_id_seq OWNED BY public.function.id;
+ALTER SEQUENCE public.user_function_id_seq OWNED BY public.user_function.id;
 
 /* user_role */
 CREATE SEQUENCE public.user_role_id_seq;
@@ -88,6 +89,7 @@ CREATE TABLE public.user_role (
                 id BIGINT NOT NULL DEFAULT nextval('public.user_role_id_seq'),
                 name VARCHAR(50),
 				description VARCHAR(50),
+				user_id BIGINT,
                 CONSTRAINT user_role_pk PRIMARY KEY (id)
 );
 ALTER SEQUENCE public.user_role_id_seq OWNED BY public.user_role.id;
@@ -100,6 +102,7 @@ CREATE TABLE public.user_type (
 				start_time TIMESTAMP,
 				description VARCHAR(50),
                 serialized_properties TEXT,
+				user_id BIGINT,
                 CONSTRAINT user_type_pk PRIMARY KEY (id)
 );
 ALTER SEQUENCE public.user_type_id_seq OWNED BY public.user_type.id;
@@ -117,10 +120,7 @@ CREATE TABLE public.user (
 				creation_time TIMESTAMP,
 				serialized_properties TEXT,
 				service_id BIGINT,
-				group_id BIGINT,
-				function_id BIGINT,
-				user_role_id BIGINT,
-				user_type_id BIGINT,
+				user_group_id BIGINT,
 				address_id BIGINT,
                 CONSTRAINT user_pk PRIMARY KEY (id)
 );
@@ -670,9 +670,9 @@ ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-/* group */
+/* user_group */
 
-ALTER TABLE public.group ADD CONSTRAINT group_service_id_fk
+ALTER TABLE public.user_group ADD CONSTRAINT group_service_id_fk
 FOREIGN KEY (service_id)
 REFERENCES public.service (id)
 ON DELETE CASCADE
@@ -689,29 +689,8 @@ ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 ALTER TABLE public.user ADD CONSTRAINT group_id_fk
-FOREIGN KEY (group_id)
-REFERENCES public.group(id)
-ON DELETE CASCADE
-ON UPDATE NO ACTION
-NOT DEFERRABLE;
-
-ALTER TABLE public.user ADD CONSTRAINT function_id_fk
-FOREIGN KEY (function_id)
-REFERENCES public.function(id)
-ON DELETE CASCADE
-ON UPDATE NO ACTION
-NOT DEFERRABLE;
-
-ALTER TABLE public.user ADD CONSTRAINT user_role_id_fk
-FOREIGN KEY (user_role_id)
-REFERENCES public.user_role(id)
-ON DELETE CASCADE
-ON UPDATE NO ACTION
-NOT DEFERRABLE;
-
-ALTER TABLE public.user ADD CONSTRAINT user_type_id_fk
-FOREIGN KEY (user_type_id)
-REFERENCES public.user_type(id)
+FOREIGN KEY (user_group_id)
+REFERENCES public.user_group(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
@@ -1243,6 +1222,33 @@ NOT DEFERRABLE;
 ALTER TABLE public.user_request_quality_map ADD CONSTRAINT request_quality_user_map_fk
 FOREIGN KEY (request_quality_id)
 REFERENCES public.request_quality (id)
+ON DELETE CASCADE
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+/*user_function*/
+
+ALTER TABLE public.user_function ADD CONSTRAINT user_function_user_id_fk
+FOREIGN KEY (user_id)
+REFERENCES public.user(id)
+ON DELETE CASCADE
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+/*user_role*/
+
+ALTER TABLE public.user_role ADD CONSTRAINT user_role_user_id_fk
+FOREIGN KEY (user_id)
+REFERENCES public.user(id)
+ON DELETE CASCADE
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+/* user_type */
+
+ALTER TABLE public.user_type ADD CONSTRAINT user_type_user_id_fk
+FOREIGN KEY (user_id)
+REFERENCES public.user(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
