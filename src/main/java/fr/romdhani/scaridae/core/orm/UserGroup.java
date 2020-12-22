@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
-@Table(name = "user_group")
+@Table(name = "user_account_group")
 public class UserGroup implements Serializable {
     private static final long serialVersionUID = 1L;
 

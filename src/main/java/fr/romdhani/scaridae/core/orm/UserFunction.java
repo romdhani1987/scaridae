@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
-@Table(name = "user_function")
+@Table(name = "user_account_function")
 public class UserFunction implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -28,8 +28,8 @@ public class UserFunction implements Serializable {
     private String serializedProperties;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", nullable = true)
-    private User userFunction;
+    @JoinColumn(name = "user_account_id", nullable = true)
+    private UserAccount userAccountFunction;
 
     public UserFunction() {
     }
@@ -74,12 +74,12 @@ public class UserFunction implements Serializable {
         this.serializedProperties = serializedProperties;
     }
 
-    public User getUserFunction() {
-        return userFunction;
+    public UserAccount getUserFunction() {
+        return userAccountFunction;
     }
 
-    public void setUserFunction(User userFunction) {
-        this.userFunction = userFunction;
+    public void setUserFunction(UserAccount userAccountFunction) {
+        this.userAccountFunction = userAccountFunction;
     }
 
     public UserFunction(String name, String description, Timestamp startTime) {

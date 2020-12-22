@@ -9,7 +9,7 @@ import java.util.Date;
  * Used for user type : intern or extern user for example
  */
 @Entity
-@Table(name = "user_type")
+@Table(name = "user_account_type")
 public class UserType implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -31,8 +31,8 @@ public class UserType implements Serializable {
     private String serializedProperties;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = true)
-    private User userType;
+    @JoinColumn(name = "user_account_id", nullable = true)
+    private UserAccount userAccountType;
 
     public UserType() {
     }
@@ -77,12 +77,12 @@ public class UserType implements Serializable {
         this.serializedProperties = serializedProperties;
     }
 
-    public User getUserType() {
-        return userType;
+    public UserAccount getUserType() {
+        return userAccountType;
     }
 
-    public void setUserType(User userType) {
-        this.userType = userType;
+    public void setUserType(UserAccount userAccountType) {
+        this.userAccountType = userAccountType;
     }
 
     public UserType(String name, String description) {

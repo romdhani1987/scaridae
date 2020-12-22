@@ -7,8 +7,8 @@ import java.util.Date;
 import java.util.Set;
 
 @Entity
-@Table(name = "user")
-public class User implements Serializable {
+@Table(name = "user_account")
+public class UserAccount implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -45,20 +45,20 @@ public class User implements Serializable {
     private Service service;
 
     @ManyToOne
-    @JoinColumn(name = "user_group_id", nullable = true)
+    @JoinColumn(name = "user_account_group_id", nullable = true)
     private UserGroup userGroup;
 
     @OneToOne
     @JoinColumn(name = "address_id", nullable = true)
     private Address address;
 
-    @OneToMany(mappedBy = "userType")
+    @OneToMany(mappedBy = "userAccountType")
     private Set<UserType> userTypeSet;
 
-    @OneToMany(mappedBy = "userFunction")
+    @OneToMany(mappedBy = "userAccountFunction")
     private Set<UserFunction> userFunctionSet;
 
-    @OneToMany(mappedBy = "userRole")
+    @OneToMany(mappedBy = "userAccountRole")
     private Set<UserRole> userRoleSet;
 
     public long getId() {
@@ -181,7 +181,7 @@ public class User implements Serializable {
         this.userRoleSet = userRoleSet;
     }
 
-    public User(String login, String passwordHash) {
+    public UserAccount(String login, String passwordHash) {
         this.login = login;
         this.passwordHash = passwordHash;
     }
