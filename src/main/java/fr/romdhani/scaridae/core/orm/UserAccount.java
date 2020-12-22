@@ -61,6 +61,11 @@ public class UserAccount implements Serializable {
     @OneToMany(mappedBy = "userAccountRole")
     private Set<UserRole> userRoleSet;
 
+    // bi-directional many-to-many association to ExternalDb
+    @ManyToMany
+    @JoinTable(name = "project_user_account_map", joinColumns = {@JoinColumn(name = "user_account_id")}, inverseJoinColumns = {@JoinColumn(name = "project_id")})
+    private Set<Project> projectSet;
+
     public long getId() {
         return id;
     }
@@ -179,6 +184,22 @@ public class UserAccount implements Serializable {
 
     public void setUserRoleSet(Set<UserRole> userRoleSet) {
         this.userRoleSet = userRoleSet;
+    }
+
+    public UserGroup getUserGroup() {
+        return userGroup;
+    }
+
+    public void setUserGroup(UserGroup userGroup) {
+        this.userGroup = userGroup;
+    }
+
+    public Set<Project> getProjectSet() {
+        return projectSet;
+    }
+
+    public void setProjectSet(Set<Project> projectSet) {
+        this.projectSet = projectSet;
     }
 
     public UserAccount(String login, String passwordHash) {

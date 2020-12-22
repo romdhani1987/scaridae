@@ -1,7 +1,0 @@
-fr\romdhani\scaridae\core\orm\Address.class
-fr\romdhani\scaridae\ScaridaeView.class
-fr\romdhani\scaridae\core\orm\Company.class
-fr\romdhani\scaridae\core\database\DBSession.class
-fr\romdhani\scaridae\core\orm\CompanyStatus.class
-fr\romdhani\scaridae\core\database\HibernateUtil.class
-fr\romdhani\scaridae\core\database\DBSession$InstanceHolder.class

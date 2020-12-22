@@ -1,6 +1,6 @@
 
 /* company */
-CREATE SEQUENCE public.company_id_seq;
+CREATE SEQUENCE public.company_id_seq ;
 CREATE TABLE public.company (
                 id BIGINT NOT NULL DEFAULT nextval('public.company_id_seq'),
                 name VARCHAR(50) NOT NULL,
@@ -18,7 +18,12 @@ CREATE TABLE public.company (
 );
 ALTER SEQUENCE public.company_id_seq OWNED BY public.company.id;
 
-/* status*/
+CREATE UNIQUE INDEX company_name_idx
+ ON public.company
+ ( name );
+
+
+/* company_status*/
 
 CREATE SEQUENCE public.company_status_id_seq;
 CREATE TABLE public.company_status (
@@ -56,58 +61,61 @@ CREATE TABLE public.address (
 );
 ALTER SEQUENCE public.address_id_seq OWNED BY public.address.id;
 
-/* group */
-CREATE SEQUENCE public.group_id_seq;
-CREATE TABLE public.group (
-                id BIGINT NOT NULL DEFAULT nextval('public.group_id_seq'),
+/* user_account_group */
+CREATE SEQUENCE public.user_account_group_id_seq;
+CREATE TABLE public.user_account_group (
+                id BIGINT NOT NULL DEFAULT nextval('public.user_account_group_id_seq'),
                 name VARCHAR(50),
 				creation_time TIMESTAMP,
 				activity VARCHAR(50),
 				description VARCHAR(50),
                 serialized_properties TEXT,
 				service_id BIGINT,
-                CONSTRAINT group_pk PRIMARY KEY (id)
+                CONSTRAINT user_account_group_pk PRIMARY KEY (id)
 );
-ALTER SEQUENCE public.group_id_seq OWNED BY public.group.id;
+ALTER SEQUENCE public.user_account_group_id_seq OWNED BY public.user_account_group.id;
 
-/* function */
-CREATE SEQUENCE public.function_id_seq;
-CREATE TABLE public.function (
-                id BIGINT NOT NULL DEFAULT nextval('public.function_id_seq'),
+/* user_account_function */
+CREATE SEQUENCE public.user_account_function_id_seq;
+CREATE TABLE public.user_account_function (
+                id BIGINT NOT NULL DEFAULT nextval('public.user_account_function_id_seq'),
                 name VARCHAR(50),
 				start_time TIMESTAMP,
 				description VARCHAR(50),
                 serialized_properties TEXT,
-                CONSTRAINT function_pk PRIMARY KEY (id)
+				user_account_id BIGINT,
+                CONSTRAINT user_account_function_pk PRIMARY KEY (id)
 );
-ALTER SEQUENCE public.function_id_seq OWNED BY public.function.id;
+ALTER SEQUENCE public.user_account_function_id_seq OWNED BY public.user_account_function.id;
 
-/* user_role */
-CREATE SEQUENCE public.user_role_id_seq;
-CREATE TABLE public.user_role (
-                id BIGINT NOT NULL DEFAULT nextval('public.user_role_id_seq'),
+/* user_account_role */
+CREATE SEQUENCE public.user_account_role_id_seq;
+CREATE TABLE public.user_account_role (
+                id BIGINT NOT NULL DEFAULT nextval('public.user_account_role_id_seq'),
                 name VARCHAR(50),
 				description VARCHAR(50),
-                CONSTRAINT user_role_pk PRIMARY KEY (id)
+				user_account_id BIGINT,
+                CONSTRAINT user_account_role_pk PRIMARY KEY (id)
 );
-ALTER SEQUENCE public.user_role_id_seq OWNED BY public.user_role.id;
+ALTER SEQUENCE public.user_account_role_id_seq OWNED BY public.user_account_role.id;
 
-/* user_type */
-CREATE SEQUENCE public.user_type_id_seq;
-CREATE TABLE public.user_type (
-                id BIGINT NOT NULL DEFAULT nextval('public.user_type_id_seq'),
+/* user_account_type */
+CREATE SEQUENCE public.user_account_type_id_seq;
+CREATE TABLE public.user_account_type (
+                id BIGINT NOT NULL DEFAULT nextval('public.user_account_type_id_seq'),
                 name VARCHAR(50),
 				start_time TIMESTAMP,
 				description VARCHAR(50),
                 serialized_properties TEXT,
-                CONSTRAINT user_type_pk PRIMARY KEY (id)
+				user_account_id BIGINT,
+                CONSTRAINT user_account_type_pk PRIMARY KEY (id)
 );
-ALTER SEQUENCE public.user_type_id_seq OWNED BY public.user_type.id;
+ALTER SEQUENCE public.user_account_type_id_seq OWNED BY public.user_account_type.id;
 
-/* user */
-CREATE SEQUENCE public.user_id_seq;
-CREATE TABLE public.user (
-                id BIGINT NOT NULL DEFAULT nextval('public.user_id_seq'),
+/* user_account */
+CREATE SEQUENCE public.user_account_id_seq;
+CREATE TABLE public.user_account (
+                id BIGINT NOT NULL DEFAULT nextval('public.user_account_id_seq'),
                 login VARCHAR(50) NOT NULL,
 				password_hash VARCHAR NOT NULL,
                 first_name VARCHAR,
@@ -117,14 +125,15 @@ CREATE TABLE public.user (
 				creation_time TIMESTAMP,
 				serialized_properties TEXT,
 				service_id BIGINT,
-				group_id BIGINT,
-				function_id BIGINT,
-				user_role_id BIGINT,
-				user_type_id BIGINT,
+				user_account_group_id BIGINT,
 				address_id BIGINT,
-                CONSTRAINT user_pk PRIMARY KEY (id)
+                CONSTRAINT user_account_pk PRIMARY KEY (id)
 );
-ALTER SEQUENCE public.user_id_seq OWNED BY public.user.id;
+ALTER SEQUENCE public.user_account_id_seq OWNED BY public.user_account.id;
+CREATE UNIQUE INDEX user_account_login_idx
+ ON public.user_account
+ ( login );
+
 
 /* project */
 CREATE SEQUENCE public.project_id_seq;
@@ -177,13 +186,11 @@ CREATE TABLE public.object_data (
 );
 ALTER SEQUENCE public.object_data_id_seq OWNED BY public.object_data.id;
 
-/* user_project_map */
-CREATE TABLE public.project_user_map (
+/* user_account_project_map */
+CREATE TABLE public.project_user_account_map (
                 project_id BIGINT NOT NULL,
-                user_id BIGINT NOT NULL,
-                write_permission BOOLEAN NOT NULL,
-                serialized_properties TEXT,
-                CONSTRAINT project_user_map_pk PRIMARY KEY (project_id, user_id)
+                user_account_id BIGINT NOT NULL,
+                CONSTRAINT project_user_account_map_pk PRIMARY KEY (project_id, user_account_id)
 );
 
 /* intervention */
@@ -270,13 +277,12 @@ CREATE TABLE public.vat (
 );
 ALTER SEQUENCE public.vat_id_seq OWNED BY public.vat.id;
 
-/* user_intervention_map */
+/* user_account_intervention_map */
 
-CREATE TABLE public.user_intervention_map (
-                user_id BIGINT NOT NULL,
+CREATE TABLE public.user_account_intervention_map (
+                user_account_id BIGINT NOT NULL,
 				intervention_id BIGINT NOT NULL,
-                serialized_properties TEXT,
-                CONSTRAINT user_intervention_map_pk PRIMARY KEY (user_id,intervention_id)
+                CONSTRAINT user_account_intervention_map_pk PRIMARY KEY (user_account_id,intervention_id)
 );
 
 /* project_intervention_map */
@@ -284,7 +290,6 @@ CREATE TABLE public.user_intervention_map (
 CREATE TABLE public.project_intervention_map (
                 project_id BIGINT NOT NULL,
 				intervention_id BIGINT NOT NULL,
-                serialized_properties TEXT,
                 CONSTRAINT project_intervention_map_pk PRIMARY KEY (project_id,intervention_id)
 );
 
@@ -305,7 +310,7 @@ CREATE TABLE public.product (
 			    product_group_id BIGINT,
 				product_item_id BIGINT,
 			    provider_id BIGINT,
-				user_id BIGINT,
+				user_account_id BIGINT,
                 CONSTRAINT product_pk PRIMARY KEY (id)
 );
 ALTER SEQUENCE public.product_id_seq OWNED BY public.product.id;
@@ -400,13 +405,12 @@ CREATE TABLE public.request_purchase (
 );
 ALTER SEQUENCE public.request_purchase_id_seq OWNED BY public.request_purchase.id;
 
-/* user_request_purchase_map */
+/* user_account_request_purchase_map */
 
-CREATE TABLE public.user_request_purchase_map (
-                user_id BIGINT NOT NULL,
+CREATE TABLE public.user_account_request_purchase_map (
+                user_account_id BIGINT NOT NULL,
                 request_purchase_id BIGINT NOT NULL,
-                serialized_properties TEXT,
-                CONSTRAINT user_request_purchase_map_pk PRIMARY KEY (user_id, request_purchase_id)
+                CONSTRAINT user_account_request_purchase_map_pk PRIMARY KEY (user_account_id, request_purchase_id)
 );
 
 /*request_type*/
@@ -471,12 +475,11 @@ CREATE TABLE public.request_borrow (
 );
 ALTER SEQUENCE public.request_borrow_id_seq OWNED BY public.request_borrow.id;
 
-/* user_request_borrow_map */
-CREATE TABLE public.user_request_borrow_map (
-                user_id BIGINT NOT NULL,
+/* user_account_request_borrow_map */
+CREATE TABLE public.user_account_request_borrow_map (
+                user_account_id BIGINT NOT NULL,
                 request_borrow_id BIGINT NOT NULL,
-                serialized_properties TEXT,
-                CONSTRAINT user_request_borrow_map_pk PRIMARY KEY (user_id, request_borrow_id)
+                CONSTRAINT user_account_request_borrow_map_pk PRIMARY KEY (user_account_id, request_borrow_id)
 );
 
 /* response_borrow  */
@@ -529,13 +532,12 @@ CREATE TABLE public.request_access (
 );
 ALTER SEQUENCE public.request_access_id_seq OWNED BY public.request_access.id;
 
-/* user_request_access_map */
+/* user_account_request_access_map */
 
-CREATE TABLE public.user_request_access_map (
-                user_id BIGINT NOT NULL,
+CREATE TABLE public.user_account_request_access_map (
+                user_account_id BIGINT NOT NULL,
                 request_access_id BIGINT NOT NULL,
-                serialized_properties TEXT,
-                CONSTRAINT user_request_access_map_pk PRIMARY KEY (user_id, request_access_id)
+                CONSTRAINT user_account_request_access_map_pk PRIMARY KEY (user_account_id, request_access_id)
 );
 
 /* response_access */
@@ -589,13 +591,12 @@ CREATE TABLE public.request_quality (
 );
 ALTER SEQUENCE public.request_quality_id_seq OWNED BY public.request_quality.id;
 
-/* user_request_access_map */
+/* user_account_request_access_map */
 
-CREATE TABLE public.user_request_quality_map (
-                user_id BIGINT NOT NULL,
+CREATE TABLE public.user_account_request_quality_map (
+                user_account_id BIGINT NOT NULL,
                 request_quality_id BIGINT NOT NULL,
-                serialized_properties TEXT,
-                CONSTRAINT user_request_quality_map_pk PRIMARY KEY (user_id, request_quality_id)
+                CONSTRAINT user_account_request_quality_map_pk PRIMARY KEY (user_account_id, request_quality_id)
 );
 
 /* response_quality */
@@ -665,60 +666,39 @@ NOT DEFERRABLE;
 
 ALTER TABLE public.service ADD CONSTRAINT service_company_id_fk
 FOREIGN KEY (company_id)
-REFERENCES public.company (id)
+REFERENCES public.company(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-/* group */
+/* user_account_group */
 
-ALTER TABLE public.group ADD CONSTRAINT group_service_id_fk
+ALTER TABLE public.user_account_group ADD CONSTRAINT group_service_id_fk
 FOREIGN KEY (service_id)
 REFERENCES public.service (id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-/* user */
+/* user_account */
 
-ALTER TABLE public.user ADD CONSTRAINT service_id_fk
+ALTER TABLE public.user_account ADD CONSTRAINT service_id_fk
 FOREIGN KEY (service_id)
-REFERENCES public.service (id)
+REFERENCES public.service(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.user ADD CONSTRAINT group_id_fk
-FOREIGN KEY (group_id)
-REFERENCES public.group (id)
+ALTER TABLE public.user_account ADD CONSTRAINT group_id_fk
+FOREIGN KEY (user_account_group_id)
+REFERENCES public.user_account_group(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.user ADD CONSTRAINT function_id_fk
-FOREIGN KEY (function_id)
-REFERENCES public.function (id)
-ON DELETE CASCADE
-ON UPDATE NO ACTION
-NOT DEFERRABLE;
-
-ALTER TABLE public.user ADD CONSTRAINT user_role_id_fk
-FOREIGN KEY (user_role_id)
-REFERENCES public.user_role (id)
-ON DELETE CASCADE
-ON UPDATE NO ACTION
-NOT DEFERRABLE;
-
-ALTER TABLE public.user ADD CONSTRAINT user_type_id_fk
-FOREIGN KEY (user_type_id)
-REFERENCES public.user_type (id)
-ON DELETE CASCADE
-ON UPDATE NO ACTION
-NOT DEFERRABLE;
-
-ALTER TABLE public.user ADD CONSTRAINT address_id_fk
+ALTER TABLE public.user_account ADD CONSTRAINT address_id_fk
 FOREIGN KEY (address_id)
-REFERENCES public.address (id)
+REFERENCES public.address(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
@@ -727,14 +707,14 @@ NOT DEFERRABLE;
 
 ALTER TABLE public.project ADD CONSTRAINT contract_id_fk
 FOREIGN KEY (contract_id)
-REFERENCES public.contract (id)
+REFERENCES public.contract(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 ALTER TABLE public.project ADD CONSTRAINT object_data_id_fk
 FOREIGN KEY (object_data_id)
-REFERENCES public.object_data (id)
+REFERENCES public.object_data(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
@@ -743,21 +723,21 @@ NOT DEFERRABLE;
 
 ALTER TABLE public.contract ADD CONSTRAINT part_one_id_fk
 FOREIGN KEY (part_one_id)
-REFERENCES public.user (id)
+REFERENCES public.user_account(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 ALTER TABLE public.contract ADD CONSTRAINT part_two_id_fk
 FOREIGN KEY (part_two_id)
-REFERENCES public.user (id)
+REFERENCES public.user_account(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 ALTER TABLE public.contract ADD CONSTRAINT address_id_fk
 FOREIGN KEY (address_id)
-REFERENCES public.address (id)
+REFERENCES public.address(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
@@ -766,44 +746,44 @@ NOT DEFERRABLE;
 
 ALTER TABLE public.object_data ADD CONSTRAINT project_id_fk
 FOREIGN KEY (project_id)
-REFERENCES public.project (id)
+REFERENCES public.project(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 ALTER TABLE public.object_data ADD CONSTRAINT contract_id_fk
 FOREIGN KEY (contract_id)
-REFERENCES public.contract (id)
+REFERENCES public.contract(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-/* project_user_map */
+/* project_user_account_map */
 
-ALTER TABLE public.project_user_map ADD CONSTRAINT project_user_map_fk
-FOREIGN KEY (user_id)
-REFERENCES public.user (id)
+ALTER TABLE public.project_user_account_map ADD CONSTRAINT project_user_account_map_fk
+FOREIGN KEY (user_account_id)
+REFERENCES public.user_account (id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.project_user_map ADD CONSTRAINT user_project_map_fk
+ALTER TABLE public.project_user_account_map ADD CONSTRAINT user_account_project_map_fk
 FOREIGN KEY (project_id)
 REFERENCES public.project (id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-/* user_intervention_map */
+/* user_account_intervention_map */
 
-ALTER TABLE public.user_intervention_map ADD CONSTRAINT user_intervention_map_fk
-FOREIGN KEY (user_id)
-REFERENCES public.user (id)
+ALTER TABLE public.user_account_intervention_map ADD CONSTRAINT user_account_intervention_map_fk
+FOREIGN KEY (user_account_id)
+REFERENCES public.user_account (id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.user_intervention_map ADD CONSTRAINT intervention_user_map_fk
+ALTER TABLE public.user_account_intervention_map ADD CONSTRAINT intervention_user_account_map_fk
 FOREIGN KEY (intervention_id)
 REFERENCES public.intervention (id)
 ON DELETE CASCADE
@@ -927,9 +907,9 @@ ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.product ADD CONSTRAINT user_id_fk
-FOREIGN KEY (user_id)
-REFERENCES public.user (id)
+ALTER TABLE public.product ADD CONSTRAINT user_account_id_fk
+FOREIGN KEY (user_account_id)
+REFERENCES public.user_account (id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
@@ -969,7 +949,7 @@ NOT DEFERRABLE;
 
 ALTER TABLE public.response_purchase ADD CONSTRAINT response_purchase_owner_id_fk
 FOREIGN KEY (owner_id)
-REFERENCES public.user (id)
+REFERENCES public.user_account (id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
@@ -991,7 +971,7 @@ NOT DEFERRABLE;
 
 ALTER TABLE public.action_purchase ADD CONSTRAINT action_purchase_owner_id_fk
 FOREIGN KEY (owner_id)
-REFERENCES public.user(id)
+REFERENCES public.user_account(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
@@ -1030,7 +1010,7 @@ NOT DEFERRABLE;
 
 ALTER TABLE public.response_borrow ADD CONSTRAINT response_borrow_owner_id_fk
 FOREIGN KEY (owner_id)
-REFERENCES public.user (id)
+REFERENCES public.user_account (id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
@@ -1052,7 +1032,7 @@ NOT DEFERRABLE;
 
 ALTER TABLE public.action_borrow ADD CONSTRAINT action_borrow_owner_id_fk
 FOREIGN KEY (owner_id)
-REFERENCES public.user(id)
+REFERENCES public.user_account(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
@@ -1092,7 +1072,7 @@ NOT DEFERRABLE;
 
 ALTER TABLE public.response_access ADD CONSTRAINT response_access_owner_id_fk
 FOREIGN KEY (owner_id)
-REFERENCES public.user (id)
+REFERENCES public.user_account (id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
@@ -1115,7 +1095,7 @@ NOT DEFERRABLE;
 
 ALTER TABLE public.response_access ADD CONSTRAINT action_access_owner_id_fk
 FOREIGN KEY (owner_id)
-REFERENCES public.user(id)
+REFERENCES public.user_account(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
@@ -1154,7 +1134,7 @@ NOT DEFERRABLE;
 
 ALTER TABLE public.response_quality ADD CONSTRAINT response_quality_owner_id_fk
 FOREIGN KEY (owner_id)
-REFERENCES public.user (id)
+REFERENCES public.user_account (id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
@@ -1177,37 +1157,37 @@ NOT DEFERRABLE;
 
 ALTER TABLE public.action_quality ADD CONSTRAINT action_quality_owner_id_fk
 FOREIGN KEY (owner_id)
-REFERENCES public.user(id)
+REFERENCES public.user_account(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-/* user_request_purchase_map */
+/* user_account_request_purchase_map */
 
-ALTER TABLE public.user_request_purchase_map ADD CONSTRAINT user_request_purchase_map_fk
-FOREIGN KEY (user_id)
-REFERENCES public.user (id)
+ALTER TABLE public.user_account_request_purchase_map ADD CONSTRAINT user_account_request_purchase_map_fk
+FOREIGN KEY (user_account_id)
+REFERENCES public.user_account (id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.user_request_purchase_map ADD CONSTRAINT request_purchase_user_map_fk
+ALTER TABLE public.user_account_request_purchase_map ADD CONSTRAINT request_purchase_user_account_map_fk
 FOREIGN KEY (request_purchase_id)
 REFERENCES public.request_purchase (id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-/*user_request_borrow_map*/
+/*user_account_request_borrow_map*/
 
-ALTER TABLE public.user_request_borrow_map ADD CONSTRAINT user_request_borrow_map_fk
-FOREIGN KEY (user_id)
-REFERENCES public.user (id)
+ALTER TABLE public.user_account_request_borrow_map ADD CONSTRAINT user_account_request_borrow_map_fk
+FOREIGN KEY (user_account_id)
+REFERENCES public.user_account (id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.user_request_borrow_map ADD CONSTRAINT request_borrow_user_map_fk
+ALTER TABLE public.user_account_request_borrow_map ADD CONSTRAINT request_borrow_user_account_map_fk
 FOREIGN KEY (request_borrow_id)
 REFERENCES public.request_borrow (id)
 ON DELETE CASCADE
@@ -1215,34 +1195,61 @@ ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 
-/*user_request_access_map*/
+/*user_account_request_access_map*/
 
-ALTER TABLE public.user_request_access_map ADD CONSTRAINT user_request_access_map_fk
-FOREIGN KEY (user_id)
-REFERENCES public.user (id)
+ALTER TABLE public.user_account_request_access_map ADD CONSTRAINT user_account_request_access_map_fk
+FOREIGN KEY (user_account_id)
+REFERENCES public.user_account (id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.user_request_access_map ADD CONSTRAINT request_access_user_map_fk
+ALTER TABLE public.user_account_request_access_map ADD CONSTRAINT request_access_user_account_map_fk
 FOREIGN KEY (request_access_id)
 REFERENCES public.request_access (id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-/*user_request_quality_map*/
+/*user_account_request_quality_map*/
 
-ALTER TABLE public.user_request_quality_map ADD CONSTRAINT user_request_quality_map_fk
-FOREIGN KEY (user_id)
-REFERENCES public.user (id)
+ALTER TABLE public.user_account_request_quality_map ADD CONSTRAINT user_account_request_quality_map_fk
+FOREIGN KEY (user_account_id)
+REFERENCES public.user_account (id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.user_request_quality_map ADD CONSTRAINT request_quality_user_map_fk
+ALTER TABLE public.user_account_request_quality_map ADD CONSTRAINT request_quality_user_account_map_fk
 FOREIGN KEY (request_quality_id)
 REFERENCES public.request_quality (id)
+ON DELETE CASCADE
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+/*user_account_function*/
+
+ALTER TABLE public.user_account_function ADD CONSTRAINT user_account_function_user_account_id_fk
+FOREIGN KEY (user_account_id)
+REFERENCES public.user_account(id)
+ON DELETE CASCADE
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+/*user_account_role*/
+
+ALTER TABLE public.user_account_role ADD CONSTRAINT user_account_role_user_account_id_fk
+FOREIGN KEY (user_account_id)
+REFERENCES public.user_account(id)
+ON DELETE CASCADE
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+/* user_account_type */
+
+ALTER TABLE public.user_account_type ADD CONSTRAINT user_account_type_user_account_id_fk
+FOREIGN KEY (user_account_id)
+REFERENCES public.user_account(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
