@@ -3,7 +3,9 @@ package fr.romdhani.scaridae;
 import fr.romdhani.scaridae.core.database.DBEntityManager;
 import fr.romdhani.scaridae.core.orm.*;
 
+import java.util.Currency;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 
@@ -19,29 +21,20 @@ public class ScaridaeView {
             System.out.println("*** Start scaridae ***");
             DBEntityManager.getInstance().doInTransaction((entityManager) -> {
 
+                BillingType billingType = new BillingType("Card", "original card");
+                Currency currency = Currency.getInstance("GBP");
+                BillingCurrency billingCurrency = new BillingCurrency(currency.getCurrencyCode());
+                Vat vat = new Vat("french tax", 0.2f);
+                Billing billing = new Billing("ref", 11122.2f);
 
-                UserAccount userAccount = new UserAccount("login9", "hello");
+                billing.setBillingtype(billingType);
+                billing.setBillingCurrency(billingCurrency);
+                billing.setVat(vat);
 
-                Project project = new Project("project1", "description");
-                Set<Project> projectSet = new HashSet<>();
-                projectSet.add(project);
-                userAccount.setProjectSet(projectSet);
-
-                Intervention intervention = new Intervention("intervention", "reparing");
-                InterventionType interventionType = new InterventionType("type1", "");
-                intervention.setInterventionType(interventionType);
-
-                intervention.setInterventionProjectSet(projectSet);
-
-                Set<UserAccount> userSet = new HashSet<>();
-                userSet.add(userAccount);
-                intervention.setInterventionUserAccountSet(userSet);
-
-
-                entityManager.persist(project);
-                entityManager.persist(userAccount);
-                entityManager.persist(intervention);
-                entityManager.persist(interventionType);
+                entityManager.persist(billingType);
+                entityManager.persist(billingCurrency);
+                entityManager.persist(vat);
+                entityManager.persist(billing);
 
             });
         } catch (Exception e) {

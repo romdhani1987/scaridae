@@ -249,6 +249,7 @@ CREATE TABLE public.billing (
 				validation_time TIMESTAMP,
 				billing_type_id BIGINT,
 				vat_id BIGINT,
+				billing_currency_id BIGINT,
 				CONSTRAINT billing_pk PRIMARY KEY (id)
 );
 ALTER SEQUENCE public.billing_id_seq OWNED BY public.billing.id;
@@ -265,16 +266,31 @@ CREATE TABLE public.billing_type (
 ALTER SEQUENCE public.billing_type_seq OWNED BY public.billing_type.id;
 
 /* vat */
+
 CREATE SEQUENCE public.vat_id_seq;
 CREATE TABLE public.vat (
                 id BIGINT NOT NULL DEFAULT nextval('public.vat_id_seq'),
-				description VARCHAR,
 				name VARCHAR,
-				value VARCHAR,
+				value REAL,
+				description VARCHAR,
 				creation_time TIMESTAMP,
+				updated_time TIMESTAMP,
 				CONSTRAINT vat_pk PRIMARY KEY (id)
 );
 ALTER SEQUENCE public.vat_id_seq OWNED BY public.vat.id;
+
+/* billing_currency */
+
+CREATE SEQUENCE public.billing_currency_seq;
+CREATE TABLE public.billing_currency (
+                id BIGINT NOT NULL DEFAULT nextval('public.billing_type_seq'),
+                currency_code VARCHAR,
+				default_fraction_digits integer,
+				numeric_code integer,
+				description VARCHAR,
+				CONSTRAINT billing_currency_pk PRIMARY KEY (id)
+);
+ALTER SEQUENCE public.billing_currency_seq OWNED BY public.billing_currency.id;
 
 /* user_account_intervention_map */
 
@@ -841,6 +857,13 @@ NOT DEFERRABLE;
 ALTER TABLE public.billing ADD CONSTRAINT vat_id_fk
 FOREIGN KEY (vat_id)
 REFERENCES public.vat (id)
+ON DELETE CASCADE
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE public.billing ADD CONSTRAINT billing_currency_id_fk
+FOREIGN KEY (billing_currency_id)
+REFERENCES public.billing_currency (id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;

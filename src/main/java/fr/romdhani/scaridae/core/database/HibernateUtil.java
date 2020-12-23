@@ -20,7 +20,7 @@ public class HibernateUtil {
                 Properties settings = new Properties();
 
                 settings.put(Environment.DRIVER, "org.postgresql.Driver");
-                settings.put(Environment.URL, "jdbc:postgresql://127.0.0.1:5432/scer");
+                settings.put(Environment.URL, "jdbc:postgresql://127.0.0.1:5432/df");
                 settings.put(Environment.USER, "postgres");
                 settings.put(Environment.PASS, "postgres");
                 settings.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
@@ -41,6 +41,12 @@ public class HibernateUtil {
                 configuration.addAnnotatedClass(Contract.class);
                 configuration.addAnnotatedClass(Intervention.class);
                 configuration.addAnnotatedClass(InterventionType.class);
+
+                configuration.addAnnotatedClass(Billing.class);
+                configuration.addAnnotatedClass(BillingCurrency.class);
+                configuration.addAnnotatedClass(BillingType.class);
+                configuration.addAnnotatedClass(Vat.class);
+
 
                 ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                         .applySettings(configuration.getProperties()).build();
