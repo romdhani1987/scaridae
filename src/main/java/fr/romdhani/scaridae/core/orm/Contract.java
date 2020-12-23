@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -42,14 +43,14 @@ public class Contract implements Serializable {
     private String serializedProperties;
 
     @OneToMany(mappedBy = "contract")
-    private Set<ObjectData> objectDataSet;
+    private Set<ObjectData> objectDataSet = new HashSet<>();
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", nullable = true)
     private Address address;
 
     @OneToMany(mappedBy = "contract")
-    private Set<UserAccount> userAccountSet;
+    private Set<UserAccount> userAccountSet = new HashSet<>();
 
     public Contract() {
     }

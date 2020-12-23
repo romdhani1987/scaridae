@@ -18,6 +18,7 @@ public class HibernateUtil {
             try {
                 Configuration configuration = new Configuration();
                 Properties settings = new Properties();
+
                 settings.put(Environment.DRIVER, "org.postgresql.Driver");
                 settings.put(Environment.URL, "jdbc:postgresql://127.0.0.1:5432/scer");
                 settings.put(Environment.USER, "postgres");
@@ -38,6 +39,9 @@ public class HibernateUtil {
                 configuration.addAnnotatedClass(Project.class);
                 configuration.addAnnotatedClass(ObjectData.class);
                 configuration.addAnnotatedClass(Contract.class);
+                configuration.addAnnotatedClass(Intervention.class);
+                configuration.addAnnotatedClass(InterventionType.class);
+
                 ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                         .applySettings(configuration.getProperties()).build();
                 sessionFactory = configuration.buildSessionFactory(serviceRegistry);

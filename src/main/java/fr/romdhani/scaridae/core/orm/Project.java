@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -35,11 +36,16 @@ public class Project implements Serializable {
     private String serializedProperties;
 
     @OneToMany(mappedBy = "project")
-    private Set<ObjectData> objectDataSet;
+    private Set<ObjectData> objectDataSet = new HashSet<>();
 
-    // bi-directional many-to-many association to Project
+    // bi-directional many-to-many association to userAccount
     @ManyToMany(mappedBy = "projectSet")
-    private Set<UserAccount> userAccountSet;
+    private Set<UserAccount> userAccountSet = new HashSet<>();
+
+    // bi-directional many-to-many association to intervention
+    @ManyToMany(mappedBy = "interventionProjectSet")
+    private Set<Intervention> interventionSet = new HashSet<>();
+
 
     public Project() {
     }
@@ -119,6 +125,14 @@ public class Project implements Serializable {
 
     public void setObjectDataSet(Set<ObjectData> objectDataSet) {
         this.objectDataSet = objectDataSet;
+    }
+
+    public Set<Intervention> getInterventionSet() {
+        return interventionSet;
+    }
+
+    public void setInterventionSet(Set<Intervention> interventionSet) {
+        this.interventionSet = interventionSet;
     }
 
     @Override

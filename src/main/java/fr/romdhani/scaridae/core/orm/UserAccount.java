@@ -70,6 +70,9 @@ public class UserAccount implements Serializable {
     @JoinColumn(name = "contract_id", nullable = true)
     private Contract contract;
 
+    @OneToMany(mappedBy = "interventionUserAccountSet")
+    private Set<Intervention> interventionSet;
+
     public long getId() {
         return id;
     }
@@ -217,6 +220,14 @@ public class UserAccount implements Serializable {
 
     public void setContract(Contract contract) {
         this.contract = contract;
+    }
+
+    public Set<Intervention> getInterventionSet() {
+        return interventionSet;
+    }
+
+    public void setInterventionSet(Set<Intervention> interventionSet) {
+        this.interventionSet = interventionSet;
     }
 
     @Override
