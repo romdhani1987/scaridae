@@ -6,9 +6,10 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Set;
 
+
 @Entity
-@Table(name = "project")
-public class Project implements Serializable {
+@Table(name = "object_data")
+public class ObjectData implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -22,8 +23,8 @@ public class Project implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "type")
-    private String type;
+    @Column(name = "file")
+    private String file;
 
     @Column(name = "creation_time")
     private Timestamp creationTime = new Timestamp(new Date().getTime());
@@ -34,19 +35,20 @@ public class Project implements Serializable {
     @Column(name = "serialized_properties")
     private String serializedProperties;
 
-    @OneToMany(mappedBy = "project")
-    private Set<ObjectData> objectDataSet;
+    @ManyToOne
+    @JoinColumn(name = "project_id", nullable = true)
+    private Project project;
 
-    // bi-directional many-to-many association to Project
-    @ManyToMany(mappedBy = "projectSet")
-    private Set<UserAccount> userAccountSet;
+    @ManyToOne
+    @JoinColumn(name = "contract_id", nullable = true)
+    private Contract contract;
 
-    public Project() {
-    }
 
-    public Project(String name, String description) {
+    public ObjectData(String name, String file) {
         this.name = name;
-        this.description = description;
+        this.file = file;
+    }
+    public ObjectData() {
     }
 
     public long getId() {
@@ -73,12 +75,12 @@ public class Project implements Serializable {
         this.description = description;
     }
 
-    public String getType() {
-        return type;
+    public String getFile() {
+        return file;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setFile(String file) {
+        this.file = file;
     }
 
     public Timestamp getCreationTime() {
@@ -105,29 +107,74 @@ public class Project implements Serializable {
         this.serializedProperties = serializedProperties;
     }
 
-    public Set<UserAccount> getUserAccountSet() {
-        return userAccountSet;
+    public Project getProject() {
+        return project;
     }
 
-    public void setUserAccountSet(Set<UserAccount> userAccountSet) {
-        this.userAccountSet = userAccountSet;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
-    public Set<ObjectData> getObjectDataSet() {
-        return objectDataSet;
+    public Contract getContract() {
+        return contract;
     }
 
-    public void setObjectDataSet(Set<ObjectData> objectDataSet) {
-        this.objectDataSet = objectDataSet;
+    public void setContract(Contract contract) {
+        this.contract = contract;
     }
 
     @Override
     public String toString() {
-        return "Project{" +
+        return "ObjectData{" +
                 "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", type='" + type + '\'' +
-                ", creationTime=" + creationTime +
+                ", file='" + file + '\'' +
                 '}';
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

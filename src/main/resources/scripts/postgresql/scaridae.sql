@@ -127,6 +127,7 @@ CREATE TABLE public.user_account (
 				service_id BIGINT,
 				user_account_group_id BIGINT,
 				address_id BIGINT,
+				contract_id BIGINT,
                 CONSTRAINT user_account_pk PRIMARY KEY (id)
 );
 ALTER SEQUENCE public.user_account_id_seq OWNED BY public.user_account.id;
@@ -163,8 +164,6 @@ CREATE TABLE public.contract (
 				effective_time TIMESTAMP,
 				last_modification_time TIMESTAMP,
 				serialized_properties TEXT,
-				part_one_id BIGINT,
-				part_two_id BIGINT,
 				address_id BIGINT,
 				CONSTRAINT contract_pk PRIMARY KEY (id)
 );
@@ -703,6 +702,13 @@ ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
+ALTER TABLE public.user_account ADD CONSTRAINT contract_id_fk
+FOREIGN KEY (contract_id)
+REFERENCES public.contract(id)
+ON DELETE CASCADE
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
 /* project */
 
 ALTER TABLE public.project ADD CONSTRAINT contract_id_fk
@@ -720,20 +726,6 @@ ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 /*contract*/
-
-ALTER TABLE public.contract ADD CONSTRAINT part_one_id_fk
-FOREIGN KEY (part_one_id)
-REFERENCES public.user_account(id)
-ON DELETE CASCADE
-ON UPDATE NO ACTION
-NOT DEFERRABLE;
-
-ALTER TABLE public.contract ADD CONSTRAINT part_two_id_fk
-FOREIGN KEY (part_two_id)
-REFERENCES public.user_account(id)
-ON DELETE CASCADE
-ON UPDATE NO ACTION
-NOT DEFERRABLE;
 
 ALTER TABLE public.contract ADD CONSTRAINT address_id_fk
 FOREIGN KEY (address_id)

@@ -66,6 +66,10 @@ public class UserAccount implements Serializable {
     @JoinTable(name = "project_user_account_map", joinColumns = {@JoinColumn(name = "user_account_id")}, inverseJoinColumns = {@JoinColumn(name = "project_id")})
     private Set<Project> projectSet;
 
+    @ManyToOne
+    @JoinColumn(name = "contract_id", nullable = true)
+    private Contract contract;
+
     public long getId() {
         return id;
     }
@@ -205,6 +209,14 @@ public class UserAccount implements Serializable {
     public UserAccount(String login, String passwordHash) {
         this.login = login;
         this.passwordHash = passwordHash;
+    }
+
+    public Contract getContract() {
+        return contract;
+    }
+
+    public void setContract(Contract contract) {
+        this.contract = contract;
     }
 
     @Override
