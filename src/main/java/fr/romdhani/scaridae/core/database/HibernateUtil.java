@@ -46,6 +46,7 @@ public class HibernateUtil {
                 configuration.addAnnotatedClass(BillingType.class);
                 configuration.addAnnotatedClass(Vat.class);
                 configuration.addAnnotatedClass(Customer.class);
+                configuration.addAnnotatedClass(Provider.class);
 
                 ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                         .applySettings(configuration.getProperties()).build();
