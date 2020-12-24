@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Set;
 
 
 @Entity
@@ -26,6 +27,9 @@ public class Provider implements Serializable {
     @OneToOne
     @JoinColumn(name = "company_id", nullable = true)
     Company company;
+
+    @OneToMany(mappedBy = "provider")
+    Set<ProviderIncident> providerIncidentSet;
 
     public Provider() {
     }
@@ -60,6 +64,14 @@ public class Provider implements Serializable {
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    public Set<ProviderIncident> getProviderIncidentSet() {
+        return providerIncidentSet;
+    }
+
+    public void setProviderIncidentSet(Set<ProviderIncident> providerIncidentSet) {
+        this.providerIncidentSet = providerIncidentSet;
     }
 
     public Provider(String name, Company company) {

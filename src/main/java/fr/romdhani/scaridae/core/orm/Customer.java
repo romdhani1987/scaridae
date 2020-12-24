@@ -28,6 +28,10 @@ public class Customer implements Serializable {
     @JoinColumn(name = "company_id", nullable = true)
     Company company;
 
+    @OneToMany(mappedBy = "customer")
+    Set<CustomerIncident> customerIncidentSet;
+
+
     public Customer() {
     }
 
@@ -61,6 +65,14 @@ public class Customer implements Serializable {
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    public Set<CustomerIncident> getCustomerIncidentSet() {
+        return customerIncidentSet;
+    }
+
+    public void setCustomerIncidentSet(Set<CustomerIncident> customerIncidentSet) {
+        this.customerIncidentSet = customerIncidentSet;
     }
 
     public Customer(String name, Company company) {

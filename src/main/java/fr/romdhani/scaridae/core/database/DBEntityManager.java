@@ -32,19 +32,23 @@ public class DBEntityManager {
         return InstanceHolder.INSTANCE;
     }
 
-    public boolean doInTransaction(Runnable runnable) {
+    public void doInTransaction(Runnable runnable) {
         EntityManager entityManager = sessionFactory.createEntityManager();
+        EntityTransaction tx = null;
         try {
-            entityManager.getTransaction().begin();
+            entityManager.setFlushMode(FlushModeType.COMMIT);
+            tx = entityManager.getTransaction();
+            tx.begin();
             runnable.run();
-            entityManager.getTransaction().commit();
-            entityManager.close();
-            return true;
+            entityManager.flush();
+            tx.commit();
         } catch (Exception e) {
+            if (tx != null) tx.rollback();
             e.printStackTrace();
-            return false;
         } finally {
             if (entityManager != null) entityManager.close();
+            if (sessionFactory != null) sessionFactory.close();
+
         }
     }
 
@@ -70,6 +74,7 @@ public class DBEntityManager {
             e.printStackTrace();
         } finally {
             if (entityManager != null) entityManager.close();
+            if (sessionFactory != null) sessionFactory.close();
         }
     }
 

@@ -235,6 +235,20 @@ CREATE TABLE public.customer (
                 CONSTRAINT customer_pk PRIMARY KEY (id)
 );
 ALTER SEQUENCE public.customer_id_seq OWNED BY public.customer.id;
+/* customer_incident */
+
+CREATE SEQUENCE public.customer_incident_id_seq;
+CREATE TABLE public.customer_incident (
+                id BIGINT NOT NULL DEFAULT nextval('public.customer_incident_id_seq'),
+				name VARCHAR,
+				type VARCHAR,
+				description VARCHAR,
+				happened_timestamp TIMESTAMP,
+				serialized_properties TEXT,
+				customer_id BIGINT,
+				CONSTRAINT customer_incident_pk PRIMARY KEY (id)
+);
+ALTER SEQUENCE public.customer_incident_id_seq OWNED BY public.customer_incident.id;
 
 /* billing */
 
@@ -402,6 +416,21 @@ CREATE TABLE public.provider (
 				CONSTRAINT provider_pk PRIMARY KEY (id)
 );
 ALTER SEQUENCE public.provider_id_seq OWNED BY public.provider.id;
+
+/* provider_incident */
+
+CREATE SEQUENCE public.provider_incident_id_seq;
+CREATE TABLE public.provider_incident (
+                id BIGINT NOT NULL DEFAULT nextval('public.provider_incident_id_seq'),
+				name VARCHAR,
+				type VARCHAR,
+				description VARCHAR,
+				happened_timestamp TIMESTAMP,
+				serialized_properties TEXT,
+				provider_id BIGINT,
+				CONSTRAINT provider_incident_pk PRIMARY KEY (id)
+);
+ALTER SEQUENCE public.provider_incident_id_seq OWNED BY public.provider_incident.id;
 
 /* request_purchase */
 
@@ -1265,6 +1294,24 @@ NOT DEFERRABLE;
 ALTER TABLE public.user_account_type ADD CONSTRAINT user_account_type_user_account_id_fk
 FOREIGN KEY (user_account_id)
 REFERENCES public.user_account(id)
+ON DELETE CASCADE
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+/* provider_incident */
+
+ALTER TABLE public.provider_incident ADD CONSTRAINT provider_incident_id_fk
+FOREIGN KEY (provider_id)
+REFERENCES public.provider(id)
+ON DELETE CASCADE
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+/* customer_incident */
+
+ALTER TABLE public.customer_incident ADD CONSTRAINT customer_incident_id_fk
+FOREIGN KEY (customer_id)
+REFERENCES public.customer(id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
