@@ -6,7 +6,11 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Set;
 
+
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "findAllUsers", query = "Select u from UserAccount u")
+})
 @Table(name = "user_account")
 public class UserAccount implements Serializable {
     private static final long serialVersionUID = 1L;

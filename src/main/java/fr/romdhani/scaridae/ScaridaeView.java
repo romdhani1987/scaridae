@@ -44,7 +44,7 @@ public class ScaridaeView {
                 entityManager.persist(product);
                 entityManager.persist(userAccount);
                 */
-                TypedQuery<UserAccount> q2 = entityManager.createQuery("SELECT c FROM UserAccount c", UserAccount.class);
+                TypedQuery<UserAccount> q2 = entityManager.createNamedQuery("findAllUsers", UserAccount.class);
                 for (UserAccount user : q2.getResultList()) {
                    System.out.println(user.getProductSet()+"/");
                     user.getProductSet().forEach(System.out::println);
