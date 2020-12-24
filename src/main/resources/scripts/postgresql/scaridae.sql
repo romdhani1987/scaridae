@@ -339,7 +339,7 @@ CREATE TABLE public.product (
 			    product_group_id BIGINT,
 				product_item_id BIGINT,
 			    provider_id BIGINT,
-				user_account_id BIGINT,
+			    vat_id BIGINT,
                 CONSTRAINT product_pk PRIMARY KEY (id)
 );
 ALTER SEQUENCE public.product_id_seq OWNED BY public.product.id;
@@ -431,6 +431,13 @@ CREATE TABLE public.provider_incident (
 				CONSTRAINT provider_incident_pk PRIMARY KEY (id)
 );
 ALTER SEQUENCE public.provider_incident_id_seq OWNED BY public.provider_incident.id;
+
+/* user_account_product_map */
+CREATE TABLE public.user_account_product_map (
+                user_account_id BIGINT NOT NULL,
+                product_id BIGINT NOT NULL,
+                CONSTRAINT product_user_account_map_pk PRIMARY KEY (user_account_id, product_id)
+);
 
 /* request_purchase */
 
@@ -951,13 +958,12 @@ ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.product ADD CONSTRAINT user_account_id_fk
-FOREIGN KEY (user_account_id)
-REFERENCES public.user_account (id)
+ALTER TABLE public.product ADD CONSTRAINT vat_id_fk
+FOREIGN KEY (vat_id)
+REFERENCES public.vat (id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
-
 
 /* request_purchase */
 
@@ -1312,6 +1318,22 @@ NOT DEFERRABLE;
 ALTER TABLE public.customer_incident ADD CONSTRAINT customer_incident_id_fk
 FOREIGN KEY (customer_id)
 REFERENCES public.customer(id)
+ON DELETE CASCADE
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+/*user_account_product_map*/
+
+ALTER TABLE public.user_account_product_map ADD CONSTRAINT user_account_product_map_fk
+FOREIGN KEY (user_account_id)
+REFERENCES public.user_account (id)
+ON DELETE CASCADE
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE public.user_account_product_map ADD CONSTRAINT product_user_account_map_fk
+FOREIGN KEY (product_id)
+REFERENCES public.product (id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
