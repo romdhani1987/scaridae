@@ -58,6 +58,11 @@ public class Company implements Serializable {
     public Company() {
     }
 
+    public Company(String name, String siret) {
+        this.name = name;
+        this.siret = siret;
+    }
+
     public long getId() {
         return id;
     }
@@ -162,6 +167,14 @@ public class Company implements Serializable {
         this.address = address;
     }
 
+    @Override
+    public String toString() {
+        return "Company{" +
+                "name='" + name + '\'' +
+                ", siret='" + siret + '\'' +
+                ", activity='" + activity + '\'' +
+                '}';
+    }
 }
 
 

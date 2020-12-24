@@ -41,12 +41,11 @@ public class HibernateUtil {
                 configuration.addAnnotatedClass(Contract.class);
                 configuration.addAnnotatedClass(Intervention.class);
                 configuration.addAnnotatedClass(InterventionType.class);
-
                 configuration.addAnnotatedClass(Billing.class);
                 configuration.addAnnotatedClass(BillingCurrency.class);
                 configuration.addAnnotatedClass(BillingType.class);
                 configuration.addAnnotatedClass(Vat.class);
-
+                configuration.addAnnotatedClass(Customer.class);
 
                 ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                         .applySettings(configuration.getProperties()).build();

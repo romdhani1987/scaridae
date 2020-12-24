@@ -26,10 +26,22 @@ public class ScaridaeView {
                 BillingCurrency billingCurrency = new BillingCurrency(currency.getCurrencyCode());
                 Vat vat = new Vat("french tax", 0.2f);
                 Billing billing = new Billing("ref", 11122.2f);
-
+                Address address = new Address();
                 billing.setBillingtype(billingType);
                 billing.setBillingCurrency(billingCurrency);
                 billing.setVat(vat);
+
+                Intervention intervention = new Intervention("for reparings", "");
+                Customer customer = new Customer();
+                Company company = new Company("Amazona", "d14252deqf");
+                customer.setCompany(company);
+                intervention.setCustomer(customer);
+                intervention.setAddress(address);
+
+                entityManager.persist(intervention);
+                entityManager.persist(company);
+                entityManager.persist(customer);
+                entityManager.persist(address);
 
                 entityManager.persist(billingType);
                 entityManager.persist(billingCurrency);

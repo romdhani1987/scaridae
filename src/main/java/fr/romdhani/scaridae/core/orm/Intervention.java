@@ -57,6 +57,14 @@ public class Intervention implements Serializable {
     @JoinColumn(name = "intervention_type_id", nullable = true)
     private InterventionType interventionType;
 
+    @OneToOne
+    @JoinColumn(name = "customer_id")
+    Customer customer;
+
+    @OneToOne
+    @JoinColumn(name = "address_id")
+    Address address;
+
     public Intervention() {
     }
 
@@ -167,6 +175,22 @@ public class Intervention implements Serializable {
 
     public void setInterventionType(InterventionType interventionType) {
         this.interventionType = interventionType;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     @Override
