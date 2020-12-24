@@ -65,7 +65,9 @@ public class DBEntityManager {
             entityManager.setFlushMode(FlushModeType.COMMIT);
             tx = entityManager.getTransaction();
             tx.begin();
+            System.out.println("Start transaction");
             consumer.accept(entityManager);
+            System.out.println("Transaction has finished!");
             entityManager.flush();
             tx.commit();
 

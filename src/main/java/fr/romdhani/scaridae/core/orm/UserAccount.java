@@ -73,6 +73,12 @@ public class UserAccount implements Serializable {
     @OneToMany(mappedBy = "interventionUserAccountSet")
     private Set<Intervention> interventionSet;
 
+
+    // bi-directional many-to-many association to ExternalDb
+    @ManyToMany
+    @JoinTable(name = "user_account_product_map", joinColumns = {@JoinColumn(name = "user_account_id")}, inverseJoinColumns = {@JoinColumn(name = "product_id")})
+    private Set<Product> productSet;
+
     public long getId() {
         return id;
     }
@@ -228,6 +234,17 @@ public class UserAccount implements Serializable {
 
     public void setInterventionSet(Set<Intervention> interventionSet) {
         this.interventionSet = interventionSet;
+    }
+
+    public Set<Product> getProductSet() {
+        return productSet;
+    }
+
+    public void setProductSet(Set<Product> productSet) {
+        this.productSet = productSet;
+    }
+
+    public UserAccount() {
     }
 
     @Override
