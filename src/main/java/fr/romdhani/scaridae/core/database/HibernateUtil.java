@@ -59,6 +59,8 @@ public class HibernateUtil {
                 configuration.addAnnotatedClass(RequestStatus.class);
                 configuration.addAnnotatedClass(RequestType.class);
                 configuration.addAnnotatedClass(ResponsePurchase.class);
+                configuration.addAnnotatedClass(ActionPurchase.class);
+
                 ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                         .applySettings(configuration.getProperties()).build();
                 sessionFactory = configuration.buildSessionFactory(serviceRegistry);

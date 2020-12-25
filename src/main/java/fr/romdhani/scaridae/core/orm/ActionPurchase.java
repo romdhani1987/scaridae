@@ -4,12 +4,11 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.Set;
 
 
 @Entity
-@Table(name = "response_purchase")
-public class ResponsePurchase implements Serializable {
+@Table(name = "action_purchase")
+public class ActionPurchase implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -43,8 +42,9 @@ public class ResponsePurchase implements Serializable {
     @JoinColumn(name = "status_id")
     RequestStatus requestStatus;
 
-    @OneToMany(mappedBy = "responsePurchase")
-    Set<ActionPurchase> actionPurchaseSet;
+    @ManyToOne
+    @JoinColumn(name="response_purchase_id")
+    ResponsePurchase responsePurchase;
 
     public long getId() {
         return id;
@@ -118,18 +118,18 @@ public class ResponsePurchase implements Serializable {
         this.requestStatus = requestStatus;
     }
 
-    public Set<ActionPurchase> getActionPurchaseSet() {
-        return actionPurchaseSet;
+    public ResponsePurchase getResponsePurchase() {
+        return responsePurchase;
     }
 
-    public void setActionPurchaseSet(Set<ActionPurchase> actionPurchaseSet) {
-        this.actionPurchaseSet = actionPurchaseSet;
+    public void setResponsePurchase(ResponsePurchase responsePurchase) {
+        this.responsePurchase = responsePurchase;
     }
 
-    public ResponsePurchase() {
+    public ActionPurchase() {
     }
 
-    public ResponsePurchase(String name, String description) {
+    public ActionPurchase(String name, String description) {
         this.name = name;
         this.description = description;
     }
