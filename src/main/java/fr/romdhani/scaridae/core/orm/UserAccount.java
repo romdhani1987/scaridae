@@ -88,6 +88,21 @@ public class UserAccount implements Serializable {
     @JoinTable(name = "user_account_request_purchase_map", joinColumns = {@JoinColumn(name = "user_account_id")}, inverseJoinColumns = {@JoinColumn(name = "request_purchase_id")})
     private Set<RequestPurchase> requestPurchaseSet;
 
+    // bi-directional many-to-many association to
+    @ManyToMany
+    @JoinTable(name = "user_account_request_access_map", joinColumns = {@JoinColumn(name = "user_account_id")}, inverseJoinColumns = {@JoinColumn(name = "request_access_id")})
+    private Set<RequestAccess> requestAccessSet;
+
+    // bi-directional many-to-many association to
+    @ManyToMany
+    @JoinTable(name = "user_account_request_quality_map", joinColumns = {@JoinColumn(name = "user_account_id")}, inverseJoinColumns = {@JoinColumn(name = "request_quality_id")})
+    private Set<RequestQuality> requestQualitySet;
+
+    // bi-directional many-to-many association to
+    @ManyToMany
+    @JoinTable(name = "user_account_request_borrow_map", joinColumns = {@JoinColumn(name = "user_account_id")}, inverseJoinColumns = {@JoinColumn(name = "request_borrow_id")})
+    private Set<RequestBorrow> requestBorrowSet;
+
 
     public long getId() {
         return id;
@@ -260,6 +275,30 @@ public class UserAccount implements Serializable {
 
     public void setRequestPurchaseSet(Set<RequestPurchase> requestPurchaseSet) {
         this.requestPurchaseSet = requestPurchaseSet;
+    }
+
+    public Set<RequestAccess> getRequestAccessSet() {
+        return requestAccessSet;
+    }
+
+    public void setRequestAccessSet(Set<RequestAccess> requestAccessSet) {
+        this.requestAccessSet = requestAccessSet;
+    }
+
+    public Set<RequestQuality> getRequestQualitySet() {
+        return requestQualitySet;
+    }
+
+    public void setRequestQualitySet(Set<RequestQuality> requestQualitySet) {
+        this.requestQualitySet = requestQualitySet;
+    }
+
+    public Set<RequestBorrow> getRequestBorrowSet() {
+        return requestBorrowSet;
+    }
+
+    public void setRequestBorrowSet(Set<RequestBorrow> requestBorrowSet) {
+        this.requestBorrowSet = requestBorrowSet;
     }
 
     public UserAccount() {
