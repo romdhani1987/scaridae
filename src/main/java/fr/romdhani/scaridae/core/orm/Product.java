@@ -28,6 +28,12 @@ public class Product implements Serializable {
     @Column(name = "details")
     private String details;
 
+    @Column(name = "mark")
+    private String mark;
+
+    @Column(name = "model")
+    private String model;
+
     @Column(name = "price_incl")
     private float priceIncl;
 
@@ -250,6 +256,22 @@ public class Product implements Serializable {
 
     public void setProductItem(ProductItem productItem) {
         this.productItem = productItem;
+    }
+
+    public String getMark() {
+        return mark;
+    }
+
+    public void setMark(String mark) {
+        this.mark = mark;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
     }
 
     public Product() {

@@ -127,6 +127,7 @@ CREATE TABLE public.user_account (
 				service_id BIGINT,
 				user_account_group_id BIGINT,
 				address_id BIGINT,
+				contract_id BIGINT,
                 CONSTRAINT user_account_pk PRIMARY KEY (id)
 );
 ALTER SEQUENCE public.user_account_id_seq OWNED BY public.user_account.id;
@@ -163,8 +164,6 @@ CREATE TABLE public.contract (
 				effective_time TIMESTAMP,
 				last_modification_time TIMESTAMP,
 				serialized_properties TEXT,
-				part_one_id BIGINT,
-				part_two_id BIGINT,
 				address_id BIGINT,
 				CONSTRAINT contract_pk PRIMARY KEY (id)
 );
@@ -236,6 +235,20 @@ CREATE TABLE public.customer (
                 CONSTRAINT customer_pk PRIMARY KEY (id)
 );
 ALTER SEQUENCE public.customer_id_seq OWNED BY public.customer.id;
+/* customer_incident */
+
+CREATE SEQUENCE public.customer_incident_id_seq;
+CREATE TABLE public.customer_incident (
+                id BIGINT NOT NULL DEFAULT nextval('public.customer_incident_id_seq'),
+				name VARCHAR,
+				type VARCHAR,
+				description VARCHAR,
+				happened_timestamp TIMESTAMP,
+				serialized_properties TEXT,
+				customer_id BIGINT,
+				CONSTRAINT customer_incident_pk PRIMARY KEY (id)
+);
+ALTER SEQUENCE public.customer_incident_id_seq OWNED BY public.customer_incident.id;
 
 /* billing */
 
@@ -250,6 +263,7 @@ CREATE TABLE public.billing (
 				validation_time TIMESTAMP,
 				billing_type_id BIGINT,
 				vat_id BIGINT,
+				billing_currency_id BIGINT,
 				CONSTRAINT billing_pk PRIMARY KEY (id)
 );
 ALTER SEQUENCE public.billing_id_seq OWNED BY public.billing.id;
@@ -266,16 +280,31 @@ CREATE TABLE public.billing_type (
 ALTER SEQUENCE public.billing_type_seq OWNED BY public.billing_type.id;
 
 /* vat */
+
 CREATE SEQUENCE public.vat_id_seq;
 CREATE TABLE public.vat (
                 id BIGINT NOT NULL DEFAULT nextval('public.vat_id_seq'),
-				description VARCHAR,
 				name VARCHAR,
-				value VARCHAR,
+				value REAL,
+				description VARCHAR,
 				creation_time TIMESTAMP,
+				updated_time TIMESTAMP,
 				CONSTRAINT vat_pk PRIMARY KEY (id)
 );
 ALTER SEQUENCE public.vat_id_seq OWNED BY public.vat.id;
+
+/* billing_currency */
+
+CREATE SEQUENCE public.billing_currency_seq;
+CREATE TABLE public.billing_currency (
+                id BIGINT NOT NULL DEFAULT nextval('public.billing_type_seq'),
+                currency_code VARCHAR,
+				default_fraction_digits integer,
+				numeric_code integer,
+				description VARCHAR,
+				CONSTRAINT billing_currency_pk PRIMARY KEY (id)
+);
+ALTER SEQUENCE public.billing_currency_seq OWNED BY public.billing_currency.id;
 
 /* user_account_intervention_map */
 
@@ -310,7 +339,7 @@ CREATE TABLE public.product (
 			    product_group_id BIGINT,
 				product_item_id BIGINT,
 			    provider_id BIGINT,
-				user_account_id BIGINT,
+			    vat_id BIGINT,
                 CONSTRAINT product_pk PRIMARY KEY (id)
 );
 ALTER SEQUENCE public.product_id_seq OWNED BY public.product.id;
@@ -387,6 +416,28 @@ CREATE TABLE public.provider (
 				CONSTRAINT provider_pk PRIMARY KEY (id)
 );
 ALTER SEQUENCE public.provider_id_seq OWNED BY public.provider.id;
+
+/* provider_incident */
+
+CREATE SEQUENCE public.provider_incident_id_seq;
+CREATE TABLE public.provider_incident (
+                id BIGINT NOT NULL DEFAULT nextval('public.provider_incident_id_seq'),
+				name VARCHAR,
+				type VARCHAR,
+				description VARCHAR,
+				happened_timestamp TIMESTAMP,
+				serialized_properties TEXT,
+				provider_id BIGINT,
+				CONSTRAINT provider_incident_pk PRIMARY KEY (id)
+);
+ALTER SEQUENCE public.provider_incident_id_seq OWNED BY public.provider_incident.id;
+
+/* user_account_product_map */
+CREATE TABLE public.user_account_product_map (
+                user_account_id BIGINT NOT NULL,
+                product_id BIGINT NOT NULL,
+                CONSTRAINT product_user_account_map_pk PRIMARY KEY (user_account_id, product_id)
+);
 
 /* request_purchase */
 
@@ -703,6 +754,13 @@ ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
+ALTER TABLE public.user_account ADD CONSTRAINT contract_id_fk
+FOREIGN KEY (contract_id)
+REFERENCES public.contract(id)
+ON DELETE CASCADE
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
 /* project */
 
 ALTER TABLE public.project ADD CONSTRAINT contract_id_fk
@@ -720,20 +778,6 @@ ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 /*contract*/
-
-ALTER TABLE public.contract ADD CONSTRAINT part_one_id_fk
-FOREIGN KEY (part_one_id)
-REFERENCES public.user_account(id)
-ON DELETE CASCADE
-ON UPDATE NO ACTION
-NOT DEFERRABLE;
-
-ALTER TABLE public.contract ADD CONSTRAINT part_two_id_fk
-FOREIGN KEY (part_two_id)
-REFERENCES public.user_account(id)
-ON DELETE CASCADE
-ON UPDATE NO ACTION
-NOT DEFERRABLE;
 
 ALTER TABLE public.contract ADD CONSTRAINT address_id_fk
 FOREIGN KEY (address_id)
@@ -853,6 +897,13 @@ ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
+ALTER TABLE public.billing ADD CONSTRAINT billing_currency_id_fk
+FOREIGN KEY (billing_currency_id)
+REFERENCES public.billing_currency (id)
+ON DELETE CASCADE
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
 /*provider*/
 
 ALTER TABLE public.provider ADD CONSTRAINT provider_company_id_fk
@@ -907,13 +958,12 @@ ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.product ADD CONSTRAINT user_account_id_fk
-FOREIGN KEY (user_account_id)
-REFERENCES public.user_account (id)
+ALTER TABLE public.product ADD CONSTRAINT vat_id_fk
+FOREIGN KEY (vat_id)
+REFERENCES public.vat (id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
-
 
 /* request_purchase */
 
@@ -1250,6 +1300,40 @@ NOT DEFERRABLE;
 ALTER TABLE public.user_account_type ADD CONSTRAINT user_account_type_user_account_id_fk
 FOREIGN KEY (user_account_id)
 REFERENCES public.user_account(id)
+ON DELETE CASCADE
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+/* provider_incident */
+
+ALTER TABLE public.provider_incident ADD CONSTRAINT provider_incident_id_fk
+FOREIGN KEY (provider_id)
+REFERENCES public.provider(id)
+ON DELETE CASCADE
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+/* customer_incident */
+
+ALTER TABLE public.customer_incident ADD CONSTRAINT customer_incident_id_fk
+FOREIGN KEY (customer_id)
+REFERENCES public.customer(id)
+ON DELETE CASCADE
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+/*user_account_product_map*/
+
+ALTER TABLE public.user_account_product_map ADD CONSTRAINT user_account_product_map_fk
+FOREIGN KEY (user_account_id)
+REFERENCES public.user_account (id)
+ON DELETE CASCADE
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE public.user_account_product_map ADD CONSTRAINT product_user_account_map_fk
+FOREIGN KEY (product_id)
+REFERENCES public.product (id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION
 NOT DEFERRABLE;

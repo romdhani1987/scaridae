@@ -1,11 +1,11 @@
 package fr.romdhani.scaridae;
 
 import fr.romdhani.scaridae.core.database.DBEntityManager;
-import fr.romdhani.scaridae.core.orm.*;
+import fr.romdhani.scaridae.gui.panels.home.Home;
+import fr.romdhani.scaridae.utils.Version;
 
-import javax.persistence.TypedQuery;
-import java.util.HashSet;
-import java.util.Set;
+import javax.swing.*;
+import java.awt.*;
 
 
 /**
@@ -15,31 +15,28 @@ import java.util.Set;
  */
 public class ScaridaeView {
     @SuppressWarnings("unused")
+    private void show() {
+        Version version = new Version();
+        JFrame frame = new JFrame("Scaridae");
+        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        frame.setSize(800, 600);
+        frame.setContentPane(new Home());
+        frame.setVisible(true);
+    }
+    private void initialize() {
+
+
+    }
+
+    private void launch() {
+        initialize();
+        show();
+    }
     public static void main(String[] args) {
         try {
             System.out.println("*** Start scaridae ***");
-            DBEntityManager.getInstance().doInTransaction((entityManager) -> {
-                UserAccount userAccount = new UserAccount("aromdhani1251", "sdcqs");
-                RequestQuality requestPurchase = new RequestQuality("requestaccess", "");
-                RequestType requestType = new RequestType("type1", "");
-                RequestStatus requestStatus = new RequestStatus("waiting", "wating to execute");
-                requestPurchase.setRequestStatus(requestStatus);
-                requestPurchase.setRequestType(requestType);
-                ResponseQuality responsePurchase = new ResponseQuality("valid", "");
-                requestPurchase.setResponseQuality(responsePurchase);
-                Set<RequestQuality> requestPurchaseSet = new HashSet<>();
-                requestPurchaseSet.add(requestPurchase);
-                userAccount.setRequestQualitySet(requestPurchaseSet);
-                ActionQuality actionPurchase = new ActionQuality("action1", "action descriptyion");
-                actionPurchase.setResponseQuality(responsePurchase);
-                responsePurchase.setActionQualitySet(Set.of(actionPurchase));
-                entityManager.persist(requestPurchase);
-                entityManager.persist(requestStatus);
-                entityManager.persist(requestType);
-                entityManager.persist(responsePurchase);
-                entityManager.persist(userAccount);
-                entityManager.persist(actionPurchase);
-            });
+            ScaridaeView scaridaeView = new ScaridaeView();
+            scaridaeView.launch();
         } catch (Exception e) {
             e.printStackTrace();
         }
