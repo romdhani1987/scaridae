@@ -19,7 +19,7 @@ public class ScaridaeView {
         Version version = new Version();
         JFrame frame = new JFrame("Scaridae");
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        frame.setSize(800, 600);
+        frame.setSize(1250, 850);
         frame.setContentPane(new Home());
         frame.setVisible(true);
     }
