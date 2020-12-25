@@ -19,36 +19,25 @@ public class ScaridaeView {
         try {
             System.out.println("*** Start scaridae ***");
             DBEntityManager.getInstance().doInTransaction((entityManager) -> {
-              /*  ProductUse productUse = new ProductUse("intern", "intern");
-                ProductCategory productCategory = new ProductCategory("cat1", "");
-                ProductGroup productGroup = new ProductGroup("grp1", "ge");
-                ProductType proudctType = new ProductType("type1", "");
-                ProductItem productItem = new ProductItem("item", "item");
-                Product product = new Product("key1", 123.3f);
-                product.setProductCategory(productCategory);
-                product.setProductGroup(productGroup);
-                product.setProudctType(proudctType);
-                product.setProductItem(productItem);
-                product.setProductUse(productUse);
 
-                UserAccount userAccount = new UserAccount("hello1", "sdcqs");
-                Set<Product> productSet = new HashSet<>();
-                productSet.add(product);
-                userAccount.setProductSet(productSet);
+                UserAccount userAccount = new UserAccount("aromdhani", "sdcqs");
+                RequestPurchase requestPurchase = new RequestPurchase("request1", "");
+                RequestType requestType = new RequestType("type1", "");
+                RequestStatus requestStatus = new RequestStatus("waiting", "wating to execute");
+                requestPurchase.setRequestStatus(requestStatus);
+                requestPurchase.setRequestType(requestType);
+                ResponsePurchase responsePurchase = new ResponsePurchase("valid", "");
+                requestPurchase.setResponsePurchase(responsePurchase);
+                Set<RequestPurchase> requestPurchaseSet = new HashSet<>();
+                requestPurchaseSet.add(requestPurchase);
+                userAccount.setRequestPurchaseSet(requestPurchaseSet);
 
-                entityManager.persist(productUse);
-                entityManager.persist(productCategory);
-                entityManager.persist(productGroup);
-                entityManager.persist(proudctType);
-                entityManager.persist(productItem);
-                entityManager.persist(product);
+                entityManager.persist(requestPurchase);
+                entityManager.persist(requestStatus);
+                entityManager.persist(requestType);
+                entityManager.persist(responsePurchase);
                 entityManager.persist(userAccount);
-                */
-                TypedQuery<UserAccount> q2 = entityManager.createNamedQuery("findAllUsers", UserAccount.class);
-                for (UserAccount user : q2.getResultList()) {
-                   System.out.println(user.getProductSet()+"/");
-                    user.getProductSet().forEach(System.out::println);
-                }
+
 
             });
         } catch (Exception e) {

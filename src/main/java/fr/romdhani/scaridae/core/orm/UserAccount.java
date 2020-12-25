@@ -65,7 +65,7 @@ public class UserAccount implements Serializable {
     @OneToMany(mappedBy = "userAccountRole")
     private Set<UserRole> userRoleSet;
 
-    // bi-directional many-to-many association to ExternalDb
+    // bi-directional many-to-many association to Project
     @ManyToMany
     @JoinTable(name = "project_user_account_map", joinColumns = {@JoinColumn(name = "user_account_id")}, inverseJoinColumns = {@JoinColumn(name = "project_id")})
     private Set<Project> projectSet;
@@ -78,10 +78,16 @@ public class UserAccount implements Serializable {
     private Set<Intervention> interventionSet;
 
 
-    // bi-directional many-to-many association to ExternalDb
+    // bi-directional many-to-many association to Product
     @ManyToMany
     @JoinTable(name = "user_account_product_map", joinColumns = {@JoinColumn(name = "user_account_id")}, inverseJoinColumns = {@JoinColumn(name = "product_id")})
     private Set<Product> productSet;
+
+    // bi-directional many-to-many association to
+    @ManyToMany
+    @JoinTable(name = "user_account_request_purchase_map", joinColumns = {@JoinColumn(name = "user_account_id")}, inverseJoinColumns = {@JoinColumn(name = "request_purchase_id")})
+    private Set<RequestPurchase> requestPurchaseSet;
+
 
     public long getId() {
         return id;
@@ -246,6 +252,14 @@ public class UserAccount implements Serializable {
 
     public void setProductSet(Set<Product> productSet) {
         this.productSet = productSet;
+    }
+
+    public Set<RequestPurchase> getRequestPurchaseSet() {
+        return requestPurchaseSet;
+    }
+
+    public void setRequestPurchaseSet(Set<RequestPurchase> requestPurchaseSet) {
+        this.requestPurchaseSet = requestPurchaseSet;
     }
 
     public UserAccount() {
