@@ -3,6 +3,7 @@ package fr.romdhani.scaridae.gui.panels.home;
 import fr.romdhani.scaridae.controller.UserController;
 import fr.romdhani.scaridae.core.orm.Address;
 import fr.romdhani.scaridae.core.orm.UserAccount;
+import fr.romdhani.scaridae.utils.email.GenerateEncryptionPassword;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -42,6 +43,37 @@ public class SignupPanel extends JPanel {
     private JPasswordField secondPasswordField = new JPasswordField();
     private JButton singInButton = new JButton("Create account");
     private JButton cancelButton = new JButton("Cancel");
+
+    private Runnable onSuccess = () -> {
+    };
+    private Runnable onFailure = () -> {
+    };
+    private Runnable onCancel = () -> {
+    };
+
+    public Runnable getOnSuccess() {
+        return onSuccess;
+    }
+
+    public void setOnSuccess(Runnable onSuccess) {
+        this.onSuccess = onSuccess;
+    }
+
+    public Runnable getOnFailure() {
+        return onFailure;
+    }
+
+    public void setOnFailure(Runnable onFailure) {
+        this.onFailure = onFailure;
+    }
+
+    public Runnable getOnCancel() {
+        return onCancel;
+    }
+
+    public void setOnCancel(Runnable onCancel) {
+        this.onCancel = onCancel;
+    }
 
     private void init() {
 
@@ -114,6 +146,7 @@ public class SignupPanel extends JPanel {
     }
 
     private void cancel(ActionEvent actionEvent) {
+        onCancel.run();
     }
 
     private void updateFields(boolean isVisible) {
@@ -156,9 +189,11 @@ public class SignupPanel extends JPanel {
             return false;
         }
     }
+
     private boolean checkFields() {
         return isLoginAvailable() && isValidPass() && isValidMail();
     }
+
     private void signup(ActionEvent e) {
         if (checkFields()) {
             UserAccount userAccount = new UserAccount();
@@ -166,9 +201,8 @@ public class SignupPanel extends JPanel {
             userAccount.setLastName(secondNameField.getText());
             userAccount.setLogin(loginField.getText());
             userAccount.setMail(mailField.getText());
-            userAccount.setPasswordHash(secondPasswordField.getText());
+            userAccount.setPasswordHash(GenerateEncryptionPassword.generate(secondPasswordField.getText()));
             userAccount.setPhone(phoneField.getText());
-
             Address address = new Address();
             address.setStreet(streetField.getText());
             address.setCity(cityField.getText());
@@ -176,8 +210,10 @@ public class SignupPanel extends JPanel {
             address.setCountry(countryField.getText());
             userAccount.setAddress(address);
             userController.signup(userAccount, address);
+            onSuccess.run();
         } else {
             System.out.println("can not create user account!");
+            onFailure.run();
         }
     }
 }

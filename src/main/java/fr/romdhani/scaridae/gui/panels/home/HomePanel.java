@@ -42,6 +42,12 @@ public class HomePanel extends JPanel {
     private void signupPerforemd(ActionEvent actionEvent) {
         JDialog dialog = new JDialog();
         SignupPanel signupPanel = new SignupPanel(UserController.getInstance());
+        signupPanel.setOnSuccess(()->{
+            dialog. dispose();
+        });
+        signupPanel.setOnCancel(()->{
+            dialog. dispose();
+        });
         dialog.setTitle("Sign up");
         dialog.setContentPane(signupPanel);
         dialog.setSize(new Dimension(800, 650));
