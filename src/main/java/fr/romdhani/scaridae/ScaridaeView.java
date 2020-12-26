@@ -1,11 +1,9 @@
 package fr.romdhani.scaridae;
 
-import fr.romdhani.scaridae.core.database.DBEntityManager;
-import fr.romdhani.scaridae.gui.panels.home.Home;
+import fr.romdhani.scaridae.gui.panels.home.HomePanel;
 import fr.romdhani.scaridae.utils.Version;
 
 import javax.swing.*;
-import java.awt.*;
 
 
 /**
@@ -18,9 +16,11 @@ public class ScaridaeView {
     private void show() {
         Version version = new Version();
         JFrame frame = new JFrame("Scaridae");
-        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setContentPane(new HomePanel());
+        frame.pack();
         frame.setSize(1250, 850);
-        frame.setContentPane(new Home());
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
     private void initialize() {

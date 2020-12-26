@@ -76,7 +76,6 @@ public class DBEntityManager {
             e.printStackTrace();
         } finally {
             if (entityManager != null) entityManager.close();
-            if (sessionFactory != null) sessionFactory.close();
         }
     }
 

@@ -9,7 +9,8 @@ import java.util.Set;
 
 @Entity
 @NamedQueries({
-        @NamedQuery(name = "findAllUsers", query = "Select u from UserAccount u")
+        @NamedQuery(name = "findAllUsers", query = "Select u from UserAccount u"),
+        @NamedQuery(name = "findUserByLogin",query = "SELECT u FROM UserAccount u WHERE u.login = :login")
 })
 @Table(name = "user_account")
 public class UserAccount implements Serializable {
