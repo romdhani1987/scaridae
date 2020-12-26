@@ -1,8 +1,7 @@
 package fr.romdhani.scaridae;
 
 import fr.romdhani.scaridae.core.database.DBEntityManager;
-import fr.romdhani.scaridae.gui.panels.home.HomePanel;
-import fr.romdhani.scaridae.utils.Version;
+import fr.romdhani.scaridae.gui.panels.home.ConnectionPanel;
 
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
@@ -19,7 +18,7 @@ public class ScaridaeView {
     private void show() {
         JFrame frame = new JFrame("Scaridae");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setContentPane(new HomePanel());
+        frame.setContentPane(new ConnectionPanel());
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent windowEvent) {
@@ -35,11 +34,10 @@ public class ScaridaeView {
 
     private void exit() {
         DBEntityManager.getInstance().closeSessionFactory();
+        System.exit(0);
     }
 
     private void initialize() {
-
-
     }
 
     private void launch() {

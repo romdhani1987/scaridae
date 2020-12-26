@@ -2,13 +2,17 @@ package fr.romdhani.scaridae.controller;
 
 import fr.romdhani.scaridae.core.database.DBEntityManager;
 import fr.romdhani.scaridae.core.orm.UserAccount;
+import fr.romdhani.scaridae.utils.email.GeneratePlainPassword;
 
-import javax.persistence.Entity;
 import javax.persistence.TypedQuery;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * @author aromdhani
+ */
 public class UserController {
 
     private UserController() {
@@ -22,8 +26,11 @@ public class UserController {
         return UserController.InstanceHolder.INSTANCE;
     }
 
-    public boolean signIn() {
-        return true;
+    public synchronized boolean signIn(String login, String password) {
+        List<UserAccount> userAccountList = getUserAccount(login);
+        if (userAccountList.isEmpty()) return false;
+        UserAccount userAccount = userAccountList.get(0);
+        return GeneratePlainPassword.generate(userAccount.getPasswordHash()).equals(password) ? true : false;
     }
 
     public void signup(Serializable... entities) {
@@ -37,6 +44,21 @@ public class UserController {
             e.printStackTrace();
         }
 
+    }
+
+    private synchronized List<UserAccount> getUserAccount(String login) {
+        final List<UserAccount> results = new ArrayList<>();
+        try {
+            DBEntityManager.getInstance().doInTransaction(em -> {
+                TypedQuery<UserAccount> query = em.createQuery(
+                        "SELECT u FROM UserAccount u WHERE u.login = :userLogin", UserAccount.class);
+                results.addAll(query.setParameter("userLogin", login).getResultList());
+
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return results;
     }
 
     public synchronized boolean isLoginAvailable(String login) {

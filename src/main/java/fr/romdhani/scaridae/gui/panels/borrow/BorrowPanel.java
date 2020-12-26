@@ -1,4 +1,4 @@
-package fr.romdhani.scaridae.gui.panels.home;
+package fr.romdhani.scaridae.gui.panels.borrow;
 
 import fr.romdhani.scaridae.controller.UserController;
 import fr.romdhani.scaridae.core.orm.Address;
@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @author aromdhani
  */
-public class SignupPanel extends JPanel {
+public class BorrowPanel extends JPanel {
 
     private UserController userController;
 
@@ -158,7 +158,7 @@ public class SignupPanel extends JPanel {
         list.forEach(l -> l.setVisible(isVisible));
     }
 
-    public SignupPanel(UserController userController) {
+    public BorrowPanel(UserController userController) {
         this.userController = userController;
         init();
     }
