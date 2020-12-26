@@ -76,7 +76,6 @@ public class SignupPanel extends JPanel {
     }
 
     private void init() {
-
         String layoutConstraint = "width :180: ,wrap";
         LoginExistError.setForeground(Color.RED);
         passwordError.setForeground(Color.RED);
