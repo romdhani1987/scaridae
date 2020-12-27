@@ -7,6 +7,8 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class ConnectionPanel extends JPanel {
 
@@ -29,14 +31,23 @@ public class ConnectionPanel extends JPanel {
         loginPanel.add(passwordField, "width :150: ,wrap");
         JPanel buttonsPanel = new JPanel(new FlowLayout());
         buttonsPanel.add(singInButton);
-        singInButton.addActionListener(this::signInPerformed);
+        singInButton.addActionListener(e -> signInPerformed());
+        singInButton.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    signInPerformed();
+                }
+            }
+        });
         buttonsPanel.add(cancelButton);
         cancelButton.addActionListener(this::cancelActionPerformed);
         signupButton.setText("<HTML> <FONT color=\"#000099\"><U>Sign up</U></FONT>"
                 + "</HTML>");
         errorSignIn.setForeground(Color.RED);
         errorSignIn.setVisible(false);
-        signupButton.addActionListener(this::signupPerforemd);
+        signupButton.addActionListener(e -> signupPerforemd());
         buttonsPanel.add(signupButton, "new");
         loginPanel.add(buttonsPanel, "growx, span,wrap");
         loginPanel.add(new JLabel(""), "span2");
@@ -47,6 +58,12 @@ public class ConnectionPanel extends JPanel {
 
         add(buttonPanel, "dock center");
 
+    }
+
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+
+        }
     }
 
     private void cancelActionPerformed(ActionEvent actionEvent) {
@@ -60,7 +77,7 @@ public class ConnectionPanel extends JPanel {
         loginField.grabFocus();
     }
 
-    private void signInPerformed(ActionEvent actionEvent) {
+    private void signInPerformed() {
         if (UserController.getInstance().signIn(loginField.getText(), passwordField.getText())) {
             System.out.println("Signed in");
             errorSignIn.setVisible(false);
@@ -73,7 +90,7 @@ public class ConnectionPanel extends JPanel {
         }
     }
 
-    private void signupPerforemd(ActionEvent actionEvent) {
+    private void signupPerforemd() {
         JDialog dialog = new JDialog();
         SignupPanel signupPanel = new SignupPanel(UserController.getInstance());
         signupPanel.setOnSuccess(() -> {
