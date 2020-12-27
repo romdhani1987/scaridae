@@ -35,7 +35,6 @@ public class ConnectionPanel extends JPanel {
         singInButton.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                super.keyPressed(e);
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     signInPerformed();
                 }
@@ -55,17 +54,9 @@ public class ConnectionPanel extends JPanel {
         loginPanel.add(errorSignIn, "growx");
         JPanel buttonPanel = new JPanel(new FlowLayout());
         buttonPanel.add(loginPanel);
-
         add(buttonPanel, "dock center");
 
     }
-
-    public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-
-        }
-    }
-
     private void cancelActionPerformed(ActionEvent actionEvent) {
         clearFields();
         errorSignIn.setVisible(false);

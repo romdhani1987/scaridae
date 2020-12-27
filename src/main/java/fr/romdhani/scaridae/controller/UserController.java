@@ -79,4 +79,9 @@ public class UserController {
         }
         return atomicBoolean.get();
     }
+
+    public void exit() {
+        DBEntityManager.getInstance().closeSessionFactory();
+        System.exit(0);
+    }
 }

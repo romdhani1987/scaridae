@@ -1,5 +1,6 @@
 package fr.romdhani.scaridae.gui.panels.home;
 
+import fr.romdhani.scaridae.controller.UserController;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -10,7 +11,7 @@ import javax.swing.*;
 public class MainPanel extends JPanel {
     private final JMenuBar menuBar = new JMenuBar();
     private final JMenu fileMenu = new JMenu("File");
-    private final JMenuItem logoutMenuItem = new JMenuItem("Logout");
+    private final JMenuItem exitMenuItem = new JMenuItem("Exit");
     private final JMenu settingsMenu = new JMenu("Settings");
     private final JMenuItem outputMenuItem = new JMenuItem("Default output directory");
     private final JMenuItem dbMenuItem = new JMenuItem("Database");
@@ -28,15 +29,16 @@ public class MainPanel extends JPanel {
     private static final String ADMIN = "Admin";
 
     private void init() {
-
-        fileMenu.add(logoutMenuItem);
+        fileMenu.add(exitMenuItem);
+        exitMenuItem.addActionListener(e -> {
+            UserController.getInstance().exit();
+        });
         settingsMenu.add(outputMenuItem);
         settingsMenu.add(dbMenuItem);
         helpMenu.add(helpMenuItem);
         menuBar.add(fileMenu);
         menuBar.add(settingsMenu);
         menuBar.add(helpMenu);
-
         tabbedPane.add(ORGANIZATION, new JPanel());
         tabbedPane.add(REQUESTS, new JPanel());
         tabbedPane.add(RESPONSE, new JPanel());
