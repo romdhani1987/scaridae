@@ -7,17 +7,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Frame extends JFrame {
-    private MainPanel mainPanel;
-
-    public Frame() throws HeadlessException {
-    }
 
     public Frame(String title) throws HeadlessException {
         super(title);
-    }
-
-    public Frame(String title, GraphicsConfiguration gc) {
-        super(title, gc);
     }
 
     @Subscribe
