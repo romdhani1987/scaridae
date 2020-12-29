@@ -1,6 +1,8 @@
 package fr.romdhani.scaridae.gui.table;
 
 import fr.romdhani.scaridae.core.orm.RequestAccess;
+import fr.romdhani.scaridae.core.orm.RequestStatus;
+import fr.romdhani.scaridae.core.orm.RequestType;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
@@ -8,15 +10,17 @@ import java.util.List;
 
 
 /**
+ * Request Model
+ *
  * @author aromdhani
  */
 public class AccessRequestModel extends AbstractTableModel {
-    private final String[] header = {"Name", "Reference"};
-    private List<RequestAccess> userStatisticsList = new ArrayList<>();
+    private final String[] header = {"Name", "Reference", "Description", "Group", "Creation Time", "Last Modification", "Type", "Status"};
+    private List<RequestAccess> requestAccessList = new ArrayList<>();
 
     @Override
     public int getRowCount() {
-        return userStatisticsList.size();
+        return requestAccessList.size();
     }
 
     @Override
@@ -31,42 +35,55 @@ public class AccessRequestModel extends AbstractTableModel {
 
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return false;
+        return true;
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (columnIndex) {
             case 0:
-                return userStatisticsList.get(rowIndex).getName();
+                return requestAccessList.get(rowIndex).getName();
             case 1:
-                return userStatisticsList.get(rowIndex).getRef();
+                return requestAccessList.get(rowIndex).getRef();
+            case 2:
+                return requestAccessList.get(rowIndex).getDescription();
+            case 3:
+                return requestAccessList.get(rowIndex).getType();
+            case 4:
+                return requestAccessList.get(rowIndex).getCreationTime();
+            case 5:
+                return requestAccessList.get(rowIndex).getLastModificationTime();
+            case 6:
+                return requestAccessList.get(rowIndex).getRequestType();
+            case 7:
+                return requestAccessList.get(rowIndex).getRequestStatus();
             default:
                 return null; //Error
         }
     }
 
     public Object getValueAt(int rowIndex) {
-        return userStatisticsList.get(rowIndex);
+        return requestAccessList.get(rowIndex);
     }
 
+    public AccessRequestModel() {
+        super();
+    }
 
     /**
-     * Add a user statis wrapper
-     *
-     * @param requestAccess The user to add.
+     * @param requestAccess The request to add.
      */
     public void addUserStatis(RequestAccess requestAccess) {
-        userStatisticsList.add(requestAccess);
-        fireTableRowsInserted(userStatisticsList.size() - 1, userStatisticsList.size() - 1);
+        requestAccessList.add(requestAccess);
+        fireTableRowsInserted(requestAccessList.size() - 1, requestAccessList.size() - 1);
     }
 
     /**
      * Remove all  user statis wrapper
      */
     public void removeAll() {
-        userStatisticsList.clear();
-        fireTableRowsInserted(userStatisticsList.size() - 1, userStatisticsList.size() - 1);
+        requestAccessList.clear();
+        fireTableRowsInserted(requestAccessList.size() - 1, requestAccessList.size() - 1);
     }
 
     /**
@@ -75,28 +92,28 @@ public class AccessRequestModel extends AbstractTableModel {
      * @param serieWrapperList The users list to add.
      */
     public void addAll(List<RequestAccess> serieWrapperList) {
-        userStatisticsList.addAll(serieWrapperList);
-        fireTableRowsInserted(userStatisticsList.size() - 1, userStatisticsList.size() - 1);
+        requestAccessList.addAll(serieWrapperList);
+        fireTableRowsInserted(requestAccessList.size() - 1, requestAccessList.size() - 1);
     }
 
     /**
      * Set all in batch
      *
-     * @param serieWrapperList The users list to add.
+     * @param requestList The request list to add.
      */
-    public void setAll(List<RequestAccess> serieWrapperList) {
-        userStatisticsList.clear();
-        userStatisticsList.addAll(serieWrapperList);
-        fireTableRowsInserted(userStatisticsList.size() - 1, userStatisticsList.size() - 1);
+    public void setAll(List<RequestAccess> requestList) {
+        requestAccessList.clear();
+        requestAccessList.addAll(requestList);
+        fireTableRowsInserted(requestAccessList.size() - 1, requestAccessList.size() - 1);
     }
 
     /**
-     * Remove  user statis wrapper
+     * Remove
      *
-     * @param rowIndex The index of the selected SerieWrapper.
+     * @param rowIndex The index of the selected request.
      */
-    public void removeUserStatisWrapper(int rowIndex) {
-        userStatisticsList.remove(rowIndex);
+    public void removeRequest(int rowIndex) {
+        requestAccessList.remove(rowIndex);
         fireTableRowsDeleted(rowIndex, rowIndex);
     }
 
@@ -105,6 +122,10 @@ public class AccessRequestModel extends AbstractTableModel {
         switch (columnIndex) {
             case 0:
                 return String.class;
+            case 6:
+                return RequestType.class;
+            case 7:
+                return RequestStatus.class;
             default:
                 return Object.class;
         }

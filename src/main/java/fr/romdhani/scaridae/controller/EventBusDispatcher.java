@@ -20,11 +20,15 @@ public class EventBusDispatcher {
         return eventBus;
     }
 
-    public <T> void register(T event) {
-        eventBus.register(event);
+    public <T> void register(T object) {
+        eventBus.register(object);
     }
 
-    public <T> void unRegister(T event) {
-        eventBus.unregister(event);
+    public <T> void unRegister(T object) {
+        eventBus.unregister(object);
+    }
+
+    public <T> void post(T object) {
+        eventBus.post(object);
     }
 }

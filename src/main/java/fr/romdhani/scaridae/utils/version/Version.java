@@ -1,4 +1,4 @@
-package fr.romdhani.scaridae.utils;
+package fr.romdhani.scaridae.utils.version;
 
 public class Version {
 

@@ -1,5 +1,7 @@
 package fr.romdhani.scaridae.core.orm;
 
+import fr.romdhani.scaridae.utils.version.UUIDVersion;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -21,7 +23,7 @@ public class RequestAccess implements Serializable {
     private String name;
 
     @Column(name = "ref")
-    private String ref;
+    private String ref = UUIDVersion.get().toString();
 
     @Column(name = "description")
     private String description;

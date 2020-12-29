@@ -1,5 +1,6 @@
 package fr.romdhani.scaridae.gui.panels.home;
 
+import fr.romdhani.scaridae.controller.RequestController;
 import fr.romdhani.scaridae.controller.UserController;
 import fr.romdhani.scaridae.gui.panels.access.AccessRequest;
 import fr.romdhani.scaridae.utils.size.Desktop;
@@ -29,6 +30,7 @@ public class MainPanel extends JPanel {
     private static final String CONTACTS = "Contacts";
     private static final String ATTENDANCE = "Attendance";
     private static final String ADMIN = "Admin";
+    private RequestController requestController = new RequestController();
 
     private void init() {
         fileMenu.add(exitMenuItem);
@@ -41,7 +43,7 @@ public class MainPanel extends JPanel {
         menuBar.add(fileMenu);
         menuBar.add(settingsMenu);
         menuBar.add(helpMenu);
-        AccessRequest accessRequest = new AccessRequest();
+        AccessRequest accessRequest = new AccessRequest(requestController);
 
         JToolBar toolBar = new JToolBar();
         JPanel accessPanel = new JPanel(new MigLayout());
@@ -59,7 +61,7 @@ public class MainPanel extends JPanel {
         tabbedPane.add(CONTACTS, new JPanel());
         tabbedPane.add(ATTENDANCE, new JPanel());
         tabbedPane.add(ADMIN, new JPanel());
-        this.setLayout(new MigLayout("fill,debug"));
+        this.setLayout(new MigLayout("fill"));
         this.setPreferredSize(Desktop.getScreenDimension());
         this.add(tabbedPane, "grow,push");
     }
