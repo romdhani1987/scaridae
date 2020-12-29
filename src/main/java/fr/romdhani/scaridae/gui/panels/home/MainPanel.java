@@ -21,14 +21,14 @@ public class MainPanel extends JPanel {
     private final JMenu helpMenu = new JMenu("Help");
     private final JMenuItem helpMenuItem = new JMenuItem("?");
     private final JTabbedPane tabbedPane = new JTabbedPane();
-    private static final String ORGANIZATION = "Organisation";
+    private static final String PRODUCTS = "Products";
     private static final String REQUESTS = "Requests";
     private static final String ACTIONS = "Actions";
     private static final String RESPONSE = "Responses";
     private static final String PROJECTS = "Projects";
     private static final String REPORTS = "Reports";
     private static final String CONTACTS = "Contacts";
-    private static final String ATTENDANCE = "Attendance";
+    private static final String ATTENDANCE = "Plannings";
     private static final String ADMIN = "Admin";
     private RequestController requestController = new RequestController();
 
@@ -55,8 +55,8 @@ public class MainPanel extends JPanel {
         tabbedPane.add(REQUESTS, accessPanel);
         tabbedPane.add(RESPONSE, new JPanel());
         tabbedPane.add(ACTIONS, new JPanel());
-        tabbedPane.add(ORGANIZATION, new JPanel());
         tabbedPane.add(PROJECTS, new JPanel());
+        tabbedPane.add(PRODUCTS, new JPanel());
         tabbedPane.add(REPORTS, new JPanel());
         tabbedPane.add(CONTACTS, new JPanel());
         tabbedPane.add(ATTENDANCE, new JPanel());

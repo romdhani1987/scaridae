@@ -5,10 +5,8 @@ import fr.romdhani.scaridae.controller.EventBusDispatcher;
 import fr.romdhani.scaridae.core.database.DBEntityManager;
 import fr.romdhani.scaridae.gui.Frame;
 import fr.romdhani.scaridae.gui.panels.home.ConnectionPanel;
-import fr.romdhani.scaridae.utils.size.Desktop;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 

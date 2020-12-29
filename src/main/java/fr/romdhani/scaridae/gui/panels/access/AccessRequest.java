@@ -53,7 +53,7 @@ public class AccessRequest extends JPanel implements IRequest {
         RequestAccess requestAccess = new RequestAccess("rrr", "Test");
         accessRequestModel.addUserStatis(requestAccess);
         accessPanel.add(toolbarPanel, ",wrap");
-        accessPanel.add(accessTable, ",span,grow,push");
+        accessPanel.add(new JScrollPane(accessTable), ",span,grow,push");
 
         JScrollPane tableScrollPane = new JScrollPane(accessPanel);
         JSplitPane documentSplitPane = new JSplitPane(
