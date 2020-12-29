@@ -1,8 +1,12 @@
 package fr.romdhani.scaridae.gui.panels.home;
 
+import fr.romdhani.scaridae.controller.DatabaseInitializer;
 import fr.romdhani.scaridae.controller.UserController;
 import fr.romdhani.scaridae.core.orm.Address;
+import fr.romdhani.scaridae.core.orm.Service;
 import fr.romdhani.scaridae.core.orm.UserAccount;
+import fr.romdhani.scaridae.core.orm.UserFunction;
+import fr.romdhani.scaridae.gui.renders.SimpleListCellRender;
 import fr.romdhani.scaridae.utils.email.GenerateEncryptionPassword;
 import net.miginfocom.swing.MigLayout;
 
@@ -19,30 +23,30 @@ public class SignupPanel extends JPanel {
 
     private UserController userController;
 
-    private JLabel LoginExistError = new JLabel("Login error !");
-    private JLabel passwordError = new JLabel("Passwords error !");
-    private JLabel emailError = new JLabel("Email address error !");
+    private final JLabel LoginExistError = new JLabel("Login error !");
+    private final JLabel passwordError = new JLabel("Passwords error !");
+    private final JLabel emailError = new JLabel("Email address error !");
 
-    private JTextField firstNameField = new JTextField();
-    private JTextField secondNameField = new JTextField();
-    private JTextField mailField = new JTextField();
-    private JTextField phoneField = new JTextField();
-    private JTextField loginField = new JTextField();
+    private final JTextField firstNameField = new JTextField();
+    private final JTextField secondNameField = new JTextField();
+    private final JTextField mailField = new JTextField();
+    private final JTextField phoneField = new JTextField();
+    private final JTextField loginField = new JTextField();
 
-    private JTextField streetField = new JTextField();
-    private JTextField cityField = new JTextField();
-    private JTextField codeField = new JTextField();
-    private JTextField countryField = new JTextField();
+    private final JTextField streetField = new JTextField();
+    private final JTextField cityField = new JTextField();
+    private final JTextField codeField = new JTextField();
+    private final JTextField countryField = new JTextField();
 
-    private JComboBox<String> functionCBox = new JComboBox<>();
-    private JComboBox<String> serviceCBox = new JComboBox<>();
+    private JComboBox<UserFunction> functionCBox;
+    private JComboBox<Service> serviceCBox;
     private JComboBox<String> groupCBox = new JComboBox<>();
     private JComboBox<String> companyCBox = new JComboBox<>();
 
-    private JPasswordField firstPasswordField = new JPasswordField();
-    private JPasswordField secondPasswordField = new JPasswordField();
-    private JButton singInButton = new JButton("Create account");
-    private JButton cancelButton = new JButton("Cancel");
+    private final JPasswordField firstPasswordField = new JPasswordField();
+    private final JPasswordField secondPasswordField = new JPasswordField();
+    private final JButton singInButton = new JButton("Create account");
+    private final JButton cancelButton = new JButton("Cancel");
 
     private Runnable onSuccess = () -> {
     };
@@ -125,9 +129,14 @@ public class SignupPanel extends JPanel {
         loginPanel.add(new JSeparator(), "wrap");
 
         loginPanel.add(new JLabel("Function: "));
+        functionCBox = new JComboBox<>();
+        functionCBox.setRenderer(new SimpleListCellRender());
         loginPanel.add(functionCBox, layoutConstraint);
 
+
         loginPanel.add(new JLabel("Service: "));
+        serviceCBox = new JComboBox<>();
+        serviceCBox.setRenderer(new SimpleListCellRender());
         loginPanel.add(serviceCBox, layoutConstraint);
 
         loginPanel.add(new JLabel("Group: "));

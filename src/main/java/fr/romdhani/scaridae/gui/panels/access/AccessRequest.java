@@ -11,11 +11,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.text.SimpleDateFormat;
 
+/**
+ * @author aromdhani
+ */
 public class AccessRequest extends JPanel implements IRequest {
+
     private final JTextField searchTextField = new JTextField();
-    private JTable accessTable = new JTable();
     private final JPanel accessRequestPanel = new JPanel();
     private RequestController requestController;
+    private JTable accessTable = new JTable();
 
     private void init() {
         JPanel accessPanel = new JPanel();

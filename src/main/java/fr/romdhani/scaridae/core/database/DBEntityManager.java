@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.FlushModeType;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,13 +80,14 @@ public class DBEntityManager {
         }
     }
 
-    /**
-     * @param list
-     * @param func
-     * @param <T>
-     * @param <R>
-     * @return
-     */
+    public void persistEntities(Serializable... entities) throws Exception {
+        DBEntityManager.getInstance().doInTransaction(em -> {
+            for (Serializable entity : entities) {
+                em.persist(entity);
+            }
+        });
+    }
+
     public <T, R> Map<T, R> doInTransaction(List<T> list, Function<T, R> func) {
         EntityManager entityManager = sessionFactory.createEntityManager();
         Map<T, R> result = new HashMap<>();
@@ -105,9 +107,6 @@ public class DBEntityManager {
         }
     }
 
-    /**
-     * Close session factory
-     */
     public void closeSessionFactory() {
         try {
             sessionFactory.close();

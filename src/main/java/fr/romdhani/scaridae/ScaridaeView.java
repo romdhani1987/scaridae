@@ -1,5 +1,6 @@
 package fr.romdhani.scaridae;
 
+import fr.romdhani.scaridae.controller.DatabaseInitializer;
 import fr.romdhani.scaridae.controller.EventBusDispatcher;
 import fr.romdhani.scaridae.core.database.DBEntityManager;
 import fr.romdhani.scaridae.gui.Frame;
@@ -45,7 +46,11 @@ public class ScaridaeView {
     }
 
     private void initialize() {
-        DBEntityManager.getInstance();
+        try {
+            DatabaseInitializer.getInstance().load();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void launch() {
