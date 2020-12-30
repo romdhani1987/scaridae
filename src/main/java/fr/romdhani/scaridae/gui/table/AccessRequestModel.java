@@ -15,7 +15,7 @@ import java.util.List;
  * @author aromdhani
  */
 public class AccessRequestModel extends AbstractTableModel {
-    private final String[] header = {"Name", "Reference", "Description", "Priority", "Label", "Group", "Creation Time", "Last Modification", "Type", "Status"};
+    private final String[] header = {"Name", "Reference", "Description", "Priority", "Owner", "Reporter", "Label", "Group", "Creation Time", "Last Modification", "Type", "Status"};
     private List<RequestAccess> requestAccessList = new ArrayList<>();
 
     @Override
@@ -50,16 +50,20 @@ public class AccessRequestModel extends AbstractTableModel {
             case 3:
                 return requestAccessList.get(rowIndex).getRequestPriority();
             case 4:
-                return requestAccessList.get(rowIndex).getRequestLabel();
+                return requestAccessList.get(rowIndex).getReporter();
             case 5:
-                return requestAccessList.get(rowIndex).getRequestGroup();
+                return requestAccessList.get(rowIndex).getAssignee();
             case 6:
-                return requestAccessList.get(rowIndex).getCreationTime();
+                return requestAccessList.get(rowIndex).getRequestLabel();
             case 7:
-                return requestAccessList.get(rowIndex).getLastModificationTime();
+                return requestAccessList.get(rowIndex).getRequestGroup();
             case 8:
-                return requestAccessList.get(rowIndex).getRequestType();
+                return requestAccessList.get(rowIndex).getCreationTime();
             case 9:
+                return requestAccessList.get(rowIndex).getLastModificationTime();
+            case 10:
+                return requestAccessList.get(rowIndex).getRequestType();
+            case 11:
                 return requestAccessList.get(rowIndex).getRequestStatus();
             default:
                 return null; //Error

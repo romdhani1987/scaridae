@@ -31,6 +31,12 @@ public class RequestAccess implements Serializable {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "reporter")
+    private String reporter;
+
+    @Column(name = "assignee")
+    private String assignee;
+
     @Column(name = "request_group")
     private String requestGroup = ReqGroup.MISCELLANEOUS.getName();
 
@@ -190,6 +196,36 @@ public class RequestAccess implements Serializable {
 
     public void setRequestLabel(String requestLabel) {
         this.requestLabel = requestLabel;
+    }
+
+    public String getReporter() {
+        return reporter;
+    }
+
+    public void setReporter(String reporter) {
+        this.reporter = reporter;
+    }
+
+    public String getAssignee() {
+        return assignee;
+    }
+
+    public void setAssignee(String assignee) {
+        this.assignee = assignee;
+    }
+
+    public RequestAccess(String name, String reporter, String assignee, String requestPriority, String requestLabel) {
+        this.name = name;
+        this.reporter = reporter;
+        this.assignee = assignee;
+        this.requestPriority = requestPriority;
+        this.requestLabel = requestLabel;
+    }
+
+    public RequestAccess(String name, String reporter, String requestPriority) {
+        this.name = name;
+        this.reporter = reporter;
+        this.requestPriority = requestPriority;
     }
 
     @Override

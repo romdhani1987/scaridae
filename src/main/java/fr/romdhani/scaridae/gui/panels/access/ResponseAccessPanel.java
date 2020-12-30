@@ -4,6 +4,6 @@ import fr.romdhani.scaridae.gui.panels.commons.IResponse;
 
 import javax.swing.*;
 
-public class AccessResponse extends JPanel implements IResponse {
+public class ResponseAccessPanel extends JPanel implements IResponse {
 
 }

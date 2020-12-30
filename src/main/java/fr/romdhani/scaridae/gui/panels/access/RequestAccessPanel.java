@@ -15,12 +15,13 @@ import java.text.SimpleDateFormat;
 /**
  * @author aromdhani
  */
-public class AccessRequest extends JPanel implements IRequest {
+public class RequestAccessPanel extends JPanel implements IRequest {
 
     private final JTextField searchTextField = new JTextField();
     private final JPanel accessRequestPanel = new JPanel();
+    private final JTable accessTable = new JTable();
     private RequestController requestController;
-    private JTable accessTable = new JTable();
+
 
     private void init() {
         JPanel accessPanel = new JPanel();
@@ -71,7 +72,7 @@ public class AccessRequest extends JPanel implements IRequest {
         add(rightSplitPane, "height 95%, width 100%");
     }
 
-    public AccessRequest(RequestController requestController) {
+    public RequestAccessPanel(RequestController requestController) {
         this.requestController = requestController;
         init();
     }

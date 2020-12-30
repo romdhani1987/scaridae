@@ -2,7 +2,7 @@ package fr.romdhani.scaridae.gui.panels.home;
 
 import fr.romdhani.scaridae.controller.RequestController;
 import fr.romdhani.scaridae.controller.UserController;
-import fr.romdhani.scaridae.gui.panels.access.AccessRequest;
+import fr.romdhani.scaridae.gui.panels.access.RequestAccessPanel;
 import fr.romdhani.scaridae.utils.size.Desktop;
 import net.miginfocom.swing.MigLayout;
 
@@ -43,13 +43,13 @@ public class MainPanel extends JPanel {
         menuBar.add(fileMenu);
         menuBar.add(settingsMenu);
         menuBar.add(helpMenu);
-        AccessRequest accessRequest = new AccessRequest(requestController);
+        RequestAccessPanel requestAccessPanel = new RequestAccessPanel(requestController);
 
         JToolBar toolBar = new JToolBar();
         JPanel accessPanel = new JPanel(new MigLayout());
         accessPanel.add(toolBar, "wrap");
         JTabbedPane requestTabbedPane = new JTabbedPane();
-        requestTabbedPane.add("Access", accessRequest);
+        requestTabbedPane.add("Access", requestAccessPanel);
         accessPanel.add(requestTabbedPane, "grow, push, wrap");
 
         tabbedPane.add(REQUESTS, accessPanel);

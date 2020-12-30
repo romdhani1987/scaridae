@@ -76,6 +76,7 @@ public class DBEntityManager {
             if (tx != null) tx.rollback();
             e.printStackTrace();
         } finally {
+            entityManager.setFlushMode(FlushModeType.AUTO);
             if (entityManager != null) entityManager.close();
         }
     }
@@ -84,6 +85,22 @@ public class DBEntityManager {
         DBEntityManager.getInstance().doInTransaction(em -> {
             for (Serializable entity : entities) {
                 em.persist(entity);
+            }
+        });
+    }
+
+    public void removeEntities(Serializable... entities) throws Exception {
+        DBEntityManager.getInstance().doInTransaction(em -> {
+            for (Serializable entity : entities) {
+                em.remove(entity);
+            }
+        });
+    }
+
+    public void mergeEntities(Serializable... entities) throws Exception {
+        DBEntityManager.getInstance().doInTransaction(em -> {
+            for (Serializable entity : entities) {
+                em.merge(entity);
             }
         });
     }
