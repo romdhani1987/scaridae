@@ -15,7 +15,7 @@ import java.util.List;
  * @author aromdhani
  */
 public class AccessRequestModel extends AbstractTableModel {
-    private final String[] header = {"Name", "Reference", "Description", "Group", "Creation Time", "Last Modification", "Type", "Status"};
+    private final String[] header = {"Name", "Reference", "Description", "Priority", "Label", "Group", "Creation Time", "Last Modification", "Type", "Status"};
     private List<RequestAccess> requestAccessList = new ArrayList<>();
 
     @Override
@@ -48,14 +48,18 @@ public class AccessRequestModel extends AbstractTableModel {
             case 2:
                 return requestAccessList.get(rowIndex).getDescription();
             case 3:
-                return requestAccessList.get(rowIndex).getType();
+                return requestAccessList.get(rowIndex).getRequestPriority();
             case 4:
-                return requestAccessList.get(rowIndex).getCreationTime();
+                return requestAccessList.get(rowIndex).getRequestLabel();
             case 5:
-                return requestAccessList.get(rowIndex).getLastModificationTime();
+                return requestAccessList.get(rowIndex).getRequestGroup();
             case 6:
-                return requestAccessList.get(rowIndex).getRequestType();
+                return requestAccessList.get(rowIndex).getCreationTime();
             case 7:
+                return requestAccessList.get(rowIndex).getLastModificationTime();
+            case 8:
+                return requestAccessList.get(rowIndex).getRequestType();
+            case 9:
                 return requestAccessList.get(rowIndex).getRequestStatus();
             default:
                 return null; //Error
@@ -120,8 +124,6 @@ public class AccessRequestModel extends AbstractTableModel {
     @Override
     public Class getColumnClass(int columnIndex) {
         switch (columnIndex) {
-            case 0:
-                return String.class;
             case 6:
                 return RequestType.class;
             case 7:

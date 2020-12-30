@@ -1,5 +1,8 @@
 package fr.romdhani.scaridae.core.orm;
 
+import fr.romdhani.scaridae.core.orm.enums.ReqGroup;
+import fr.romdhani.scaridae.core.orm.enums.Labels;
+import fr.romdhani.scaridae.core.orm.enums.Priority;
 import fr.romdhani.scaridae.utils.version.UUIDVersion;
 
 import javax.persistence.*;
@@ -28,8 +31,14 @@ public class RequestAccess implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "type")
-    private String type;
+    @Column(name = "request_group")
+    private String requestGroup = ReqGroup.MISCELLANEOUS.getName();
+
+    @Column(name = "request_priority")
+    private String requestPriority = Priority.MINOR.getName();
+
+    @Column(name = "request_label")
+    private String requestLabel = Labels.QUESTION.getName();
 
     @Column(name = "creation_time")
     private Timestamp creationTime = new Timestamp(new Date().getTime());
@@ -87,12 +96,12 @@ public class RequestAccess implements Serializable {
         this.description = description;
     }
 
-    public String getType() {
-        return type;
+    public String getRequestGroup() {
+        return requestGroup;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setRequestGroup(String requestGroup) {
+        this.requestGroup = requestGroup;
     }
 
     public Timestamp getCreationTime() {
@@ -159,12 +168,36 @@ public class RequestAccess implements Serializable {
         this.description = description;
     }
 
+    public String getRequestPriority() {
+        return requestPriority;
+    }
+
+    public void setRequestPriority(Priority priority) {
+        this.requestPriority = priority.getName();
+    }
+
+    public void setRequestPriority(String requestPriority) {
+        this.requestPriority = requestPriority;
+    }
+
+    public String getRequestLabel() {
+        return requestLabel;
+    }
+
+    public void setRequestLabel(Labels label) {
+        this.requestLabel = label.name();
+    }
+
+    public void setRequestLabel(String requestLabel) {
+        this.requestLabel = requestLabel;
+    }
+
     @Override
     public String toString() {
         return "RequestAccess{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", type='" + type + '\'' +
+                ", type='" + requestGroup + '\'' +
                 '}';
     }
 }

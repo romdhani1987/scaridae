@@ -2,6 +2,7 @@ package fr.romdhani.scaridae.gui.panels.access;
 
 import fr.romdhani.scaridae.controller.RequestController;
 import fr.romdhani.scaridae.core.orm.RequestAccess;
+import fr.romdhani.scaridae.core.orm.enums.Priority;
 import fr.romdhani.scaridae.gui.panels.commons.IRequest;
 import fr.romdhani.scaridae.gui.table.AccessRequestModel;
 import net.miginfocom.swing.MigLayout;
@@ -51,6 +52,7 @@ public class AccessRequest extends JPanel implements IRequest {
         AccessRequestModel accessRequestModel = new AccessRequestModel();
         accessTable.setModel(accessRequestModel);
         RequestAccess requestAccess = new RequestAccess("rrr", "Test");
+        requestAccess.setRequestPriority(Priority.MINOR);
         accessRequestModel.addUserStatis(requestAccess);
         accessPanel.add(toolbarPanel, ",wrap");
         accessPanel.add(new JScrollPane(accessTable), ",span,grow,push");
