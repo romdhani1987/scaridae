@@ -111,6 +111,7 @@ public class RequestAccessPanel extends JPanel implements IRequest {
         JDialog dialog = new JDialog();
         NewRequestPanel newRequestPanel = new NewRequestPanel();
         newRequestPanel.setOnSuccess(() -> {
+
             dialog.dispose();
         });
         newRequestPanel.setOnCancel(() -> {

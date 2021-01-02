@@ -93,6 +93,7 @@ public class NewRequestPanel extends JPanel {
 
         setLayout(new MigLayout());
         loginPanel.add(new JLabel("Title: "));
+        nameField.addActionListener(e -> isTitleOk());
         loginPanel.add(nameField, layoutConstraint);
         loginPanel.add(nameError, layoutConstraintWrap);
 
@@ -161,19 +162,74 @@ public class NewRequestPanel extends JPanel {
         add(buttonPanel, "dock center");
     }
 
-    private void assignee() {
+    private boolean isTitleOk() {
+        if (nameField.getText().isEmpty()) {
+            nameError.setVisible(false);
+            return true;
+        } else {
+            nameError.setVisible(true);
+            return false;
+        }
     }
 
-    private void statusChanged() {
+    private boolean isDescOk() {
+        if (descriptionField.getText().isEmpty()) {
+            descriptionError.setVisible(false);
+            return true;
+        } else {
+            descriptionError.setVisible(true);
+            return false;
+        }
     }
 
-    private void reqGroupChanged() {
+    private boolean assignee() {
+        if (assigneeCBox.getSelectedItem() != null) {
+            assigneeError.setVisible(false);
+            return true;
+        } else {
+            statusError.setVisible(true);
+            return false;
+        }
     }
 
-    private void labelsChanged() {
+    private boolean statusChanged() {
+        if (statusCBox.getSelectedItem() != null) {
+            statusError.setVisible(false);
+            return true;
+        } else {
+            statusError.setVisible(true);
+            return false;
+        }
     }
 
-    private void priorityChanged() {
+    private boolean reqGroupChanged() {
+        if (groupCBox.getSelectedItem() != null) {
+            groupError.setVisible(false);
+            return true;
+        } else {
+            groupError.setVisible(true);
+            return false;
+        }
+    }
+
+    private boolean labelsChanged() {
+        if (labelCBox.getSelectedItem() != null) {
+            labelError.setVisible(false);
+            return true;
+        } else {
+            labelError.setVisible(true);
+            return false;
+        }
+    }
+
+    private boolean priorityChanged() {
+        if (priorityCBox.getSelectedItem() != null) {
+            priorityError.setVisible(false);
+            return true;
+        } else {
+            priorityError.setVisible(true);
+            return false;
+        }
     }
 
     private void cancel(ActionEvent actionEvent) {
@@ -194,26 +250,9 @@ public class NewRequestPanel extends JPanel {
         init();
     }
 
-    private boolean isLoginAvailable() {
-        return true;
-    }
-
-    private boolean isValidPass() {
-        if (true) {
-            statusError.setVisible(false);
-            return true;
-        } else {
-            statusError.setVisible(true);
-            return false;
-        }
-    }
-
-    private boolean isValidMail() {
-        return true;
-    }
 
     private boolean checkFields() {
-        return isLoginAvailable() && isValidPass() && isValidMail();
+        return assignee() && statusChanged() && reqGroupChanged() && labelsChanged() && priorityChanged() && isTitleOk() && isDescOk();
     }
 
     private void add(ActionEvent e) {
