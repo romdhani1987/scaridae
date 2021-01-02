@@ -13,7 +13,7 @@ public class CurrentSession {
         private static final CurrentSession INSTANCE = new CurrentSession();
     }
 
-    public CurrentSession getInstance() {
+    public static CurrentSession getInstance() {
         return InstanceHolder.INSTANCE;
     }
 

@@ -30,7 +30,15 @@ public class UserController {
         List<UserAccount> userAccountList = getUserAccount(login);
         if (userAccountList.isEmpty()) return false;
         UserAccount userAccount = userAccountList.get(0);
-        return GeneratePlainPassword.generate(userAccount.getPasswordHash()).equals(password) ? true : false;
+        if (GeneratePlainPassword.generate(userAccount.getPasswordHash()).equals(password)) {
+            CurrentSession.getInstance().setLogin(login);
+            CurrentSession.getInstance().setUserAccount(userAccount);
+            return true;
+        } else {
+            CurrentSession.getInstance().setLogin(null);
+            CurrentSession.getInstance().setUserAccount(null);
+            return false;
+        }
     }
 
     public void signup(Serializable... entities) {
@@ -53,6 +61,21 @@ public class UserController {
                 TypedQuery<UserAccount> query = em.createQuery(
                         "SELECT u FROM UserAccount u WHERE u.login = :userLogin", UserAccount.class);
                 results.addAll(query.setParameter("userLogin", login).getResultList());
+
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return results;
+    }
+
+    public synchronized List<UserAccount> getAllUserAccounts() {
+        final List<UserAccount> results = new ArrayList<>();
+        try {
+            DBEntityManager.getInstance().doInTransaction(em -> {
+                TypedQuery<UserAccount> query = em.createQuery(
+                        "SELECT u FROM UserAccount u", UserAccount.class);
+                results.addAll(query.getResultList());
 
             });
         } catch (Exception e) {

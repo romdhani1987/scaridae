@@ -1,10 +1,12 @@
 package fr.romdhani.scaridae.gui.panels.access;
 
 import fr.romdhani.scaridae.controller.RequestController;
+import fr.romdhani.scaridae.controller.UserController;
 import fr.romdhani.scaridae.core.orm.RequestAccess;
 import fr.romdhani.scaridae.core.orm.enums.Priority;
 import fr.romdhani.scaridae.gui.panels.commons.IRequest;
-import fr.romdhani.scaridae.gui.table.AccessRequestModel;
+import fr.romdhani.scaridae.gui.panels.home.SignupPanel;
+import fr.romdhani.scaridae.gui.table.model.AccessRequestModel;
 import net.miginfocom.swing.MigLayout;
 import org.jdesktop.swingx.JXDatePicker;
 
@@ -20,6 +22,9 @@ public class RequestAccessPanel extends JPanel implements IRequest {
     private final JTextField searchTextField = new JTextField();
     private final JPanel accessRequestPanel = new JPanel();
     private final JTable accessTable = new JTable();
+    private final JButton newRequestButton = new JButton("New");
+    private final JButton editRequestButton = new JButton("Edit");
+    private final JButton removeRequestButton = new JButton("Remove");
     private RequestController requestController;
 
 
@@ -54,7 +59,7 @@ public class RequestAccessPanel extends JPanel implements IRequest {
         accessTable.setModel(accessRequestModel);
         RequestAccess requestAccess = new RequestAccess("rrr", "Test");
         requestAccess.setRequestPriority(Priority.MINOR);
-        accessRequestModel.addUserStatis(requestAccess);
+        accessRequestModel.addRequest(requestAccess);
         accessPanel.add(toolbarPanel, ",wrap");
         accessPanel.add(new JScrollPane(accessTable), ",span,grow,push");
 
@@ -63,13 +68,59 @@ public class RequestAccessPanel extends JPanel implements IRequest {
                 JSplitPane.HORIZONTAL_SPLIT, tableScrollPane, accessRequestPanel);
         documentSplitPane.setResizeWeight(0.8);
 
-        JScrollPane scrollPane = new JScrollPane(new JPanel());
+        JScrollPane scrollPane = new JScrollPane(createBottomPane());
         JSplitPane rightSplitPane = new JSplitPane(
                 JSplitPane.VERTICAL_SPLIT, documentSplitPane, scrollPane);
         rightSplitPane.setResizeWeight(0.8);
         this.setLayout(new MigLayout(""));
 
         add(rightSplitPane, "height 95%, width 100%");
+    }
+
+    private JPanel createBottomPane() {
+        JPanel bottomPanel = new JPanel(new MigLayout());
+        newRequestButton.addActionListener(e -> newRequest());
+        editRequestButton.addActionListener(e -> editRequest());
+        removeRequestButton.addActionListener(e -> removeRequest());
+        bottomPanel.add(newRequestButton, "w :50:");
+        bottomPanel.add(editRequestButton, "w :50:");
+        bottomPanel.add(removeRequestButton, "w :50:");
+        return bottomPanel;
+    }
+
+    private void removeRequest() {
+    }
+
+    private void editRequest() {
+        JDialog dialog = new JDialog();
+        SignupPanel signupPanel = new SignupPanel(UserController.getInstance());
+        signupPanel.setOnSuccess(() -> {
+            dialog.dispose();
+        });
+        signupPanel.setOnCancel(() -> {
+            dialog.dispose();
+        });
+        dialog.setTitle("Edit Request");
+        dialog.setContentPane(signupPanel);
+        dialog.setSize(new Dimension(800, 650));
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+    }
+
+    private void newRequest() {
+        JDialog dialog = new JDialog();
+        NewRequestPanel newRequestPanel = new NewRequestPanel();
+        newRequestPanel.setOnSuccess(() -> {
+            dialog.dispose();
+        });
+        newRequestPanel.setOnCancel(() -> {
+            dialog.dispose();
+        });
+        dialog.setTitle("New Request");
+        dialog.setContentPane(newRequestPanel);
+        dialog.setSize(new Dimension(800, 650));
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
     }
 
     public RequestAccessPanel(RequestController requestController) {

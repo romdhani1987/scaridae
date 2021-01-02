@@ -1,4 +1,4 @@
-package fr.romdhani.scaridae.gui.table;
+package fr.romdhani.scaridae.gui.table.model;
 
 import fr.romdhani.scaridae.core.orm.RequestAccess;
 import fr.romdhani.scaridae.core.orm.RequestStatus;
@@ -81,7 +81,7 @@ public class AccessRequestModel extends AbstractTableModel {
     /**
      * @param requestAccess The request to add.
      */
-    public void addUserStatis(RequestAccess requestAccess) {
+    public void addRequest(RequestAccess requestAccess) {
         requestAccessList.add(requestAccess);
         fireTableRowsInserted(requestAccessList.size() - 1, requestAccessList.size() - 1);
     }

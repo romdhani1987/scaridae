@@ -1,5 +1,6 @@
 package fr.romdhani.scaridae.gui.panels.home;
 
+import fr.romdhani.scaridae.controller.CurrentSession;
 import fr.romdhani.scaridae.controller.EventBusDispatcher;
 import fr.romdhani.scaridae.controller.UserController;
 import net.miginfocom.swing.MigLayout;
@@ -57,6 +58,7 @@ public class ConnectionPanel extends JPanel {
         add(buttonPanel, "dock center");
 
     }
+
     private void cancelActionPerformed(ActionEvent actionEvent) {
         clearFields();
         errorSignIn.setVisible(false);
