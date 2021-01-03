@@ -4,10 +4,10 @@ package fr.romdhani.scaridae.gui.panels.access;
 import fr.romdhani.scaridae.controller.CurrentSession;
 import fr.romdhani.scaridae.controller.UserController;
 import fr.romdhani.scaridae.core.orm.*;
-import fr.romdhani.scaridae.core.orm.enums.Labels;
-import fr.romdhani.scaridae.core.orm.enums.Priority;
-import fr.romdhani.scaridae.core.orm.enums.ReqGroup;
-import fr.romdhani.scaridae.core.orm.enums.Status;
+import fr.romdhani.scaridae.core.orm.enums.request.Labels;
+import fr.romdhani.scaridae.core.orm.enums.request.Priority;
+import fr.romdhani.scaridae.core.orm.enums.request.ReqGroup;
+import fr.romdhani.scaridae.core.orm.enums.request.Status;
 import fr.romdhani.scaridae.gui.renders.UserCellRender;
 import net.miginfocom.swing.MigLayout;
 

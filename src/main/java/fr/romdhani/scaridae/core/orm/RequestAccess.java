@@ -1,8 +1,7 @@
 package fr.romdhani.scaridae.core.orm;
 
-import fr.romdhani.scaridae.core.orm.enums.ReqGroup;
-import fr.romdhani.scaridae.core.orm.enums.Labels;
-import fr.romdhani.scaridae.core.orm.enums.Priority;
+import fr.romdhani.scaridae.core.orm.enums.request.Labels;
+import fr.romdhani.scaridae.core.orm.enums.request.Priority;
 import fr.romdhani.scaridae.utils.version.UUIDVersion;
 
 import javax.persistence.*;
@@ -179,7 +178,7 @@ public class RequestAccess implements Serializable {
     }
 
     public void setRequestPriority(Priority priority) {
-        this.requestPriority = priority.getName();
+        this.requestPriority = priority.getPriority();
     }
 
     public void setRequestPriority(String requestPriority) {

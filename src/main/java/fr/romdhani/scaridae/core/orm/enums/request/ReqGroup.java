@@ -1,4 +1,4 @@
-package fr.romdhani.scaridae.core.orm.enums;
+package fr.romdhani.scaridae.core.orm.enums.request;
 
 public enum ReqGroup {
     HARDWARE("Hardware"), SOFTWARE("software"), MISCELLANEOUS("Miscellaneous");
@@ -10,6 +10,14 @@ public enum ReqGroup {
 
     public String getName() {
         return name;
+    }
+
+    public ReqGroup getReqGroup(String name) {
+        for (ReqGroup reqGroup : ReqGroup.values()) {
+            if (reqGroup.getName().equals(name))
+                return reqGroup;
+        }
+        return null;
     }
 
     @Override
