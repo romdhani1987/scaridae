@@ -1,11 +1,13 @@
 package fr.romdhani.scaridae.core.orm.enums.user;
 
 public enum UserRole {
-    USER("User"), EDITOR("Editor"), ANONYMOUS("Anonymous"), ADMIN("Admin");
+    USER("User", "Standard user,allowed only for his requests, his actions and his projects"), EDITOR("Editor", "Editor role allowed to create, delete and edit projects"), ANONYMOUS("Anonymous", "Only watching"), ADMIN("Admin", "Admin rights");
     private String role;
+    private String description;
 
-    UserRole(String role) {
+    UserRole(String role, String description) {
         this.role = role;
+        this.description = description;
     }
 
     public String getRole() {
