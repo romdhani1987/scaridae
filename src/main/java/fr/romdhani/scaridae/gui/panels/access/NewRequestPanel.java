@@ -51,6 +51,14 @@ public class NewRequestPanel extends JPanel {
     private Runnable onCancel = () -> {
     };
 
+    public RequestAccess getRequestAccess() {
+        return requestAccess;
+    }
+
+    public void setRequestAccess(RequestAccess requestAccess) {
+        this.requestAccess = requestAccess;
+    }
+
     public Runnable getOnSuccess() {
         return onSuccess;
     }
@@ -163,7 +171,7 @@ public class NewRequestPanel extends JPanel {
     }
 
     private boolean isTitleOk() {
-        if (nameField.getText().isEmpty()) {
+        if (!nameField.getText().isEmpty()) {
             nameError.setVisible(false);
             return true;
         } else {
@@ -173,7 +181,7 @@ public class NewRequestPanel extends JPanel {
     }
 
     private boolean isDescOk() {
-        if (descriptionField.getText().isEmpty()) {
+        if (!descriptionField.getText().isEmpty()) {
             descriptionError.setVisible(false);
             return true;
         } else {
@@ -257,6 +265,11 @@ public class NewRequestPanel extends JPanel {
 
     private void add(ActionEvent e) {
         if (checkFields()) {
+            requestAccess = new RequestAccess(nameField.getText(), descriptionField.getText());
+            requestAccess.setRequestPriority(priorityCBox.getSelectedItem().toString());
+            requestAccess.setAssignee(((UserAccount)assigneeCBox.getSelectedItem()).getLogin());
+            requestAccess.setRequestGroup(groupCBox.getSelectedItem().toString());
+            requestAccess.setRequestLabel(labelCBox.getSelectedItem().toString());
             onSuccess.run();
         } else {
             System.err.println("can not create access request!");

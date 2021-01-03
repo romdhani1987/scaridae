@@ -1,6 +1,8 @@
 package fr.romdhani.scaridae.controller;
 
 import fr.romdhani.scaridae.core.database.DBEntityManager;
+import fr.romdhani.scaridae.core.orm.RequestAccess;
+
 import javax.persistence.Query;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -34,6 +36,31 @@ public class RequestController {
                 Query query = em.createQuery(reqAsString);
                 list.addAll(query.getResultList());
             });
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return list;
+        }
+    }
+
+    public  List<RequestAccess> getAllRequestList() {
+        List<RequestAccess> list = new ArrayList<>();
+        try {
+            DBEntityManager.getInstance().doInTransaction(em -> {
+                Query query = em.createQuery("SELECT r FROM RequestAccess r");
+                list.addAll(query.getResultList());
+            });
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return list;
+        }
+    }
+
+    public  List<RequestAccess> getRequestList() {
+        List<RequestAccess> list = new ArrayList<>();
+        try {
+            list.addAll(CurrentSession.getInstance().getUserAccount().getRequestAccessSet());
             return list;
         } catch (Exception e) {
             e.printStackTrace();

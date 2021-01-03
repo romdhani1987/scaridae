@@ -3,7 +3,6 @@ package fr.romdhani.scaridae.gui.panels.access;
 import fr.romdhani.scaridae.controller.RequestController;
 import fr.romdhani.scaridae.controller.UserController;
 import fr.romdhani.scaridae.core.orm.RequestAccess;
-import fr.romdhani.scaridae.core.orm.enums.Priority;
 import fr.romdhani.scaridae.gui.panels.commons.IRequest;
 import fr.romdhani.scaridae.gui.panels.home.SignupPanel;
 import fr.romdhani.scaridae.gui.table.model.AccessRequestModel;
@@ -22,6 +21,7 @@ public class RequestAccessPanel extends JPanel implements IRequest {
     private final JTextField searchTextField = new JTextField();
     private final JPanel accessRequestPanel = new JPanel();
     private final JTable accessTable = new JTable();
+    private final AccessRequestModel accessRequestModel = new AccessRequestModel();
     private final JButton newRequestButton = new JButton("New");
     private final JButton editRequestButton = new JButton("Edit");
     private final JButton removeRequestButton = new JButton("Remove");
@@ -55,11 +55,8 @@ public class RequestAccessPanel extends JPanel implements IRequest {
 
         JButton searchButton = new JButton("Search");
         toolbarPanel.add(searchButton, "width :80:,wrap");
-        AccessRequestModel accessRequestModel = new AccessRequestModel();
+        accessRequestModel.addAll(requestController.getAllRequestList());
         accessTable.setModel(accessRequestModel);
-        RequestAccess requestAccess = new RequestAccess("rrr", "Test");
-        requestAccess.setRequestPriority(Priority.MINOR);
-        accessRequestModel.addRequest(requestAccess);
         accessPanel.add(toolbarPanel, ",wrap");
         accessPanel.add(new JScrollPane(accessTable), ",span,grow,push");
 
@@ -111,7 +108,13 @@ public class RequestAccessPanel extends JPanel implements IRequest {
         JDialog dialog = new JDialog();
         NewRequestPanel newRequestPanel = new NewRequestPanel();
         newRequestPanel.setOnSuccess(() -> {
+            RequestAccess requestAccess = newRequestPanel.getRequestAccess();
+            if (requestAccess != null) {
+                requestController.add(requestAccess);
+                accessRequestModel.addRequest(requestAccess);
 
+            }
+            newRequestPanel.setRequestAccess(null);
             dialog.dispose();
         });
         newRequestPanel.setOnCancel(() -> {

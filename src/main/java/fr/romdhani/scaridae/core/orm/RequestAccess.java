@@ -38,13 +38,13 @@ public class RequestAccess implements Serializable {
     private String assignee;
 
     @Column(name = "request_group")
-    private String requestGroup = ReqGroup.MISCELLANEOUS.getName();
+    private String requestGroup ;
 
     @Column(name = "request_priority")
-    private String requestPriority = Priority.MINOR.getName();
+    private String requestPriority ;
 
     @Column(name = "request_label")
-    private String requestLabel = Labels.QUESTION.getName();
+    private String requestLabel;
 
     @Column(name = "creation_time")
     private Timestamp creationTime = new Timestamp(new Date().getTime());
