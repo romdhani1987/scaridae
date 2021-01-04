@@ -4,13 +4,14 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 
 @Entity
 @NamedQueries({
         @NamedQuery(name = "findAllUsers", query = "Select u from UserAccount u"),
-        @NamedQuery(name = "findUserByLogin",query = "SELECT u FROM UserAccount u WHERE u.login = :login")
+        @NamedQuery(name = "findUserByLogin", query = "SELECT u FROM UserAccount u WHERE u.login = :login")
 })
 @Table(name = "user_account")
 public class UserAccount implements Serializable {
@@ -92,7 +93,7 @@ public class UserAccount implements Serializable {
     // bi-directional many-to-many association to
     @ManyToMany
     @JoinTable(name = "user_account_request_access_map", joinColumns = {@JoinColumn(name = "user_account_id")}, inverseJoinColumns = {@JoinColumn(name = "request_access_id")})
-    private Set<RequestAccess> requestAccessSet;
+    private Set<RequestAccess> requestAccessSet = new HashSet<>();
 
     // bi-directional many-to-many association to
     @ManyToMany
@@ -280,6 +281,31 @@ public class UserAccount implements Serializable {
 
     public Set<RequestAccess> getRequestAccessSet() {
         return requestAccessSet;
+    }
+
+    public void addRequestAccess(final RequestAccess requestAccess) {
+
+        if (requestAccess != null) {
+            Set<RequestAccess> requestAccessSets = getRequestAccessSet();
+
+            if (requestAccess == null) {
+                requestAccessSets = new HashSet<RequestAccess>();
+
+                setRequestAccessSet(requestAccessSets);
+            }
+
+            requestAccessSets.add(requestAccess);
+        }
+
+    }
+
+    public void removeRequestAccess(final RequestAccess requestAccess) {
+        final Set<RequestAccess> requestAccessSet = getRequestAccessSet();
+
+        if (requestAccess != null) {
+            requestAccessSet.remove(requestAccess);
+        }
+
     }
 
     public void setRequestAccessSet(Set<RequestAccess> requestAccessSet) {

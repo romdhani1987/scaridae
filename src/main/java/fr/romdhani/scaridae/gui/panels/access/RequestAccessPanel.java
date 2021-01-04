@@ -110,9 +110,8 @@ public class RequestAccessPanel extends JPanel implements IRequest {
         newRequestPanel.setOnSuccess(() -> {
             RequestAccess requestAccess = newRequestPanel.getRequestAccess();
             if (requestAccess != null) {
-                requestController.add(requestAccess);
+                requestController.addReq(requestAccess);
                 accessRequestModel.addRequest(requestAccess);
-
             }
             newRequestPanel.setRequestAccess(null);
             dialog.dispose();

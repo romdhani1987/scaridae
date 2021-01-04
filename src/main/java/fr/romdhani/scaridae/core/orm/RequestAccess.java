@@ -13,6 +13,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "request_access")
+@NamedQueries({
+        @NamedQuery(name = "findRequestAccessByUser", query = "select ra from fr.romdhani.scaridae.core.orm.RequestAccess ra join ra.userAccountSet as ua where (ua = :user)"
+        )})
 public class RequestAccess implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -37,10 +40,10 @@ public class RequestAccess implements Serializable {
     private String assignee;
 
     @Column(name = "request_group")
-    private String requestGroup ;
+    private String requestGroup;
 
     @Column(name = "request_priority")
-    private String requestPriority ;
+    private String requestPriority;
 
     @Column(name = "request_label")
     private String requestLabel;
