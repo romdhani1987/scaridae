@@ -23,7 +23,7 @@ CREATE UNIQUE INDEX company_name_idx
  ( name );
 
 
-/* company_status*/
+/* company_status */
 
 CREATE SEQUENCE public.company_status_id_seq;
 CREATE TABLE public.company_status (

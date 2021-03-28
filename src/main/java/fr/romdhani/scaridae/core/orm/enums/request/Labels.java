@@ -2,7 +2,7 @@ package fr.romdhani.scaridae.core.orm.enums.request;
 
 
 public enum Labels {
-    BUG("Bug"), DOCUMENTATION("Documentation"), DUPLICATE("Duplicate"), ENHANCEMENT("Enhancement"), HELP_WANTED("Help wanted"), INVALID("Invalid"), QUESTION("Question"), WONT_FIX("Wont fix"), MISC("Miscellaneous");
+    BUG("Bug"), DOCUMENTATION("Documentation"), DUPLICATE("Duplicate"), ENHANCEMENT("Enhancement"), HELP_WANTED("Help wanted"), INVALID("Invalid"), QUESTION("Question"), WONT_FIX("Wont fix"), MISCELLANEOUS("Miscellaneous");
     private String name;
 
     Labels(String name) {
@@ -13,7 +13,7 @@ public enum Labels {
         return name;
     }
 
-    public Labels getUserRole(String name) {
+    public Labels getLabelByName(String name) {
         for (Labels labels : Labels.values()) {
             if (labels.getName().equals(name))
                 return labels;

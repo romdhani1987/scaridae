@@ -6,7 +6,7 @@ import fr.romdhani.scaridae.controller.UserController;
 import fr.romdhani.scaridae.core.orm.*;
 import fr.romdhani.scaridae.core.orm.enums.request.Labels;
 import fr.romdhani.scaridae.core.orm.enums.request.Priority;
-import fr.romdhani.scaridae.core.orm.enums.request.ReqGroup;
+import fr.romdhani.scaridae.core.orm.enums.request.RequestGroup;
 import fr.romdhani.scaridae.core.orm.enums.request.Status;
 import fr.romdhani.scaridae.gui.renders.UserCellRender;
 import net.miginfocom.swing.MigLayout;
@@ -36,7 +36,7 @@ public class NewRequestPanel extends JPanel {
 
     private JComboBox<Priority> priorityCBox;
     private JComboBox<Labels> labelCBox;
-    private JComboBox<ReqGroup> groupCBox;
+    private JComboBox<RequestGroup> groupCBox;
     private JComboBox<Status> statusCBox;
     private JComboBox<UserAccount> assigneeCBox;
     private final JTextField reporterField = new JTextField();
@@ -130,7 +130,7 @@ public class NewRequestPanel extends JPanel {
 
 
         loginPanel.add(new JLabel("Group: "));
-        groupCBox = new JComboBox<>(ReqGroup.values());
+        groupCBox = new JComboBox<>(RequestGroup.values());
         groupCBox.addItemListener(e -> reqGroupChanged());
         loginPanel.add(groupCBox, layoutConstraint);
         loginPanel.add(groupError, layoutConstraintWrap);

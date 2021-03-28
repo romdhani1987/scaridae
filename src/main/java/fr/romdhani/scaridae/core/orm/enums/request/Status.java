@@ -1,7 +1,7 @@
 package fr.romdhani.scaridae.core.orm.enums.request;
 
 public enum Status {
-    WAITING("Waiting"), PENDING("Pending"), APPROVED("Approved"), REFUSED("Refused");
+    WAITING("Waiting"), PENDING("Pending"), PROGRESS("Progress"), APPROVED("Approved"), REFUSED("Refused");
     private String status;
 
     Status(String status) {
