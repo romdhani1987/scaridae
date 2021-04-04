@@ -15,7 +15,7 @@ import java.util.List;
  * @author aromdhani
  */
 public class AccessRequestModel extends AbstractTableModel {
-    private final String[] header = {"Name", "Reference", "Description", "Priority", "Owner", "Reporter", "Label", "Group", "Creation Time", "Last Modification", "Type", "Status"};
+    private final String[] header = {"Name", "Reference", "Description", "Priority", "Assignee", "Reporter", "Label", "Group", "Creation Time", "Last Modification", "Status"};
     private List<RequestAccess> requestAccessList = new ArrayList<>();
 
     @Override
@@ -50,9 +50,9 @@ public class AccessRequestModel extends AbstractTableModel {
             case 3:
                 return requestAccessList.get(rowIndex).getPriority();
             case 4:
-                return requestAccessList.get(rowIndex).getReporter();
-            case 5:
                 return requestAccessList.get(rowIndex).getAssignee();
+            case 5:
+                return requestAccessList.get(rowIndex).getReporter();
             case 6:
                 return requestAccessList.get(rowIndex).getLabel();
             case 7:
@@ -62,8 +62,6 @@ public class AccessRequestModel extends AbstractTableModel {
             case 9:
                 return requestAccessList.get(rowIndex).getLastModificationTime();
             case 10:
-                return requestAccessList.get(rowIndex).getRequestType();
-            case 11:
                 return requestAccessList.get(rowIndex).getStatus();
             default:
                 return null; //Error
@@ -81,7 +79,7 @@ public class AccessRequestModel extends AbstractTableModel {
     /**
      * @param requestAccess The request to add.
      */
-    public void addRequest(RequestAccess requestAccess) {
+    public void addAccessRequest(RequestAccess requestAccess) {
         requestAccessList.add(requestAccess);
         fireTableRowsInserted(requestAccessList.size() - 1, requestAccessList.size() - 1);
     }

@@ -267,9 +267,10 @@ public class NewRequestPanel extends JPanel {
             requestAccess = new RequestAccess(nameField.getText(), descriptionField.getText());
             requestAccess.setPriority(priorityCBox.getSelectedItem().toString());
             requestAccess.setStatus(statusCBox.getSelectedItem().toString());
-            requestAccess.setAssignee(((UserAccount) assigneeCBox.getSelectedItem()).getLogin());
             requestAccess.setGroup(groupCBox.getSelectedItem().toString());
             requestAccess.setLabel(labelCBox.getSelectedItem().toString());
+            requestAccess.setReporter(CurrentSession.getInstance().getLogin());
+            requestAccess.setAssignee(((UserAccount) assigneeCBox.getSelectedItem()).getLogin());
             onSuccess.run();
         } else {
             requestAccess = null;

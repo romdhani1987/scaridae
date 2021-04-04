@@ -67,7 +67,7 @@ public class RequestAccessPanel extends JPanel implements IRequest {
                     JSplitPane.HORIZONTAL_SPLIT, tableScrollPane, accessRequestPanel);
             documentSplitPane.setResizeWeight(0.8);
 
-            JScrollPane scrollPane = new JScrollPane(createBottomPane());
+            JScrollPane scrollPane = new JScrollPane(createBottomPanel());
             JSplitPane rightSplitPane = new JSplitPane(
                     JSplitPane.VERTICAL_SPLIT, documentSplitPane, scrollPane);
             rightSplitPane.setResizeWeight(0.8);
@@ -75,18 +75,18 @@ public class RequestAccessPanel extends JPanel implements IRequest {
 
             add(rightSplitPane, "height 95%, width 100%");
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Failed to initialize: " + ex);
+            JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Failed to initialize " + ex);
         }
     }
 
-    private JPanel createBottomPane() {
+    private JPanel createBottomPanel() {
         JPanel bottomPanel = new JPanel(new MigLayout());
         newRequestButton.addActionListener(e -> newRequest());
         editRequestButton.addActionListener(e -> editRequest());
         removeRequestButton.addActionListener(e -> removeRequest());
-        bottomPanel.add(newRequestButton, "w :50:");
-        bottomPanel.add(editRequestButton, "w :50:");
-        bottomPanel.add(removeRequestButton, "w :50:");
+        bottomPanel.add(newRequestButton, "w 80:80:");
+        bottomPanel.add(editRequestButton, "w 80:80:");
+        bottomPanel.add(removeRequestButton, "w 80:80:");
         return bottomPanel;
     }
 
@@ -117,7 +117,7 @@ public class RequestAccessPanel extends JPanel implements IRequest {
             if (requestAccess != null) {
                 try {
                     requestController.addAccessRequest(requestAccess);
-                    accessRequestModel.addRequest(requestAccess);
+                    accessRequestModel.addAccessRequest(requestAccess);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Failed to create a new request:" + ex);
                 }
@@ -128,10 +128,11 @@ public class RequestAccessPanel extends JPanel implements IRequest {
         newRequestPanel.setOnCancel(() -> {
             dialog.dispose();
         });
-        dialog.setTitle("New Request");
+        dialog.setTitle("New Accesst Request");
+        dialog.setModal(true);
         dialog.setContentPane(newRequestPanel);
         dialog.setSize(new Dimension(800, 650));
-        dialog.setLocationRelativeTo(null);
+        dialog.setLocationRelativeTo(WindowUtil.findParentWindow());
         dialog.setVisible(true);
     }
 
