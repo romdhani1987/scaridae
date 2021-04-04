@@ -1,7 +1,5 @@
 package fr.romdhani.scaridae.core.orm;
 
-import fr.romdhani.scaridae.core.orm.enums.request.Labels;
-import fr.romdhani.scaridae.core.orm.enums.request.Priority;
 import fr.romdhani.scaridae.utils.version.UUIDVersion;
 
 import javax.persistence.*;
@@ -40,13 +38,16 @@ public class RequestAccess implements Serializable {
     private String assignee;
 
     @Column(name = "request_group")
-    private String requestGroup;
+    private String group;
 
-    @Column(name = "request_priority")
-    private String requestPriority;
+    @Column(name = "priority")
+    private String priority;
 
-    @Column(name = "request_label")
-    private String requestLabel;
+    @Column(name = "label")
+    private String label;
+
+    @Column(name = "status")
+    String status;
 
     @Column(name = "creation_time")
     private Timestamp creationTime = new Timestamp(new Date().getTime());
@@ -61,9 +62,6 @@ public class RequestAccess implements Serializable {
     @JoinColumn(name = "request_type_id")
     RequestType requestType;
 
-    @OneToOne
-    @JoinColumn(name = "status_id")
-    RequestStatus requestStatus;
 
     @OneToOne
     @JoinColumn(name = "response_access_id")
@@ -104,13 +102,6 @@ public class RequestAccess implements Serializable {
         this.description = description;
     }
 
-    public String getRequestGroup() {
-        return requestGroup;
-    }
-
-    public void setRequestGroup(String requestGroup) {
-        this.requestGroup = requestGroup;
-    }
 
     public Timestamp getCreationTime() {
         return creationTime;
@@ -134,14 +125,6 @@ public class RequestAccess implements Serializable {
 
     public void setRequestType(RequestType requestType) {
         this.requestType = requestType;
-    }
-
-    public RequestStatus getRequestStatus() {
-        return requestStatus;
-    }
-
-    public void setRequestStatus(RequestStatus requestStatus) {
-        this.requestStatus = requestStatus;
     }
 
     public ResponseAccess getResponseAccess() {
@@ -176,29 +159,6 @@ public class RequestAccess implements Serializable {
         this.description = description;
     }
 
-    public String getRequestPriority() {
-        return requestPriority;
-    }
-
-    public void setRequestPriority(Priority priority) {
-        this.requestPriority = priority.getPriority();
-    }
-
-    public void setRequestPriority(String requestPriority) {
-        this.requestPriority = requestPriority;
-    }
-
-    public String getRequestLabel() {
-        return requestLabel;
-    }
-
-    public void setRequestLabel(Labels label) {
-        this.requestLabel = label.name();
-    }
-
-    public void setRequestLabel(String requestLabel) {
-        this.requestLabel = requestLabel;
-    }
 
     public String getReporter() {
         return reporter;
@@ -216,26 +176,61 @@ public class RequestAccess implements Serializable {
         this.assignee = assignee;
     }
 
-    public RequestAccess(String name, String reporter, String assignee, String requestPriority, String requestLabel) {
+    public RequestAccess(String name, String reporter, String assignee, String priority, String label) {
         this.name = name;
         this.reporter = reporter;
         this.assignee = assignee;
-        this.requestPriority = requestPriority;
-        this.requestLabel = requestLabel;
+        this.priority = priority;
+        this.label = label;
     }
 
     public RequestAccess(String name, String reporter, String requestPriority) {
         this.name = name;
         this.reporter = reporter;
-        this.requestPriority = requestPriority;
+        this.priority = requestPriority;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override
     public String toString() {
         return "RequestAccess{" +
                 "name='" + name + '\'' +
+                ", ref='" + ref + '\'' +
                 ", description='" + description + '\'' +
-                ", type='" + requestGroup + '\'' +
+                ", reporter='" + reporter + '\'' +
+                ", assignee='" + assignee + '\'' +
+                ", priority='" + priority + '\'' +
                 '}';
     }
 }

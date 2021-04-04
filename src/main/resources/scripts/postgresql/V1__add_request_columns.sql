@@ -449,7 +449,6 @@ CREATE TABLE public.request_purchase (
 				description VARCHAR,
 				creation_timestamp TIMESTAMP,
 				serialized_properties TEXT,
-				status_id BIGINT,
 				request_type_id BIGINT,
 				response_purchase_id BIGINT,
 				CONSTRAINT request_purchase_pk PRIMARY KEY (id)
@@ -519,7 +518,6 @@ CREATE TABLE public.request_borrow (
 				description VARCHAR,
 				creation_timestamp TIMESTAMP,
 				serialized_properties TEXT,
-				status_id BIGINT,
 				request_type_id BIGINT,
 				response_borrow_id BIGINT,
 				CONSTRAINT request_borrow_pk PRIMARY KEY (id)
@@ -576,7 +574,6 @@ CREATE TABLE public.request_access (
 				description VARCHAR,
 				creation_timestamp TIMESTAMP,
 				serialized_properties TEXT,
-				status_id BIGINT,
 				request_type_id BIGINT,
 				response_access_id BIGINT,
 				CONSTRAINT request_access_pk PRIMARY KEY (id)
@@ -635,7 +632,6 @@ CREATE TABLE public.request_quality (
 				description VARCHAR,
 				creation_timestamp TIMESTAMP,
 				serialized_properties TEXT,
-				status_id BIGINT,
 				request_type_id BIGINT,
 				response_quality_id BIGINT,
 				CONSTRAINT request_quality_pk PRIMARY KEY (id)
@@ -967,12 +963,6 @@ NOT DEFERRABLE;
 
 /* request_purchase */
 
-ALTER TABLE public.request_purchase ADD CONSTRAINT status_id_fk
-FOREIGN KEY (status_id)
-REFERENCES public.request_status (id)
-ON DELETE CASCADE
-ON UPDATE NO ACTION
-NOT DEFERRABLE;
 
 ALTER TABLE public.request_purchase ADD CONSTRAINT request_type_id_fk
 FOREIGN KEY (request_type_id)
@@ -1027,13 +1017,6 @@ ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 /* request_borrow */
-
-ALTER TABLE public.request_borrow ADD CONSTRAINT status_id_fk
-FOREIGN KEY (status_id)
-REFERENCES public.request_status (id)
-ON DELETE CASCADE
-ON UPDATE NO ACTION
-NOT DEFERRABLE;
 
 ALTER TABLE public.request_borrow ADD CONSTRAINT request_type_id_fk
 FOREIGN KEY (request_type_id)
@@ -1090,13 +1073,6 @@ NOT DEFERRABLE;
 
 /** request_access */
 
-ALTER TABLE public.request_access ADD CONSTRAINT status_id_fk
-FOREIGN KEY (status_id)
-REFERENCES public.request_status (id)
-ON DELETE CASCADE
-ON UPDATE NO ACTION
-NOT DEFERRABLE;
-
 ALTER TABLE public.request_access ADD CONSTRAINT request_type_id_fk
 FOREIGN KEY (request_type_id)
 REFERENCES public.request_type (id)
@@ -1151,13 +1127,6 @@ ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 /* request_quality */
-
-ALTER TABLE public.request_quality ADD CONSTRAINT status_id_fk
-FOREIGN KEY (status_id)
-REFERENCES public.request_status (id)
-ON DELETE CASCADE
-ON UPDATE NO ACTION
-NOT DEFERRABLE;
 
 ALTER TABLE public.request_quality ADD CONSTRAINT request_type_id_fk
 FOREIGN KEY (request_type_id)

@@ -7,12 +7,14 @@ import org.hibernate.SessionFactory;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.FlushModeType;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Handle EntityManager
@@ -49,7 +51,6 @@ public class DBEntityManager {
         } finally {
             if (entityManager != null) entityManager.close();
             if (sessionFactory != null) sessionFactory.close();
-
         }
     }
 
@@ -57,24 +58,49 @@ public class DBEntityManager {
      * Do in transaction
      *
      * @param consumer
-     * @return
      */
     public void doInTransaction(Consumer<EntityManager> consumer) throws Exception {
         EntityManager entityManager = sessionFactory.createEntityManager();
-        EntityTransaction tx = null;
+        EntityTransaction transaction = null;
         try {
             entityManager.setFlushMode(FlushModeType.COMMIT);
-            tx = entityManager.getTransaction();
-            tx.begin();
+            transaction = entityManager.getTransaction();
+            transaction.begin();
             System.out.println("Start transaction");
             consumer.accept(entityManager);
             System.out.println("Transaction has finished!");
             entityManager.flush();
-            tx.commit();
+            transaction.commit();
 
+        } catch (Exception ex) {
+            if (transaction != null) transaction.rollback();
+            throw new IOException("Failed to accept in transaction: " + ex);
+        } finally {
+            entityManager.setFlushMode(FlushModeType.AUTO);
+            if (entityManager != null) entityManager.close();
+        }
+    }
+
+    /**
+     * Get t in transaction
+     *
+     * @param supplier
+     * @return t
+     */
+    public <T> T getInTransaction(Supplier<T> supplier) throws Exception {
+        EntityManager entityManager = sessionFactory.createEntityManager();
+        EntityTransaction transaction = null;
+        try {
+            entityManager.setFlushMode(FlushModeType.COMMIT);
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+            T t = supplier.get();
+            entityManager.flush();
+            transaction.commit();
+            return t;
         } catch (Exception e) {
-            if (tx != null) tx.rollback();
-            e.printStackTrace();
+            if (transaction != null) transaction.rollback();
+            throw new IOException("Failed to get from transaction: " + e);
         } finally {
             entityManager.setFlushMode(FlushModeType.AUTO);
             if (entityManager != null) entityManager.close();

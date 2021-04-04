@@ -48,15 +48,15 @@ public class AccessRequestModel extends AbstractTableModel {
             case 2:
                 return requestAccessList.get(rowIndex).getDescription();
             case 3:
-                return requestAccessList.get(rowIndex).getRequestPriority();
+                return requestAccessList.get(rowIndex).getPriority();
             case 4:
                 return requestAccessList.get(rowIndex).getReporter();
             case 5:
                 return requestAccessList.get(rowIndex).getAssignee();
             case 6:
-                return requestAccessList.get(rowIndex).getRequestLabel();
+                return requestAccessList.get(rowIndex).getLabel();
             case 7:
-                return requestAccessList.get(rowIndex).getRequestGroup();
+                return requestAccessList.get(rowIndex).getGroup();
             case 8:
                 return requestAccessList.get(rowIndex).getCreationTime();
             case 9:
@@ -64,7 +64,7 @@ public class AccessRequestModel extends AbstractTableModel {
             case 10:
                 return requestAccessList.get(rowIndex).getRequestType();
             case 11:
-                return requestAccessList.get(rowIndex).getRequestStatus();
+                return requestAccessList.get(rowIndex).getStatus();
             default:
                 return null; //Error
         }

@@ -258,7 +258,6 @@ public class NewRequestPanel extends JPanel {
         init();
     }
 
-
     private boolean checkFields() {
         return assignee() && statusChanged() && reqGroupChanged() && labelsChanged() && priorityChanged() && isTitleOk() && isDescOk();
     }
@@ -266,12 +265,14 @@ public class NewRequestPanel extends JPanel {
     private void add(ActionEvent e) {
         if (checkFields()) {
             requestAccess = new RequestAccess(nameField.getText(), descriptionField.getText());
-            requestAccess.setRequestPriority(priorityCBox.getSelectedItem().toString());
-            requestAccess.setAssignee(((UserAccount)assigneeCBox.getSelectedItem()).getLogin());
-            requestAccess.setRequestGroup(groupCBox.getSelectedItem().toString());
-            requestAccess.setRequestLabel(labelCBox.getSelectedItem().toString());
+            requestAccess.setPriority(priorityCBox.getSelectedItem().toString());
+            requestAccess.setStatus(statusCBox.getSelectedItem().toString());
+            requestAccess.setAssignee(((UserAccount) assigneeCBox.getSelectedItem()).getLogin());
+            requestAccess.setGroup(groupCBox.getSelectedItem().toString());
+            requestAccess.setLabel(labelCBox.getSelectedItem().toString());
             onSuccess.run();
         } else {
+            requestAccess = null;
             System.err.println("can not create access request!");
             onFailure.run();
         }

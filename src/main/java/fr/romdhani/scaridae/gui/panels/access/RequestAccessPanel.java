@@ -6,6 +6,7 @@ import fr.romdhani.scaridae.core.orm.RequestAccess;
 import fr.romdhani.scaridae.gui.panels.commons.IRequest;
 import fr.romdhani.scaridae.gui.panels.home.SignupPanel;
 import fr.romdhani.scaridae.gui.table.model.AccessRequestModel;
+import fr.romdhani.scaridae.utils.window.WindowUtil;
 import net.miginfocom.swing.MigLayout;
 import org.jdesktop.swingx.JXDatePicker;
 
@@ -29,49 +30,53 @@ public class RequestAccessPanel extends JPanel implements IRequest {
 
 
     private void init() {
-        JPanel accessPanel = new JPanel();
-        accessPanel.setLayout(new MigLayout());
-        JPanel toolbarPanel = new JPanel(new MigLayout(""));
-        JLabel nameLabel = new JLabel(" Name: ");
-        toolbarPanel.add(nameLabel, "width 80:80:100");
-        toolbarPanel.add(searchTextField, "width :180:, height :25:");
+        try {
+            JPanel accessPanel = new JPanel();
+            accessPanel.setLayout(new MigLayout());
+            JPanel toolbarPanel = new JPanel(new MigLayout(""));
+            JLabel nameLabel = new JLabel(" Name: ");
+            toolbarPanel.add(nameLabel, "width 80:80:100");
+            toolbarPanel.add(searchTextField, "width :180:, height :25:");
 
-        JLabel startDateLabel = new JLabel(" From:");
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        JXDatePicker startDatePicker = new JXDatePicker();
-        startDatePicker.setFormats(dateFormat);
-        startDatePicker.setPreferredSize(new Dimension(100, 25));
+            JLabel startDateLabel = new JLabel(" From:");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            JXDatePicker startDatePicker = new JXDatePicker();
+            startDatePicker.setFormats(dateFormat);
+            startDatePicker.setPreferredSize(new Dimension(100, 25));
 
-        toolbarPanel.add(startDateLabel, "width :80:");
-        toolbarPanel.add(startDatePicker, "width :80:");
+            toolbarPanel.add(startDateLabel, "width :80:");
+            toolbarPanel.add(startDatePicker, "width :80:");
 
-        JLabel endDateLabel = new JLabel(" To:");
-        JXDatePicker endDatePicker = new JXDatePicker();
-        endDatePicker.setFormats(dateFormat);
-        endDatePicker.setPreferredSize(new Dimension(100, 25));
+            JLabel endDateLabel = new JLabel(" To:");
+            JXDatePicker endDatePicker = new JXDatePicker();
+            endDatePicker.setFormats(dateFormat);
+            endDatePicker.setPreferredSize(new Dimension(100, 25));
 
-        toolbarPanel.add(endDateLabel, "width 80:80:100");
-        toolbarPanel.add(endDatePicker, "width :80:");
+            toolbarPanel.add(endDateLabel, "width 80:80:100");
+            toolbarPanel.add(endDatePicker, "width :80:");
 
-        JButton searchButton = new JButton("Search");
-        toolbarPanel.add(searchButton, "width :80:,wrap");
-        accessRequestModel.addAll(requestController.getAllRequestList());
-        accessTable.setModel(accessRequestModel);
-        accessPanel.add(toolbarPanel, ",wrap");
-        accessPanel.add(new JScrollPane(accessTable), ",span,grow,push");
+            JButton searchButton = new JButton("Search");
+            toolbarPanel.add(searchButton, "width :80:,wrap");
+            accessRequestModel.addAll(requestController.getAllRequestList());
+            accessTable.setModel(accessRequestModel);
+            accessPanel.add(toolbarPanel, ",wrap");
+            accessPanel.add(new JScrollPane(accessTable), ",span,grow,push");
 
-        JScrollPane tableScrollPane = new JScrollPane(accessPanel);
-        JSplitPane documentSplitPane = new JSplitPane(
-                JSplitPane.HORIZONTAL_SPLIT, tableScrollPane, accessRequestPanel);
-        documentSplitPane.setResizeWeight(0.8);
+            JScrollPane tableScrollPane = new JScrollPane(accessPanel);
+            JSplitPane documentSplitPane = new JSplitPane(
+                    JSplitPane.HORIZONTAL_SPLIT, tableScrollPane, accessRequestPanel);
+            documentSplitPane.setResizeWeight(0.8);
 
-        JScrollPane scrollPane = new JScrollPane(createBottomPane());
-        JSplitPane rightSplitPane = new JSplitPane(
-                JSplitPane.VERTICAL_SPLIT, documentSplitPane, scrollPane);
-        rightSplitPane.setResizeWeight(0.8);
-        this.setLayout(new MigLayout(""));
+            JScrollPane scrollPane = new JScrollPane(createBottomPane());
+            JSplitPane rightSplitPane = new JSplitPane(
+                    JSplitPane.VERTICAL_SPLIT, documentSplitPane, scrollPane);
+            rightSplitPane.setResizeWeight(0.8);
+            this.setLayout(new MigLayout(""));
 
-        add(rightSplitPane, "height 95%, width 100%");
+            add(rightSplitPane, "height 95%, width 100%");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Failed to initialize: " + ex);
+        }
     }
 
     private JPanel createBottomPane() {
@@ -110,8 +115,12 @@ public class RequestAccessPanel extends JPanel implements IRequest {
         newRequestPanel.setOnSuccess(() -> {
             RequestAccess requestAccess = newRequestPanel.getRequestAccess();
             if (requestAccess != null) {
-                requestController.addReq(requestAccess);
-                accessRequestModel.addRequest(requestAccess);
+                try {
+                    requestController.addAccessRequest(requestAccess);
+                    accessRequestModel.addRequest(requestAccess);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Failed to create a new request:" + ex);
+                }
             }
             newRequestPanel.setRequestAccess(null);
             dialog.dispose();

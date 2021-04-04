@@ -47,7 +47,6 @@ public class ScaridaeView {
         try {
             //TODO to remove later when entities have been loaded
             DBEntityManager.getInstance();
-
             DatabaseInitializer.getInstance().load();
         } catch (Exception e) {
             e.printStackTrace();

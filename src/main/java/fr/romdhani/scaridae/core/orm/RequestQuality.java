@@ -26,6 +26,24 @@ public class RequestQuality implements Serializable {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "reporter")
+    private String reporter;
+
+    @Column(name = "assignee")
+    private String assignee;
+
+    @Column(name = "request_group")
+    private String group;
+
+    @Column(name = "priority")
+    private String priority;
+
+    @Column(name = "label")
+    private String label;
+
+    @Column(name = "status")
+    String status;
+
     @Column(name = "type")
     private String type;
 
@@ -41,10 +59,6 @@ public class RequestQuality implements Serializable {
     @OneToOne
     @JoinColumn(name = "request_type_id")
     RequestType requestType;
-
-    @OneToOne
-    @JoinColumn(name = "status_id")
-    RequestStatus requestStatus;
 
     @OneToOne
     @JoinColumn(name = "response_quality_id")
@@ -117,12 +131,52 @@ public class RequestQuality implements Serializable {
         this.requestType = requestType;
     }
 
-    public RequestStatus getRequestStatus() {
-        return requestStatus;
+    public String getReporter() {
+        return reporter;
     }
 
-    public void setRequestStatus(RequestStatus requestStatus) {
-        this.requestStatus = requestStatus;
+    public void setReporter(String reporter) {
+        this.reporter = reporter;
+    }
+
+    public String getAssignee() {
+        return assignee;
+    }
+
+    public void setAssignee(String assignee) {
+        this.assignee = assignee;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public ResponseQuality getResponseQuality() {
@@ -161,8 +215,11 @@ public class RequestQuality implements Serializable {
     public String toString() {
         return "RequestQuality{" +
                 "name='" + name + '\'' +
+                ", ref='" + ref + '\'' +
                 ", description='" + description + '\'' +
-                ", type='" + type + '\'' +
+                ", reporter='" + reporter + '\'' +
+                ", assignee='" + assignee + '\'' +
+                ", priority='" + priority + '\'' +
                 '}';
     }
 }
