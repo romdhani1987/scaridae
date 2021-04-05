@@ -1,9 +1,11 @@
 package fr.romdhani.scaridae.gui.panels.home;
 
-import fr.romdhani.scaridae.controller.CurrentSession;
 import fr.romdhani.scaridae.controller.EventBusDispatcher;
 import fr.romdhani.scaridae.controller.UserController;
+import fr.romdhani.scaridae.core.database.DBEntityManager;
 import net.miginfocom.swing.MigLayout;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +14,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class ConnectionPanel extends JPanel {
-
+    private static final Logger logger = LogManager.getLogger(DBEntityManager.class);
     private final JTextField loginField = new JTextField();
     private final JPasswordField passwordField = new JPasswordField();
     private final JButton singInButton = new JButton("Sign in");
@@ -72,12 +74,11 @@ public class ConnectionPanel extends JPanel {
 
     private void signInPerformed() {
         if (UserController.getInstance().signIn(loginField.getText(), passwordField.getText())) {
-            System.out.println("Signed in");
             errorSignIn.setVisible(false);
             MainPanel mainPanel = new MainPanel();
             EventBusDispatcher.getInstance().getEventBus().post(mainPanel);
         } else {
-            System.out.println("Error!");
+            logger.error("Unable to sign in!");
             errorSignIn.setVisible(true);
             clearFields();
         }

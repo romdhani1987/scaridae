@@ -1,6 +1,5 @@
 package fr.romdhani.scaridae.gui.panels.home;
 
-import fr.romdhani.scaridae.controller.DatabaseInitializer;
 import fr.romdhani.scaridae.controller.UserController;
 import fr.romdhani.scaridae.core.orm.Address;
 import fr.romdhani.scaridae.core.orm.Service;
@@ -225,7 +224,6 @@ public class SignupPanel extends JPanel {
             userController.signup(userAccount, address);
             onSuccess.run();
         } else {
-            System.out.println("can not create user account!");
             onFailure.run();
         }
     }

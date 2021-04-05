@@ -10,7 +10,6 @@ import java.util.List;
 
 public class RequestController {
 
-
     public void addAccessRequest(RequestAccess newRequest) throws Exception {
         DBEntityManager.getInstance().doInTransaction(em -> {
             UserAccount user = em.createQuery(

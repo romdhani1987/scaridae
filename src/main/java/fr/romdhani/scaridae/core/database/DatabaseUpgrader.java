@@ -1,5 +1,6 @@
 package fr.romdhani.scaridae.core.database;
 
+import fr.romdhani.scaridae.controller.ConfigLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.flywaydb.core.Flyway;
@@ -19,13 +20,13 @@ public class DatabaseUpgrader {
     private void initConfig() {
         try {
             ClassicConfiguration config = new ClassicConfiguration();
-            config.setDataSource("jdbc:postgresql://127.0.0.1:5432/db2", "postgres", "postgres");
+            config.setDataSource(ConfigLoader.JDBC_PREFIX + "://" + ConfigLoader.getInstance().getHost() + ":" + ConfigLoader.getInstance().getPort() + "/" + ConfigLoader.getInstance().getDbName(), ConfigLoader.getInstance().getUser(), ConfigLoader.getInstance().getPass());
             config.setBaselineOnMigrate(true);
             config.setTable("scaridae_schema_history");
-            config.setLocations(new Location("classpath:database"),new Location("classpath:fr/romdhani/scaridae/core/database/migration"));
+            config.setLocations(new Location("classpath:database"), new Location("classpath:fr/romdhani/scaridae/core/database/migration"));
             flyway = new Flyway(config);
         } catch (FlywayException ex) {
-            logger.error("Failed to initialize Flyway! "+ ex);
+            logger.error("Failed to initialize Flyway! ", ex);
         }
     }
 

@@ -13,6 +13,8 @@ import java.util.Properties;
 public class ConfigLoader {
 
     private static final Logger logger = LogManager.getLogger(ConfigLoader.class);
+
+    public static final String JDBC_PREFIX = "jdbc:postgresql";
     private String host;
     private String port;
     private String user;
@@ -42,7 +44,6 @@ public class ConfigLoader {
             dbName = prop.getProperty("db.name");
             dbDriver = prop.getProperty("db.driver");
             dbDialect = prop.getProperty("db.dialect");
-
         } catch (IOException e) {
             logger.error("Unable to read config file: " + e);
         }

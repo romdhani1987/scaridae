@@ -13,14 +13,14 @@ import java.util.Properties;
 
 public class HibernateUtil {
     private static SessionFactory sessionFactory;
-    private static final String JDBC_PREFIX= "jdbc:postgresql";
+
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
             try {
                 Configuration configuration = new Configuration();
                 Properties settings = new Properties();
                 settings.put(Environment.DRIVER, ConfigLoader.getInstance().getDbDriver());
-                settings.put(Environment.URL, JDBC_PREFIX+"://"+ConfigLoader.getInstance().getHost()+":"+ConfigLoader.getInstance().getPort()+"/"+ConfigLoader.getInstance().getDbName());
+                settings.put(Environment.URL, ConfigLoader.JDBC_PREFIX + "://" + ConfigLoader.getInstance().getHost() + ":" + ConfigLoader.getInstance().getPort() + "/" + ConfigLoader.getInstance().getDbName());
                 settings.put(Environment.USER, ConfigLoader.getInstance().getUser());
                 settings.put(Environment.PASS, ConfigLoader.getInstance().getPass());
                 settings.put(Environment.DIALECT, ConfigLoader.getInstance().getDbDialect());

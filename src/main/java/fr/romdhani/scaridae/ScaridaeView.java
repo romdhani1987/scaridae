@@ -1,7 +1,6 @@
 package fr.romdhani.scaridae;
 
 import fr.romdhani.scaridae.controller.ConfigLoader;
-import fr.romdhani.scaridae.controller.DatabaseInitializer;
 import fr.romdhani.scaridae.controller.EventBusDispatcher;
 import fr.romdhani.scaridae.core.database.DBEntityManager;
 import fr.romdhani.scaridae.core.database.DatabaseUpgrader;
@@ -57,7 +56,6 @@ public class ScaridaeView {
         try {
             DatabaseUpgrader databaseUpgrader = new DatabaseUpgrader();
             databaseUpgrader.initAndMigrate();
-            DatabaseInitializer.getInstance().load();
         } catch (Exception e) {
             logger.error("Error while trying to upgrade Scaridae: " + e);
         }

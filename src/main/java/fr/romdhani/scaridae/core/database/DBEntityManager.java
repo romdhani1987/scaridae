@@ -1,8 +1,9 @@
 package fr.romdhani.scaridae.core.database;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;
-
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -23,7 +24,7 @@ import java.util.function.Supplier;
  */
 public class DBEntityManager {
     private SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-
+    private static final Logger logger = LogManager.getLogger(DBEntityManager.class);
     private DBEntityManager() {
     }
 
@@ -66,15 +67,13 @@ public class DBEntityManager {
             entityManager.setFlushMode(FlushModeType.COMMIT);
             transaction = entityManager.getTransaction();
             transaction.begin();
-            System.out.println("Start transaction");
             consumer.accept(entityManager);
-            System.out.println("Transaction has finished!");
             entityManager.flush();
             transaction.commit();
 
         } catch (Exception ex) {
             if (transaction != null) transaction.rollback();
-            throw new IOException("Failed to accept in transaction: " + ex);
+            throw new IOException("Failed to accept in transaction: " + ex.getMessage());
         } finally {
             entityManager.setFlushMode(FlushModeType.AUTO);
             if (entityManager != null) entityManager.close();
@@ -100,7 +99,7 @@ public class DBEntityManager {
             return t;
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
-            throw new IOException("Failed to get from transaction: " + e);
+            throw new IOException("Failed to get from transaction: " + e.getMessage());
         } finally {
             entityManager.setFlushMode(FlushModeType.AUTO);
             if (entityManager != null) entityManager.close();
