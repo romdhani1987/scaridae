@@ -1,16 +1,19 @@
 package fr.romdhani.scaridae;
 
-import fr.romdhani.scaridae.controller.DatabaseInitializer;
-import fr.romdhani.scaridae.controller.EventBusDispatcher;
-import fr.romdhani.scaridae.core.database.DBEntityManager;
-import fr.romdhani.scaridae.gui.Frame;
-import fr.romdhani.scaridae.gui.panels.home.ConnectionPanel;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import javax.swing.*;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.swing.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import fr.romdhani.scaridae.controller.DatabaseInitializer;
+import fr.romdhani.scaridae.controller.EventBusDispatcher;
+import fr.romdhani.scaridae.core.database.DBEntityManager;
+import fr.romdhani.scaridae.core.database.DatabaseUpgrader;
+import fr.romdhani.scaridae.gui.Frame;
+import fr.romdhani.scaridae.gui.panels.home.ConnectionPanel;
 
 
 /**
@@ -50,7 +53,8 @@ public class ScaridaeView {
     private void initialize() {
         try {
             //TODO to remove later when entities have been loaded
-            DBEntityManager.getInstance();
+            DatabaseUpgrader databaseUpgrader = new DatabaseUpgrader();
+            databaseUpgrader.initAndMigrate();
             DatabaseInitializer.getInstance().load();
         } catch (Exception e) {
             e.printStackTrace();
