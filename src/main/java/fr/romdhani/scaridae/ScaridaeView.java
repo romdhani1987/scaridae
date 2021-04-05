@@ -48,16 +48,18 @@ public class ScaridaeView {
         DBEntityManager.getInstance().closeSessionFactory();
         System.exit(0);
     }
+
     private void initConfigs() {
         ConfigLoader.getInstance().load();
     }
+
     private void upgrade() {
         try {
             DatabaseUpgrader databaseUpgrader = new DatabaseUpgrader();
             databaseUpgrader.initAndMigrate();
             DatabaseInitializer.getInstance().load();
         } catch (Exception e) {
-            logger.error("Error while trying to upgrade Scaridae: "+e);
+            logger.error("Error while trying to upgrade Scaridae: " + e);
         }
     }
 
