@@ -49,7 +49,7 @@ public class RequestAccess implements Serializable {
     @Column(name = "status")
     String status;
 
-    @Column(name = "creation_time")
+    @Column(name = "creation_timestamp")
     private Timestamp creationTime = new Timestamp(new Date().getTime());
 
     @Column(name = "last_modification_time")

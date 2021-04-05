@@ -283,25 +283,19 @@ public class UserAccount implements Serializable {
         return requestAccessSet;
     }
 
-    public void addRequestAccess(final RequestAccess requestAccess) {
-
+    public void addRequestAccess(RequestAccess requestAccess) {
         if (requestAccess != null) {
             Set<RequestAccess> requestAccessSets = getRequestAccessSet();
-
             if (requestAccess == null) {
-                requestAccessSets = new HashSet<RequestAccess>();
-
+                requestAccessSets = new HashSet<>();
                 setRequestAccessSet(requestAccessSets);
             }
-
             requestAccessSets.add(requestAccess);
         }
-
     }
 
-    public void removeRequestAccess(final RequestAccess requestAccess) {
-        final Set<RequestAccess> requestAccessSet = getRequestAccessSet();
-
+    public void removeRequestAccess(RequestAccess requestAccess) {
+        Set<RequestAccess> requestAccessSet = getRequestAccessSet();
         if (requestAccess != null) {
             requestAccessSet.remove(requestAccess);
         }

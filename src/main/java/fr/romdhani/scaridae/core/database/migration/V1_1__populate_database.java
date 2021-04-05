@@ -1,21 +1,22 @@
 package fr.romdhani.scaridae.core.database.migration;
 
-import org.flywaydb.core.api.migration.BaseJavaMigration;
-import org.flywaydb.core.api.migration.Context;
-
 import fr.romdhani.scaridae.core.database.DBEntityManager;
 import fr.romdhani.scaridae.core.orm.Address;
 import fr.romdhani.scaridae.core.orm.Company;
 import fr.romdhani.scaridae.core.orm.Service;
 import fr.romdhani.scaridae.core.orm.UserFunction;
+import org.flywaydb.core.api.migration.BaseJavaMigration;
+import org.flywaydb.core.api.migration.Context;
+
+import java.util.Set;
 
 public class V1_1__populate_database extends BaseJavaMigration {
     @Override
     public void migrate(Context context) throws Exception {
         //Address
-        Address address= new Address("13 rue de Vauban ","Mundolsheim","France","67600");
+        Address address = new Address("13 rue de Vauban ", "Mundolsheim", "France", "67600");
         //Company
-        Company company = new Company("RS2D","RS2D1234RS2D");
+        Company company = new Company("RS2D", "RS2D1234RS2D");
         company.setAddress(address);
         //UserFunction
         UserFunction software = new UserFunction("Software engineer", "Software engineer");
@@ -36,8 +37,11 @@ public class V1_1__populate_database extends BaseJavaMigration {
         Service administrative = new Service("Administrative Service", "Administrative Service");
         Service logistics = new Service("Logistics Service", "Logistics Service");
         Service install = new Service("Install Service", "Install Service");
+        Set<Service> serviceSet = Set.of(commercial, electronic, IT, softwareService, direction, administrative, logistics, install);
+        company.setServiceSet(serviceSet);
+
         //Save in database
-        DBEntityManager.getInstance().persistEntities(company,address,softwareService, commercial, electronic, direction,
+        DBEntityManager.getInstance().persistEntities(company, address, softwareService, commercial, electronic, direction,
                 IT, administrative, logistics, install, software, softwareManager, electronicEngineer, MRIEngineer,
                 NMREngineer, FinanceController, administrativeManager, cto, salesManager);
     }
