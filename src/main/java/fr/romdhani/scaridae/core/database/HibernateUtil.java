@@ -1,7 +1,6 @@
 package fr.romdhani.scaridae.core.database;
 
-import java.util.Properties;
-
+import fr.romdhani.scaridae.controller.ConfigLoader;
 import fr.romdhani.scaridae.core.orm.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -9,21 +8,22 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
 
+import java.util.Properties;
+
 
 public class HibernateUtil {
     private static SessionFactory sessionFactory;
-
+    private static final String JDBC_PREFIX= "jdbc:postgresql";
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
             try {
                 Configuration configuration = new Configuration();
                 Properties settings = new Properties();
-
-                settings.put(Environment.DRIVER, "org.postgresql.Driver");
-                settings.put(Environment.URL, "jdbc:postgresql://127.0.0.1:5432/db2");
-                settings.put(Environment.USER, "postgres");
-                settings.put(Environment.PASS, "postgres");
-                settings.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
+                settings.put(Environment.DRIVER, ConfigLoader.getInstance().getDbDriver());
+                settings.put(Environment.URL, JDBC_PREFIX+"://"+ConfigLoader.getInstance().getHost()+":"+ConfigLoader.getInstance().getPort()+"/"+ConfigLoader.getInstance().getDbName());
+                settings.put(Environment.USER, ConfigLoader.getInstance().getUser());
+                settings.put(Environment.PASS, ConfigLoader.getInstance().getPass());
+                settings.put(Environment.DIALECT, ConfigLoader.getInstance().getDbDialect());
                 settings.put(Environment.SHOW_SQL, "true");
                 settings.put(Environment.HBM2DDL_AUTO, "update");
                 configuration.setProperties(settings);

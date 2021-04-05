@@ -1,19 +1,18 @@
 package fr.romdhani.scaridae;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
-import javax.swing.*;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
+import fr.romdhani.scaridae.controller.ConfigLoader;
 import fr.romdhani.scaridae.controller.DatabaseInitializer;
 import fr.romdhani.scaridae.controller.EventBusDispatcher;
 import fr.romdhani.scaridae.core.database.DBEntityManager;
 import fr.romdhani.scaridae.core.database.DatabaseUpgrader;
 import fr.romdhani.scaridae.gui.Frame;
 import fr.romdhani.scaridae.gui.panels.home.ConnectionPanel;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.swing.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 
 /**
@@ -49,20 +48,22 @@ public class ScaridaeView {
         DBEntityManager.getInstance().closeSessionFactory();
         System.exit(0);
     }
-
-    private void initialize() {
+    private void initConfigs() {
+        ConfigLoader.getInstance().load();
+    }
+    private void upgrade() {
         try {
-            //TODO to remove later when entities have been loaded
             DatabaseUpgrader databaseUpgrader = new DatabaseUpgrader();
             databaseUpgrader.initAndMigrate();
             DatabaseInitializer.getInstance().load();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while trying to upgrade Scaridae: "+e);
         }
     }
 
     private void launch() {
-        initialize();
+        initConfigs();
+        upgrade();
         show();
     }
 
