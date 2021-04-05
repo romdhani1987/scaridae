@@ -6,9 +6,7 @@ import fr.romdhani.scaridae.core.orm.UserAccount;
 
 import javax.persistence.Query;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
 
 public class RequestController {
 

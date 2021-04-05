@@ -5,6 +5,8 @@ import fr.romdhani.scaridae.controller.EventBusDispatcher;
 import fr.romdhani.scaridae.core.database.DBEntityManager;
 import fr.romdhani.scaridae.gui.Frame;
 import fr.romdhani.scaridae.gui.panels.home.ConnectionPanel;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
@@ -17,6 +19,7 @@ import java.awt.event.WindowEvent;
  * @author aromdhani
  */
 public class ScaridaeView {
+    private static final Logger logger = LogManager.getLogger(ScaridaeView.class);
 
     @SuppressWarnings("unused")
     private void show() {
@@ -39,6 +42,7 @@ public class ScaridaeView {
     }
 
     private void exit() {
+        logger.debug("*** Exit Scaridae ***");
         DBEntityManager.getInstance().closeSessionFactory();
         System.exit(0);
     }
@@ -60,7 +64,7 @@ public class ScaridaeView {
 
     public static void main(String[] args) {
         try {
-            System.out.println("*** Start scaridae ***");
+            logger.info("*** Start Scaridae ***");
             ScaridaeView scaridaeView = new ScaridaeView();
             scaridaeView.launch();
         } catch (Exception e) {
