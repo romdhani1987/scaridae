@@ -2,7 +2,6 @@ package fr.romdhani.scaridae.controller;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.ToString;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,7 +10,6 @@ import java.io.IOException;
 import java.util.Properties;
 
 @Getter
-@ToString
 public class ConfigLoader {
 
     private static final Logger logger = LogManager.getLogger(ConfigLoader.class);
@@ -58,7 +56,7 @@ public class ConfigLoader {
             prop = new Properties();
             prop.load(fis);
         } catch (IOException ioe) {
-            logger.error("Unable to read properties file: " + ioe);
+            logger.error("Unable to read properties from file: " + ioe);
         } finally {
             fis.close();
         }
