@@ -1,11 +1,17 @@
 package fr.romdhani.scaridae.gui.panels.access;
 
+import fr.romdhani.scaridae.controller.ConfigLoader;
+import fr.romdhani.scaridae.controller.CurrentSession;
 import fr.romdhani.scaridae.controller.RequestController;
 import fr.romdhani.scaridae.controller.UserController;
 import fr.romdhani.scaridae.core.orm.RequestAccess;
+import fr.romdhani.scaridae.core.orm.UserAccount;
 import fr.romdhani.scaridae.gui.panels.commons.IRequest;
 import fr.romdhani.scaridae.gui.panels.home.SignupPanel;
 import fr.romdhani.scaridae.gui.table.model.AccessRequestModel;
+import fr.romdhani.scaridae.utils.email.EmailClient;
+import fr.romdhani.scaridae.utils.email.EmailData;
+import fr.romdhani.scaridae.utils.email.GeneratePlainPassword;
 import fr.romdhani.scaridae.utils.window.WindowUtil;
 import net.miginfocom.swing.MigLayout;
 import org.jdesktop.swingx.JXDatePicker;
@@ -119,6 +125,10 @@ public class RequestAccessPanel extends JPanel implements IRequest {
                 try {
                     requestController.addAccessRequest(requestAccess);
                     accessRequestModel.addAccessRequest(requestAccess);
+                    EmailData emailData = createEmailData(CurrentSession.getInstance().getUserAccount());
+                    emailData.setMessageTitle(requestAccess.getName());
+                    emailData.setMessageAsHtml(requestAccess.getDescription());
+                    EmailClient.send(emailData);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Failed to create a new request:" + ex);
                 }
@@ -140,6 +150,19 @@ public class RequestAccessPanel extends JPanel implements IRequest {
     public RequestAccessPanel(RequestController requestController) {
         this.requestController = requestController;
         init();
+    }
+
+    private EmailData createEmailData(UserAccount user) {
+        EmailData emailData = new EmailData();
+        emailData.setSenderEmail(user.getMail());
+        emailData.setSenderPass(GeneratePlainPassword.generate(user.getPasswordHash()));
+        emailData.setMessageTitle(ConfigLoader.getInstance().getEmailDefaultTitle());
+        emailData.setMessageAsHtml(ConfigLoader.getInstance().getEmailDefaultMessage());
+        emailData.setHost(ConfigLoader.getInstance().getEmailDefaultTitle());
+        emailData.setPort(Integer.getInteger(ConfigLoader.getInstance().getPort()));
+        emailData.setUseTls(Boolean.getBoolean(ConfigLoader.getInstance().getEmailIsUseTls()));
+        emailData.setAuth(Boolean.getBoolean(ConfigLoader.getInstance().getEmailAuth()));
+        return emailData;
     }
 
 }
