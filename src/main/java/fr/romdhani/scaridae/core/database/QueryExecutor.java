@@ -3,7 +3,6 @@ package fr.romdhani.scaridae.core.database;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class QueryExecutor {
     DBEntityManager dbEntityManager = DBEntityManager.getInstance();

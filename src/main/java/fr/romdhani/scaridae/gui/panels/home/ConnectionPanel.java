@@ -3,6 +3,7 @@ package fr.romdhani.scaridae.gui.panels.home;
 import fr.romdhani.scaridae.controller.EventBusDispatcher;
 import fr.romdhani.scaridae.controller.UserController;
 import fr.romdhani.scaridae.core.database.DBEntityManager;
+import fr.romdhani.scaridae.utils.window.WindowUtil;
 import net.miginfocom.swing.MigLayout;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -85,7 +86,7 @@ public class ConnectionPanel extends JPanel {
     }
 
     private void signupPerforemd() {
-        JDialog dialog = new JDialog();
+        JDialog dialog = new JDialog(WindowUtil.findParentWindow());
         SignupPanel signupPanel = new SignupPanel(UserController.getInstance());
         signupPanel.setOnSuccess(() -> {
             dialog.dispose();

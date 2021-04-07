@@ -103,6 +103,7 @@ public class RequestAccessPanel extends JPanel implements IRequest {
             dialog.dispose();
         });
         dialog.setTitle("Edit Request");
+        dialog.setModal(true);
         dialog.setContentPane(signupPanel);
         dialog.setSize(new Dimension(800, 650));
         dialog.setLocationRelativeTo(null);

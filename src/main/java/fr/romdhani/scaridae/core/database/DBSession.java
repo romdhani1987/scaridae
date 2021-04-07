@@ -18,7 +18,6 @@ public class DBSession {
     private SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 
     private DBSession() {
-
     }
 
     private static class InstanceHolder {

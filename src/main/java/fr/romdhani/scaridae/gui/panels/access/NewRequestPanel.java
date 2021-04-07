@@ -3,7 +3,8 @@ package fr.romdhani.scaridae.gui.panels.access;
 
 import fr.romdhani.scaridae.controller.CurrentSession;
 import fr.romdhani.scaridae.controller.UserController;
-import fr.romdhani.scaridae.core.orm.*;
+import fr.romdhani.scaridae.core.orm.RequestAccess;
+import fr.romdhani.scaridae.core.orm.UserAccount;
 import fr.romdhani.scaridae.core.orm.enums.request.Labels;
 import fr.romdhani.scaridae.core.orm.enums.request.Priority;
 import fr.romdhani.scaridae.core.orm.enums.request.RequestGroup;

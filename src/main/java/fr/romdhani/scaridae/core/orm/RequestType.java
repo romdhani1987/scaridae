@@ -2,8 +2,6 @@ package fr.romdhani.scaridae.core.orm;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.Date;
 
 /**
  * Used for request type

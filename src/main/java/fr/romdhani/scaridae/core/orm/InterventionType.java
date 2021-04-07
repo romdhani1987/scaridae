@@ -2,8 +2,6 @@ package fr.romdhani.scaridae.core.orm;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 

@@ -3,9 +3,7 @@ package fr.romdhani.scaridae.core.orm;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Currency;
 import java.util.Date;
-import java.util.Set;
 
 
 @Entity
