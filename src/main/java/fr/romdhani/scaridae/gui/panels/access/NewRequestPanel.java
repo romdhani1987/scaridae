@@ -14,7 +14,6 @@ import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.util.Arrays;
 import java.util.List;
 
@@ -35,22 +34,16 @@ public class NewRequestPanel extends JPanel {
     private final JTextField nameField = new JTextField();
     private final JTextArea descriptionField = new JTextArea(15, 20);
 
-    private JComboBox<Priority> priorityCBox;
-    private JComboBox<Labels> labelCBox;
-    private JComboBox<RequestGroup> groupCBox;
-    private JComboBox<Status> statusCBox;
-    private JComboBox<UserAccount> assigneeCBox;
+    private final JComboBox<Priority> priorityCBox = new JComboBox<>(Priority.values());
+    ;
+    private final JComboBox<Labels> labelCBox = new JComboBox<>(Labels.values());
+    private final JComboBox<RequestGroup> groupCBox = new JComboBox<>(RequestGroup.values());
+    private final JComboBox<Status> statusCBox = new JComboBox<>(Status.values());
+    private final JComboBox<UserAccount> assigneeCBox = new JComboBox<>(getUsers());
     private final JTextField reporterField = new JTextField();
 
     private final JButton validateButton = new JButton("Valid");
     private final JButton cancelButton = new JButton("Cancel");
-
-    private Runnable onSuccess = () -> {
-    };
-    private Runnable onFailure = () -> {
-    };
-    private Runnable onCancel = () -> {
-    };
 
     public RequestAccess getRequestAccess() {
         return requestAccess;
@@ -60,33 +53,9 @@ public class NewRequestPanel extends JPanel {
         this.requestAccess = requestAccess;
     }
 
-    public Runnable getOnSuccess() {
-        return onSuccess;
-    }
-
-    public void setOnSuccess(Runnable onSuccess) {
-        this.onSuccess = onSuccess;
-    }
-
-    public Runnable getOnFailure() {
-        return onFailure;
-    }
-
-    public void setOnFailure(Runnable onFailure) {
-        this.onFailure = onFailure;
-    }
-
-    public Runnable getOnCancel() {
-        return onCancel;
-    }
-
-    public void setOnCancel(Runnable onCancel) {
-        this.onCancel = onCancel;
-    }
-
     private void init() {
-        String layoutConstraintWrap = "width :100: ,wrap";
-        String layoutConstraint = "width :300:";
+        String layoutConstraintWrap = "width :100:,wrap";
+        String layoutConstraint = "width :300:, growx, push ";
         nameError.setForeground(Color.RED);
         descriptionError.setForeground(Color.RED);
         priorityError.setForeground(Color.RED);
@@ -117,37 +86,26 @@ public class NewRequestPanel extends JPanel {
         loginPanel.add(descriptionError, layoutConstraintWrap);
 
         loginPanel.add(new JLabel("Priority: "));
-        priorityCBox = new JComboBox<>(Priority.values());
         priorityCBox.addItemListener(e -> priorityChanged());
         loginPanel.add(priorityCBox, layoutConstraint);
         loginPanel.add(priorityError, layoutConstraintWrap);
 
-
         loginPanel.add(new JLabel("Label: "));
-        labelCBox = new JComboBox<>(Labels.values());
         labelCBox.addItemListener(e -> labelsChanged());
         loginPanel.add(labelCBox, layoutConstraint);
         loginPanel.add(labelError, layoutConstraintWrap);
 
-
         loginPanel.add(new JLabel("Group: "));
-        groupCBox = new JComboBox<>(RequestGroup.values());
         groupCBox.addItemListener(e -> reqGroupChanged());
         loginPanel.add(groupCBox, layoutConstraint);
         loginPanel.add(groupError, layoutConstraintWrap);
 
         loginPanel.add(new JLabel("Status: "));
-        statusCBox = new JComboBox<>(Status.values());
         statusCBox.addItemListener(e -> statusChanged());
         loginPanel.add(statusCBox, layoutConstraint);
         loginPanel.add(statusError, layoutConstraintWrap);
 
         loginPanel.add(new JLabel("Assignee: "));
-        List<UserAccount> userAccountList = UserController.getInstance().getAllUserAccounts();
-        UserAccount[] userAccounts = new UserAccount[userAccountList.size()];
-        userAccountList.toArray(userAccounts);
-
-        assigneeCBox = new JComboBox<>(userAccounts);
         assigneeCBox.setRenderer(new UserCellRender());
         assigneeCBox.addActionListener(e -> assignee());
         loginPanel.add(assigneeCBox, layoutConstraint);
@@ -158,17 +116,11 @@ public class NewRequestPanel extends JPanel {
         reporterField.setEnabled(false);
         loginPanel.add(reporterField, layoutConstraint);
 
-        JPanel buttonsPanel = new JPanel(new FlowLayout());
-        buttonsPanel.add(validateButton);
-        validateButton.addActionListener(this::add);
-        buttonsPanel.add(cancelButton);
-        cancelButton.addActionListener(this::cancel);
-        loginPanel.add(new JSeparator(), "wrap");
-        loginPanel.add(new JSeparator(), "wrap");
-        loginPanel.add(buttonsPanel, "growx, span");
-        JPanel buttonPanel = new JPanel(new FlowLayout());
-        buttonPanel.add(loginPanel);
-        add(buttonPanel, "dock center");
+        add(loginPanel, "dock center");
+    }
+
+    private UserAccount[] getUsers() {
+        return UserController.getInstance().getAllUserAccounts().toArray(UserAccount[]::new);
     }
 
     private boolean isTitleOk() {
@@ -241,9 +193,6 @@ public class NewRequestPanel extends JPanel {
         }
     }
 
-    private void cancel(ActionEvent actionEvent) {
-        onCancel.run();
-    }
 
     private void updateFields(boolean isVisible) {
         List<JLabel> list = Arrays.asList(nameError, descriptionError, priorityError, labelError, groupError, statusError, assigneeError);
@@ -263,7 +212,7 @@ public class NewRequestPanel extends JPanel {
         return assignee() && statusChanged() && reqGroupChanged() && labelsChanged() && priorityChanged() && isTitleOk() && isDescOk();
     }
 
-    private void add(ActionEvent e) {
+    public boolean add() {
         if (checkFields()) {
             requestAccess = new RequestAccess(nameField.getText(), descriptionField.getText());
             requestAccess.setPriority(priorityCBox.getSelectedItem().toString());
@@ -272,11 +221,23 @@ public class NewRequestPanel extends JPanel {
             requestAccess.setLabel(labelCBox.getSelectedItem().toString());
             requestAccess.setReporter(CurrentSession.getInstance().getLogin());
             requestAccess.setAssignee(((UserAccount) assigneeCBox.getSelectedItem()).getLogin());
-            onSuccess.run();
+            return true;
         } else {
             requestAccess = null;
-            System.err.println("can not create access request!");
-            onFailure.run();
+            return false;
         }
     }
+
+    public void cancel() {
+        updateFields(false);
+        nameField.setText("");
+        descriptionField.setText("");
+        priorityCBox.setSelectedItem(0);
+        labelCBox.setSelectedItem(0);
+        groupCBox.setSelectedItem(0);
+        statusCBox.setSelectedItem(0);
+        assigneeCBox.setSelectedItem(0);
+        requestAccess = null;
+    }
+
 }

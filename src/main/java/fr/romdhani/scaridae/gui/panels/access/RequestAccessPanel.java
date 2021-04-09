@@ -1,11 +1,9 @@
 package fr.romdhani.scaridae.gui.panels.access;
 
 import fr.romdhani.scaridae.controller.ConfigLoader;
-import fr.romdhani.scaridae.controller.CurrentSession;
 import fr.romdhani.scaridae.controller.RequestController;
 import fr.romdhani.scaridae.controller.UserController;
 import fr.romdhani.scaridae.core.orm.RequestAccess;
-import fr.romdhani.scaridae.core.orm.UserAccount;
 import fr.romdhani.scaridae.gui.panels.commons.IRequest;
 import fr.romdhani.scaridae.gui.panels.home.SignupPanel;
 import fr.romdhani.scaridae.gui.table.model.AccessRequestModel;
@@ -117,34 +115,28 @@ public class RequestAccessPanel extends JPanel implements IRequest {
     }
 
     private void newRequest() {
-        JDialog dialog = new JDialog();
-        NewRequestPanel newRequestPanel = new NewRequestPanel();
-        newRequestPanel.setOnSuccess(() -> {
-            RequestAccess requestAccess = newRequestPanel.getRequestAccess();
-            if (requestAccess != null) {
-                try {
-                    requestController.addAccessRequest(requestAccess);
-                    accessRequestModel.addAccessRequest(requestAccess);
-                    EmailData emailData = createEmailData(CurrentSession.getInstance().getUserAccount());
-                    emailData.setMessageTitle(requestAccess.getName());
-                    emailData.setMessageAsHtml(requestAccess.getDescription());
-                    EmailClient.send(emailData);
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Failed to create a new request:" + ex);
-                }
+        NewRequestDialog requestDialog = new NewRequestDialog(WindowUtil.findParentWindow(), "New Access Request");
+        requestDialog.setSize(new Dimension(700, 650));
+        requestDialog.setModal(true);
+        requestDialog.setVisible(true);
+        try {
+            if (requestDialog.getRequestAccess() != null) {
+                RequestAccess requestAccess = requestDialog.getRequestAccess();
+                requestController.addAccessRequest(requestAccess);
+                accessRequestModel.addAccessRequest(requestAccess);
+                notifyAssignee(requestAccess);
             }
-            newRequestPanel.setRequestAccess(null);
-            dialog.dispose();
-        });
-        newRequestPanel.setOnCancel(() -> {
-            dialog.dispose();
-        });
-        dialog.setTitle("New Accesst Request");
-        dialog.setModal(true);
-        dialog.setContentPane(newRequestPanel);
-        dialog.setSize(new Dimension(800, 650));
-        dialog.setLocationRelativeTo(WindowUtil.findParentWindow());
-        dialog.setVisible(true);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Failed to create a new request:" + ex);
+        }
+    }
+
+    private void notifyAssignee(RequestAccess requestAccess) {
+        EmailData emailData = createEmailData();
+        emailData.setTo(UserController.getInstance().getUserAccountByLogin(requestAccess.getAssignee()).get().getMail());
+        emailData.setMessageTitle(requestAccess.getName());
+        emailData.setMessageAsHtml(requestAccess.getDescription());
+        EmailClient.send(emailData);
     }
 
     public RequestAccessPanel(RequestController requestController) {
@@ -152,10 +144,10 @@ public class RequestAccessPanel extends JPanel implements IRequest {
         init();
     }
 
-    private EmailData createEmailData(UserAccount user) {
+    private EmailData createEmailData() {
         EmailData emailData = new EmailData();
-        emailData.setSenderEmail(user.getMail());
-        emailData.setSenderPass(GeneratePlainPassword.generate(user.getPasswordHash()));
+        emailData.setSenderEmail(ConfigLoader.getInstance().getEmailSender());
+        emailData.setSenderPass(GeneratePlainPassword.generate(ConfigLoader.getInstance().getEmailPassSender()));
         emailData.setMessageTitle(ConfigLoader.getInstance().getEmailDefaultTitle());
         emailData.setMessageAsHtml(ConfigLoader.getInstance().getEmailDefaultMessage());
         emailData.setHost(ConfigLoader.getInstance().getEmailDefaultTitle());

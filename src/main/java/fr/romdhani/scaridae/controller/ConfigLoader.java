@@ -22,6 +22,9 @@ public class ConfigLoader {
     private String dbName;
     private String dbDriver;
     private String dbDialect;
+
+    private String emailSender;
+    private String emailPassSender;
     private String emailDefaultTitle;
     private String emailDefaultMessage;
     private String emailHost;
@@ -44,6 +47,7 @@ public class ConfigLoader {
     public void load() {
         try {
             Properties prop = readPropertiesFile("src/main/resources/config.properties");
+
             //Database config
             host = prop.getProperty("db.host");
             port = prop.getProperty("db.port");
@@ -54,6 +58,8 @@ public class ConfigLoader {
             dbDialect = prop.getProperty("db.dialect");
 
             //Email config
+            emailSender = prop.getProperty("email.sender");
+            emailPassSender = prop.getProperty("email.passSender");
             emailHost = prop.getProperty("email.host");
             emailPort = prop.getProperty("email.port");
             emailAuth = prop.getProperty("email.auth");

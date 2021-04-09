@@ -58,6 +58,6 @@ public class GenerateEncryptionPassword {
 
     public static void main(String args[]) throws Exception {
         String password = "rs2d%rs2d";
-        generate(password);
+        System.out.println(generate(password));
     }
 }
