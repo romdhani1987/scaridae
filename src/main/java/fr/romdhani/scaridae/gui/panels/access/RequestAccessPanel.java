@@ -5,12 +5,12 @@ import fr.romdhani.scaridae.controller.RequestController;
 import fr.romdhani.scaridae.controller.UserController;
 import fr.romdhani.scaridae.core.orm.RequestAccess;
 import fr.romdhani.scaridae.gui.panels.commons.IRequest;
-import fr.romdhani.scaridae.gui.panels.home.SignupPanel;
 import fr.romdhani.scaridae.gui.table.model.AccessRequestModel;
 import fr.romdhani.scaridae.utils.email.EmailClient;
 import fr.romdhani.scaridae.utils.email.EmailData;
 import fr.romdhani.scaridae.utils.email.GeneratePlainPassword;
 import fr.romdhani.scaridae.utils.window.WindowUtil;
+import lombok.NonNull;
 import net.miginfocom.swing.MigLayout;
 import org.jdesktop.swingx.JXDatePicker;
 
@@ -27,10 +27,10 @@ public class RequestAccessPanel extends JPanel implements IRequest {
     private final JPanel accessRequestPanel = new JPanel();
     private final JTable accessTable = new JTable();
     private final AccessRequestModel accessRequestModel = new AccessRequestModel();
-    private final JButton newRequestButton = new JButton("New");
-    private final JButton editRequestButton = new JButton("Edit");
-    private final JButton removeRequestButton = new JButton("Remove");
-    private RequestController requestController;
+    private final JButton newRequest = new JButton("New");
+    private final JButton editRequest = new JButton("Edit");
+    private final JButton removeRequest = new JButton("Remove");
+    private final RequestController requestController;
 
 
     private void init() {
@@ -85,61 +85,66 @@ public class RequestAccessPanel extends JPanel implements IRequest {
 
     private JPanel createBottomPanel() {
         JPanel bottomPanel = new JPanel(new MigLayout());
-        newRequestButton.addActionListener(e -> newRequest());
-        editRequestButton.addActionListener(e -> editRequest());
-        removeRequestButton.addActionListener(e -> removeRequest());
-        bottomPanel.add(newRequestButton, "w 80:80:");
-        bottomPanel.add(editRequestButton, "w 80:80:");
-        bottomPanel.add(removeRequestButton, "w 80:80:");
+        newRequest.addActionListener(e -> newRequest());
+        editRequest.addActionListener(e -> editRequest());
+        removeRequest.addActionListener(e -> removeRequest());
+        bottomPanel.add(newRequest, "w 80:80:");
+        bottomPanel.add(editRequest, "w 80:80:");
+        bottomPanel.add(removeRequest, "w 80:80:");
         return bottomPanel;
     }
 
     private void removeRequest() {
+        int question = JOptionPane.showConfirmDialog(
+                WindowUtil.findParentWindow(), "Do you really want to delete the request? ", "Delete Access Request",
+                JOptionPane.YES_NO_OPTION);
+        if (question == 0) {
+            try {
+                RequestAccess selectedRequestAccess = accessRequestModel.getValueAt(accessTable.getSelectedRow());
+                requestController.RemoveRequestAccess(selectedRequestAccess);
+                accessRequestModel.removeRequest(accessTable.getSelectedRow());
+                JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Deleted successfully!");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Failed to create a new request:" + ex.getMessage());
+            }
+        }
     }
 
     private void editRequest() {
-        JDialog dialog = new JDialog();
-        SignupPanel signupPanel = new SignupPanel(UserController.getInstance());
-        signupPanel.setOnSuccess(() -> {
-            dialog.dispose();
-        });
-        signupPanel.setOnCancel(() -> {
-            dialog.dispose();
-        });
-        dialog.setTitle("Edit Request");
-        dialog.setModal(true);
-        dialog.setContentPane(signupPanel);
-        dialog.setSize(new Dimension(800, 650));
-        dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
     }
 
     private void newRequest() {
-        NewRequestDialog requestDialog = new NewRequestDialog(WindowUtil.findParentWindow(), "New Access Request");
-        requestDialog.setSize(new Dimension(700, 650));
-        requestDialog.setModal(true);
-        requestDialog.setVisible(true);
         try {
+            NewRequestDialog requestDialog = new NewRequestDialog(WindowUtil.findParentWindow(), "New Access Request");
+            requestDialog.setSize(new Dimension(700, 650));
+            requestDialog.setModal(true);
+            requestDialog.setVisible(true);
             if (requestDialog.getRequestAccess() != null) {
                 RequestAccess requestAccess = requestDialog.getRequestAccess();
                 requestController.addAccessRequest(requestAccess);
                 accessRequestModel.addAccessRequest(requestAccess);
-                notifyAssignee(requestAccess);
+                if (!UserController.getInstance().getUserAccountByLogin(requestAccess.getAssignee()).isEmpty()) {
+                    notifyAssignee(requestAccess);
+                }
             }
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Failed to create a new request:" + ex);
+            JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Failed to create a new request:" + ex.getMessage());
         }
     }
 
-    private void notifyAssignee(RequestAccess requestAccess) {
-        EmailData emailData = createEmailData();
-        emailData.setTo(UserController.getInstance().getUserAccountByLogin(requestAccess.getAssignee()).get().getMail());
-        emailData.setMessageTitle(requestAccess.getName());
-        emailData.setMessageAsHtml(requestAccess.getDescription());
-        EmailClient.send(emailData);
+    private void notifyAssignee(@NonNull RequestAccess requestAccess) {
+        try {
+            EmailData emailData = createEmailData();
+            emailData.setTo(UserController.getInstance().getUserAccountByLogin(requestAccess.getAssignee()).get(0).getMail());
+            emailData.setMessageTitle(requestAccess.getName());
+            emailData.setMessageAsHtml(requestAccess.getDescription());
+            EmailClient.send(emailData);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Failed to send an email:" + ex.getMessage());
+        }
     }
 
-    public RequestAccessPanel(RequestController requestController) {
+    public RequestAccessPanel(@NonNull RequestController requestController) {
         this.requestController = requestController;
         init();
     }
@@ -148,12 +153,12 @@ public class RequestAccessPanel extends JPanel implements IRequest {
         EmailData emailData = new EmailData();
         emailData.setSenderEmail(ConfigLoader.getInstance().getEmailSender());
         emailData.setSenderPass(GeneratePlainPassword.generate(ConfigLoader.getInstance().getEmailPassSender()));
+        emailData.setHost(ConfigLoader.getInstance().getEmailHost());
+        emailData.setPort(Integer.parseInt(ConfigLoader.getInstance().getEmailPort()));
+        emailData.setAuth(Boolean.parseBoolean(ConfigLoader.getInstance().getEmailAuth()));
         emailData.setMessageTitle(ConfigLoader.getInstance().getEmailDefaultTitle());
         emailData.setMessageAsHtml(ConfigLoader.getInstance().getEmailDefaultMessage());
-        emailData.setHost(ConfigLoader.getInstance().getEmailDefaultTitle());
-        emailData.setPort(Integer.getInteger(ConfigLoader.getInstance().getPort()));
-        emailData.setUseTls(Boolean.getBoolean(ConfigLoader.getInstance().getEmailIsUseTls()));
-        emailData.setAuth(Boolean.getBoolean(ConfigLoader.getInstance().getEmailAuth()));
+        emailData.setUseTls(Boolean.parseBoolean(ConfigLoader.getInstance().getEmailIsUseTls()));
         return emailData;
     }
 

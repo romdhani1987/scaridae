@@ -23,15 +23,15 @@ public class ConfigLoader {
     private String dbDriver;
     private String dbDialect;
 
-    private String emailSender;
-    private String emailPassSender;
-    private String emailDefaultTitle;
-    private String emailDefaultMessage;
+
     private String emailHost;
     private String emailPort;
     private String emailAuth;
     private String emailIsUseTls;
-
+    private String emailSender;
+    private String emailPassSender;
+    private String emailDefaultTitle;
+    private String emailDefaultMessage;
 
     private ConfigLoader() {
     }
@@ -86,4 +86,5 @@ public class ConfigLoader {
         }
         return prop;
     }
+
 }

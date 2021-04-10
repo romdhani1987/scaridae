@@ -21,6 +21,10 @@ public class RequestController {
         });
     }
 
+    public void RemoveRequestAccess(RequestAccess requestAccess) throws Exception {
+        DBEntityManager.getInstance().removeEntities(requestAccess);
+    }
+
     public List<RequestAccess> getAllRequestList() throws Exception {
         List<RequestAccess> requestAccessList = new ArrayList<>();
         DBEntityManager.getInstance().doInTransaction(em -> {

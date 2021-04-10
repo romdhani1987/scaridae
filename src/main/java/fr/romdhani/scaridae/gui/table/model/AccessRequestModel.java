@@ -68,7 +68,7 @@ public class AccessRequestModel extends AbstractTableModel {
         }
     }
 
-    public Object getValueAt(int rowIndex) {
+    public RequestAccess getValueAt(int rowIndex) {
         return requestAccessList.get(rowIndex);
     }
 

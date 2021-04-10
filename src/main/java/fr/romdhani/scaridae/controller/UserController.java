@@ -8,7 +8,6 @@ import javax.persistence.TypedQuery;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -70,19 +69,14 @@ public class UserController {
         return results;
     }
 
-    public synchronized Optional<UserAccount> getUserAccountByLogin(String login) {
-        Optional<UserAccount> userAccount = Optional.empty();
-        try {
-            DBEntityManager.getInstance().doInTransaction(em -> {
-                TypedQuery<UserAccount> query = em.createQuery(
-                        "SELECT u FROM UserAccount u WHERE u.login = :userLogin", UserAccount.class);
-                userAccount.ofNullable(query.setParameter("userLogin", login).getSingleResult());
-
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return userAccount;
+    public synchronized List<UserAccount> getUserAccountByLogin(String login) throws Exception {
+        final List<UserAccount> results = new ArrayList<>();
+        DBEntityManager.getInstance().doInTransaction(em -> {
+            TypedQuery<UserAccount> query = em.createQuery(
+                    "SELECT u FROM UserAccount u WHERE u.login = :userLogin", UserAccount.class);
+            results.addAll(query.setParameter("userLogin", login).getResultList());
+        });
+        return results;
     }
 
     public synchronized List<UserAccount> getAllUserAccounts() {
@@ -92,7 +86,6 @@ public class UserController {
                 TypedQuery<UserAccount> query = em.createQuery(
                         "SELECT u FROM UserAccount u", UserAccount.class);
                 results.addAll(query.getResultList());
-
             });
         } catch (Exception e) {
             e.printStackTrace();

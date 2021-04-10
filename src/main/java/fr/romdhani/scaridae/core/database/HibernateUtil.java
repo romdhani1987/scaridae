@@ -24,7 +24,7 @@ public class HibernateUtil {
                 settings.put(Environment.USER, ConfigLoader.getInstance().getUser());
                 settings.put(Environment.PASS, ConfigLoader.getInstance().getPass());
                 settings.put(Environment.DIALECT, ConfigLoader.getInstance().getDbDialect());
-                settings.put(Environment.SHOW_SQL, "true");
+                settings.put(Environment.SHOW_SQL, "false");
                 settings.put(Environment.HBM2DDL_AUTO, "update");
                 configuration.setProperties(settings);
                 configuration.addAnnotatedClass(Address.class);

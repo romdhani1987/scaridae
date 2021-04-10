@@ -57,7 +57,7 @@ public class GenerateEncryptionPassword {
     }
 
     public static void main(String args[]) throws Exception {
-        String password = "rs2d%rs2d";
+        String password = "Ar08482883";
         System.out.println(generate(password));
     }
 }
