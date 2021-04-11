@@ -102,7 +102,7 @@ public class RequestAccessPanel extends JPanel implements IRequest {
                 accessRequestModel.removeRequest(accessTable.getSelectedRow());
                 JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Deleted successfully!");
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Failed to create a new request:" + ex.getMessage(), "Error", JOptionPane.ERROR);
+                JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Failed to create a new request:" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -124,7 +124,7 @@ public class RequestAccessPanel extends JPanel implements IRequest {
                 }
             }
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Failed to edit the selected request:" + ex.getMessage(), "Error", JOptionPane.ERROR);
+            JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Failed to edit the selected request:" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -156,7 +156,7 @@ public class RequestAccessPanel extends JPanel implements IRequest {
             emailData.setMessageAsHtml(String.format(ConfigLoader.getInstance().getEmailDefaultMessage(), requestAccess.getDescription()));
             EmailClient.send(emailData);
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Failed to send an email:" + ex.getMessage(), "Error", JOptionPane.ERROR);
+            JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Failed to send an email:" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
