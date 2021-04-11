@@ -22,7 +22,7 @@ public class RequestAccessPanel extends JPanel implements IRequest {
 
     private final JTextField searchTextField = new JTextField();
     private final JPanel accessRequestPanel = new JPanel();
-    private final JTable accessTable = new JTable();
+    private final JTable requestAccessTable = new JTable();
     private final AccessRequestModel accessRequestModel = new AccessRequestModel();
     private final JButton newRequest = new JButton("New");
     private final JButton editRequest = new JButton("Edit");
@@ -59,9 +59,9 @@ public class RequestAccessPanel extends JPanel implements IRequest {
             JButton searchButton = new JButton("Search");
             toolbarPanel.add(searchButton, "width :80:,wrap");
             accessRequestModel.addAll(requestController.getAllRequestList());
-            accessTable.setModel(accessRequestModel);
+            requestAccessTable.setModel(accessRequestModel);
             accessPanel.add(toolbarPanel, ",wrap");
-            accessPanel.add(new JScrollPane(accessTable), ",span,grow,push");
+            accessPanel.add(new JScrollPane(requestAccessTable), ",span,grow,push");
 
             JScrollPane tableScrollPane = new JScrollPane(accessPanel);
             JSplitPane documentSplitPane = new JSplitPane(
@@ -97,9 +97,9 @@ public class RequestAccessPanel extends JPanel implements IRequest {
                 JOptionPane.YES_NO_OPTION);
         if (question == 0) {
             try {
-                RequestAccess selectedRequestAccess = accessRequestModel.getValueAt(accessTable.getSelectedRow());
+                RequestAccess selectedRequestAccess = accessRequestModel.getValueAt(requestAccessTable.getSelectedRow());
                 requestController.RemoveRequestAccess(selectedRequestAccess);
-                accessRequestModel.removeRequest(accessTable.getSelectedRow());
+                accessRequestModel.removeRequest(requestAccessTable.getSelectedRow());
                 JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Deleted successfully!");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Failed to create a new request:" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -109,7 +109,7 @@ public class RequestAccessPanel extends JPanel implements IRequest {
 
     private void editRequest() {
         try {
-            RequestAccess selectedRequestAccess = accessRequestModel.getValueAt(accessTable.getSelectedRow());
+            RequestAccess selectedRequestAccess = accessRequestModel.getValueAt(requestAccessTable.getSelectedRow());
             EditRequestDialog editRequestDialog = new EditRequestDialog(WindowUtil.findParentWindow(), "Edit Access Request", selectedRequestAccess);
             editRequestDialog.setSize(new Dimension(650, 650));
             editRequestDialog.setLocationRelativeTo(null);

@@ -15,7 +15,7 @@ import java.util.List;
  * @author aromdhani
  */
 public class AccessRequestModel extends AbstractTableModel {
-    private final String[] header = {"Name", "Reference", "Description", "Priority", "Assignee", "Reporter", "Label", "Group", "Creation Time", "Last Modification", "Status"};
+    private final String[] header = {"Name", "Reference", "Description", "Priority", "Assignee", "Reporter", "Label", "Group", "Status", "Creation Time", "Last Modification"};
     private List<RequestAccess> requestAccessList = new ArrayList<>();
 
     @Override
@@ -58,11 +58,11 @@ public class AccessRequestModel extends AbstractTableModel {
             case 7:
                 return requestAccessList.get(rowIndex).getGroup();
             case 8:
-                return requestAccessList.get(rowIndex).getCreationTime();
-            case 9:
-                return requestAccessList.get(rowIndex).getLastModificationTime();
-            case 10:
                 return requestAccessList.get(rowIndex).getStatus();
+            case 9:
+                return requestAccessList.get(rowIndex).getCreationTime();
+            case 10:
+                return requestAccessList.get(rowIndex).getLastModificationTime();
             default:
                 return null; //Error
         }
@@ -76,48 +76,27 @@ public class AccessRequestModel extends AbstractTableModel {
         super();
     }
 
-    /**
-     * @param requestAccess The request to add.
-     */
     public void addAccessRequest(RequestAccess requestAccess) {
         requestAccessList.add(requestAccess);
         fireTableRowsInserted(requestAccessList.size() - 1, requestAccessList.size() - 1);
     }
 
-    /**
-     * Remove all  user statis wrapper
-     */
     public void removeAll() {
         requestAccessList.clear();
         fireTableRowsInserted(requestAccessList.size() - 1, requestAccessList.size() - 1);
     }
 
-    /**
-     * Add users in batch
-     *
-     * @param serieWrapperList The users list to add.
-     */
     public void addAll(List<RequestAccess> serieWrapperList) {
         requestAccessList.addAll(serieWrapperList);
         fireTableRowsInserted(requestAccessList.size() - 1, requestAccessList.size() - 1);
     }
 
-    /**
-     * Set all in batch
-     *
-     * @param requestList The request list to add.
-     */
     public void setAll(List<RequestAccess> requestList) {
         requestAccessList.clear();
         requestAccessList.addAll(requestList);
         fireTableRowsInserted(requestAccessList.size() - 1, requestAccessList.size() - 1);
     }
 
-    /**
-     * Remove
-     *
-     * @param rowIndex The index of the selected request.
-     */
     public void removeRequest(int rowIndex) {
         requestAccessList.remove(rowIndex);
         fireTableRowsDeleted(rowIndex, rowIndex);

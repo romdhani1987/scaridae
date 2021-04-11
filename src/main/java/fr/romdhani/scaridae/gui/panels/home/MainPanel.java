@@ -44,7 +44,6 @@ public class MainPanel extends JPanel {
         menuBar.add(settingsMenu);
         menuBar.add(helpMenu);
         RequestAccessPanel requestAccessPanel = new RequestAccessPanel(requestController);
-
         JToolBar toolBar = new JToolBar();
         JPanel accessPanel = new JPanel(new MigLayout());
         accessPanel.add(toolBar, "wrap");
