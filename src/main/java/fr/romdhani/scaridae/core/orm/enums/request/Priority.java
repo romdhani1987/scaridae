@@ -12,7 +12,7 @@ public enum Priority {
         return priority;
     }
 
-    public Priority getPriority(String priorityStr) {
+    public static Priority getPriority(String priorityStr) {
         for (Priority priority : Priority.values()) {
             if (priority.getPriority().equals(priorityStr))
                 return priority;

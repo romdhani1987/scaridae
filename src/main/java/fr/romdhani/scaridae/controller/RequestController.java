@@ -25,6 +25,15 @@ public class RequestController {
         DBEntityManager.getInstance().removeEntities(requestAccess);
     }
 
+    public void editRequestAccess(RequestAccess requestAccess) throws Exception {
+        DBEntityManager.getInstance().doInTransaction(em -> {
+            RequestAccess myRequestAccess = em.createQuery(
+                    "SELECT ra FROM RequestAccess ra WHERE ra.id = :id", RequestAccess.class)
+                    .setParameter("id", requestAccess.getId()).getSingleResult();
+            em.merge(myRequestAccess);
+        });
+    }
+
     public List<RequestAccess> getAllRequestList() throws Exception {
         List<RequestAccess> requestAccessList = new ArrayList<>();
         DBEntityManager.getInstance().doInTransaction(em -> {

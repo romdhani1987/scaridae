@@ -13,7 +13,7 @@ public enum Labels {
         return name;
     }
 
-    public Labels getLabelByName(String name) {
+    public static Labels getLabelByName(String name) {
         for (Labels labels : Labels.values()) {
             if (labels.getName().equals(name))
                 return labels;

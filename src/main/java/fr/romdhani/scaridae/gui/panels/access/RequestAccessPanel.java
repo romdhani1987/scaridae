@@ -18,9 +18,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.text.SimpleDateFormat;
 
-/**
- * @author aromdhani
- */
 public class RequestAccessPanel extends JPanel implements IRequest {
 
     private final JTextField searchTextField = new JTextField();
@@ -111,6 +108,23 @@ public class RequestAccessPanel extends JPanel implements IRequest {
     }
 
     private void editRequest() {
+        try {
+            RequestAccess selectedRequestAccess = accessRequestModel.getValueAt(accessTable.getSelectedRow());
+            EditRequestDialog requestDialog = new EditRequestDialog(WindowUtil.findParentWindow(), "Edit Access Request", selectedRequestAccess);
+            requestDialog.setSize(new Dimension(700, 650));
+            requestDialog.setModal(true);
+            requestDialog.setVisible(true);
+            if (requestDialog.getRequestAccess() != null) {
+                RequestAccess requestAccess = requestDialog.getRequestAccess();
+                requestController.editRequestAccess(requestAccess);
+                accessRequestModel.addAccessRequest(requestAccess);
+                if (!UserController.getInstance().getUserAccountByLogin(requestAccess.getAssignee()).isEmpty()) {
+                    notifyAssignee(requestAccess);
+                }
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Failed to edit the selected request:" + ex.getMessage());
+        }
     }
 
     private void newRequest() {

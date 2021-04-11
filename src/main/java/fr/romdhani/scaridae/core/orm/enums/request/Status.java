@@ -12,7 +12,7 @@ public enum Status {
         return status;
     }
 
-    public Status getStatus(String statusStr) {
+    public static Status getStatus(String statusStr) {
         for (Status status : Status.values()) {
             if (status.getStatus().equals(statusStr))
                 return status;

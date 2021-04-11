@@ -10,6 +10,7 @@ import fr.romdhani.scaridae.core.orm.enums.request.Priority;
 import fr.romdhani.scaridae.core.orm.enums.request.RequestGroup;
 import fr.romdhani.scaridae.core.orm.enums.request.Status;
 import fr.romdhani.scaridae.gui.renders.UserCellRender;
+import fr.romdhani.scaridae.utils.window.WindowUtil;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -35,22 +36,14 @@ public class NewRequestPanel extends JPanel {
     private final JTextArea descriptionField = new JTextArea(15, 20);
 
     private final JComboBox<Priority> priorityCBox = new JComboBox<>(Priority.values());
-    ;
     private final JComboBox<Labels> labelCBox = new JComboBox<>(Labels.values());
     private final JComboBox<RequestGroup> groupCBox = new JComboBox<>(RequestGroup.values());
     private final JComboBox<Status> statusCBox = new JComboBox<>(Status.values());
     private final JComboBox<UserAccount> assigneeCBox = new JComboBox<>(getUsers());
     private final JTextField reporterField = new JTextField();
 
-    private final JButton validateButton = new JButton("Valid");
-    private final JButton cancelButton = new JButton("Cancel");
-
     public RequestAccess getRequestAccess() {
         return requestAccess;
-    }
-
-    public void setRequestAccess(RequestAccess requestAccess) {
-        this.requestAccess = requestAccess;
     }
 
     private void init() {
@@ -71,11 +64,17 @@ public class NewRequestPanel extends JPanel {
 
         setLayout(new MigLayout());
         loginPanel.add(new JLabel("Title: "));
+        if (requestAccess != null) {
+            nameField.setText(requestAccess.getName());
+        }
         nameField.addActionListener(e -> isTitleOk());
         loginPanel.add(nameField, layoutConstraint);
         loginPanel.add(nameError, layoutConstraintWrap);
 
         loginPanel.add(new JLabel("Description: "));
+        if (requestAccess != null) {
+            descriptionField.setText(requestAccess.getDescription());
+        }
         descriptionField.setLineWrap(true);
         descriptionField.setWrapStyleWord(true);
         descriptionField.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
@@ -86,37 +85,65 @@ public class NewRequestPanel extends JPanel {
         loginPanel.add(descriptionError, layoutConstraintWrap);
 
         loginPanel.add(new JLabel("Priority: "));
+        if (requestAccess != null) {
+            priorityCBox.setSelectedItem(Priority.getPriority(requestAccess.getPriority()));
+        }
         priorityCBox.addItemListener(e -> priorityChanged());
         loginPanel.add(priorityCBox, layoutConstraint);
         loginPanel.add(priorityError, layoutConstraintWrap);
 
         loginPanel.add(new JLabel("Label: "));
+        if (requestAccess != null) {
+            labelCBox.setSelectedItem(Labels.getLabelByName(requestAccess.getLabel()));
+        }
         labelCBox.addItemListener(e -> labelsChanged());
         loginPanel.add(labelCBox, layoutConstraint);
         loginPanel.add(labelError, layoutConstraintWrap);
 
         loginPanel.add(new JLabel("Group: "));
+        if (requestAccess != null) {
+            groupCBox.setSelectedItem(RequestGroup.getReqGroup(requestAccess.getGroup()));
+        }
         groupCBox.addItemListener(e -> reqGroupChanged());
         loginPanel.add(groupCBox, layoutConstraint);
         loginPanel.add(groupError, layoutConstraintWrap);
 
         loginPanel.add(new JLabel("Status: "));
+        if (requestAccess != null) {
+            statusCBox.setSelectedItem(Status.getStatus(requestAccess.getStatus()));
+        }
         statusCBox.addItemListener(e -> statusChanged());
         loginPanel.add(statusCBox, layoutConstraint);
         loginPanel.add(statusError, layoutConstraintWrap);
 
         loginPanel.add(new JLabel("Assignee: "));
+        if (requestAccess != null) {
+            updateField(assigneeCBox, requestAccess.getAssignee());
+        }
         assigneeCBox.setRenderer(new UserCellRender());
         assigneeCBox.addActionListener(e -> assignee());
         loginPanel.add(assigneeCBox, layoutConstraint);
         loginPanel.add(assigneeError, layoutConstraintWrap);
 
         loginPanel.add(new JLabel("Reporter: "));
+        if (requestAccess != null) {
+            reporterField.setText(requestAccess.getReporter());
+        }
         reporterField.setText(CurrentSession.getInstance().getLogin());
         reporterField.setEnabled(false);
         loginPanel.add(reporterField, layoutConstraint);
 
         add(loginPanel, "dock center");
+    }
+
+    private void updateField(JComboBox<UserAccount> field, String login) {
+        try {
+            field.setSelectedItem(UserController.getInstance().getUserAccountByLogin(requestAccess.getAssignee()));
+        } catch (Exception ex) {
+            JOptionPane.showConfirmDialog(
+                    WindowUtil.findParentWindow(), "Failed to find user " + ex.getMessage(), "Error",
+                    JOptionPane.ERROR);
+        }
     }
 
     private UserAccount[] getUsers() {
@@ -214,7 +241,10 @@ public class NewRequestPanel extends JPanel {
 
     public boolean add() {
         if (checkFields()) {
-            requestAccess = new RequestAccess(nameField.getText(), descriptionField.getText());
+            if (requestAccess == null)
+                requestAccess = new RequestAccess();
+            requestAccess.setName(nameField.getText());
+            requestAccess.setDescription(descriptionField.getText());
             requestAccess.setPriority(priorityCBox.getSelectedItem().toString());
             requestAccess.setStatus(statusCBox.getSelectedItem().toString());
             requestAccess.setGroup(groupCBox.getSelectedItem().toString());

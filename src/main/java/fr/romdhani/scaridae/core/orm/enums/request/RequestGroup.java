@@ -12,7 +12,7 @@ public enum RequestGroup {
         return name;
     }
 
-    public RequestGroup getReqGroup(String name) {
+    public static RequestGroup getReqGroup(String name) {
         for (RequestGroup requestGroup : RequestGroup.values()) {
             if (requestGroup.getName().equals(name))
                 return requestGroup;
