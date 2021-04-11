@@ -23,7 +23,6 @@ public class ConfigLoader {
     private String dbDriver;
     private String dbDialect;
 
-
     private String emailHost;
     private String emailPort;
     private String emailAuth;
@@ -32,6 +31,8 @@ public class ConfigLoader {
     private String emailPassSender;
     private String emailDefaultTitle;
     private String emailDefaultMessage;
+
+    private boolean upgradeDatabase;
 
     private ConfigLoader() {
     }

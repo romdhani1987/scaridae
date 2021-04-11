@@ -48,7 +48,7 @@ public class ScaridaeView {
         System.exit(0);
     }
 
-    private void initConfigs() {
+    private void loadConfigs() {
         ConfigLoader.getInstance().load();
     }
 
@@ -57,13 +57,15 @@ public class ScaridaeView {
             DatabaseUpgrader databaseUpgrader = new DatabaseUpgrader();
             databaseUpgrader.initAndMigrate();
         } catch (Exception e) {
-            logger.error("Error while trying to upgrade Scaridae: " + e);
+            logger.error("Error while trying to upgrade Scaridae: ", e);
         }
     }
 
     private void launch() {
-        initConfigs();
-        upgrade();
+        loadConfigs();
+        if (ConfigLoader.getInstance().isUpgradeDatabase()) {
+            upgrade();
+        }
         show();
     }
 
