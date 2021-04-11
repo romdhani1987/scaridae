@@ -102,7 +102,7 @@ public class RequestAccessPanel extends JPanel implements IRequest {
                 accessRequestModel.removeRequest(accessTable.getSelectedRow());
                 JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Deleted successfully!");
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Failed to create a new request:" + ex.getMessage());
+                JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Failed to create a new request:" + ex.getMessage(), "Error", JOptionPane.ERROR);
             }
         }
     }
@@ -110,12 +110,13 @@ public class RequestAccessPanel extends JPanel implements IRequest {
     private void editRequest() {
         try {
             RequestAccess selectedRequestAccess = accessRequestModel.getValueAt(accessTable.getSelectedRow());
-            EditRequestDialog requestDialog = new EditRequestDialog(WindowUtil.findParentWindow(), "Edit Access Request", selectedRequestAccess);
-            requestDialog.setSize(new Dimension(700, 650));
-            requestDialog.setModal(true);
-            requestDialog.setVisible(true);
-            if (requestDialog.getRequestAccess() != null) {
-                RequestAccess requestAccess = requestDialog.getRequestAccess();
+            EditRequestDialog editRequestDialog = new EditRequestDialog(WindowUtil.findParentWindow(), "Edit Access Request", selectedRequestAccess);
+            editRequestDialog.setSize(new Dimension(650, 650));
+            editRequestDialog.setLocationRelativeTo(null);
+            editRequestDialog.setModal(true);
+            editRequestDialog.setVisible(true);
+            if (editRequestDialog.getRequestAccess() != null) {
+                RequestAccess requestAccess = editRequestDialog.getRequestAccess();
                 requestController.editRequestAccess(requestAccess);
                 accessRequestModel.addAccessRequest(requestAccess);
                 if (!UserController.getInstance().getUserAccountByLogin(requestAccess.getAssignee()).isEmpty()) {
@@ -123,15 +124,16 @@ public class RequestAccessPanel extends JPanel implements IRequest {
                 }
             }
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Failed to edit the selected request:" + ex.getMessage());
+            JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Failed to edit the selected request:" + ex.getMessage(), "Error", JOptionPane.ERROR);
         }
     }
 
     private void newRequest() {
         try {
             NewRequestDialog requestDialog = new NewRequestDialog(WindowUtil.findParentWindow(), "New Access Request");
-            requestDialog.setSize(new Dimension(700, 650));
+            requestDialog.setSize(new Dimension(650, 650));
             requestDialog.setModal(true);
+            requestDialog.setLocationRelativeTo(null);
             requestDialog.setVisible(true);
             if (requestDialog.getRequestAccess() != null) {
                 RequestAccess requestAccess = requestDialog.getRequestAccess();
@@ -150,11 +152,11 @@ public class RequestAccessPanel extends JPanel implements IRequest {
         try {
             EmailData emailData = createEmailData();
             emailData.setTo(UserController.getInstance().getUserAccountByLogin(requestAccess.getAssignee()).get(0).getMail());
-            emailData.setMessageTitle(requestAccess.getName());
-            emailData.setMessageAsHtml(requestAccess.getDescription());
+            emailData.setMessageTitle(String.format(ConfigLoader.getInstance().getEmailDefaultTitle(), requestAccess.getName()));
+            emailData.setMessageAsHtml(String.format(ConfigLoader.getInstance().getEmailDefaultMessage(), requestAccess.getDescription()));
             EmailClient.send(emailData);
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Failed to send an email:" + ex.getMessage());
+            JOptionPane.showMessageDialog(WindowUtil.findParentWindow(), "Failed to send an email:" + ex.getMessage(), "Error", JOptionPane.ERROR);
         }
     }
 

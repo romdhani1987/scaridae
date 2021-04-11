@@ -9,11 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RequestController {
+    private static String USER_BY_LOGIN = "SELECT u FROM UserAccount u WHERE u.login = :userLogin";
 
     public void addAccessRequest(RequestAccess newRequest) throws Exception {
         DBEntityManager.getInstance().doInTransaction(em -> {
             UserAccount user = em.createQuery(
-                    "SELECT u FROM UserAccount u WHERE u.login = :userLogin", UserAccount.class)
+                    USER_BY_LOGIN, UserAccount.class)
                     .setParameter("userLogin", CurrentSession.getInstance().getLogin()).getSingleResult();
             user.addRequestAccess(newRequest);
             em.persist(newRequest);
@@ -27,10 +28,7 @@ public class RequestController {
 
     public void editRequestAccess(RequestAccess requestAccess) throws Exception {
         DBEntityManager.getInstance().doInTransaction(em -> {
-            RequestAccess myRequestAccess = em.createQuery(
-                    "SELECT ra FROM RequestAccess ra WHERE ra.id = :id", RequestAccess.class)
-                    .setParameter("id", requestAccess.getId()).getSingleResult();
-            em.merge(myRequestAccess);
+            RequestAccess myRequestAccess = em.find(RequestAccess.class, requestAccess.getId());
         });
     }
 

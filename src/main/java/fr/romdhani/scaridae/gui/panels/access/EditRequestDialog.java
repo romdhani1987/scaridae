@@ -19,7 +19,7 @@ public class EditRequestDialog extends JDialog {
     private void init() {
         JButton validate = new JButton("Valid");
         JButton cancel = new JButton("Cancel");
-        validate.addActionListener(this::add);
+        validate.addActionListener(this::valid);
         cancel.addActionListener(this::cancel);
         getContentPane().add(new JScrollPane(newRequestPanel), BorderLayout.CENTER);
         JPanel buttonsPanel = new JPanel(new FlowLayout());
@@ -33,8 +33,8 @@ public class EditRequestDialog extends JDialog {
         this.dispose();
     }
 
-    private void add(ActionEvent actionEvent) {
-        if (newRequestPanel.add())
+    private void valid(ActionEvent actionEvent) {
+        if (newRequestPanel.edit())
             this.dispose();
     }
 

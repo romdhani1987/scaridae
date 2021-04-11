@@ -241,8 +241,9 @@ public class NewRequestPanel extends JPanel {
 
     public boolean add() {
         if (checkFields()) {
-            if (requestAccess == null)
+            if (requestAccess == null) {
                 requestAccess = new RequestAccess();
+            }
             requestAccess.setName(nameField.getText());
             requestAccess.setDescription(descriptionField.getText());
             requestAccess.setPriority(priorityCBox.getSelectedItem().toString());
@@ -254,6 +255,22 @@ public class NewRequestPanel extends JPanel {
             return true;
         } else {
             requestAccess = null;
+            return false;
+        }
+    }
+
+    public boolean edit() {
+        if (checkFields()) {
+            requestAccess.setName(nameField.getText());
+            requestAccess.setDescription(descriptionField.getText());
+            requestAccess.setPriority(priorityCBox.getSelectedItem().toString());
+            requestAccess.setStatus(statusCBox.getSelectedItem().toString());
+            requestAccess.setGroup(groupCBox.getSelectedItem().toString());
+            requestAccess.setLabel(labelCBox.getSelectedItem().toString());
+            requestAccess.setReporter(CurrentSession.getInstance().getLogin());
+            requestAccess.setAssignee(((UserAccount) assigneeCBox.getSelectedItem()).getLogin());
+            return true;
+        } else {
             return false;
         }
     }
